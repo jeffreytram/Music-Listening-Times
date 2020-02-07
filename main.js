@@ -1,7 +1,15 @@
-function render(dataset, category) {
-    if (category !== "") {
+function render(dataset, filter, category) {
+    if (filter === "artist" && category !== "") {
         dataset = dataset.filter(d => d.Artist === category);
     }
+    if (filter === "day") {
+        let newDataset = [];
+        category.forEach(function(day) {
+            newDataset = newDataset.concat(dataset.filter(d => d.Day === day));
+        });
+        dataset = newDataset;
+    }
+
 
     var svg = d3.select('svg');
     //clear svg
@@ -18,8 +26,8 @@ function render(dataset, category) {
         .domain([Date.now(), new Date("4/1/2018")])
         .range([60, 660]);
 
-     //radius scale
-     //TODO: radius scale
+    //radius scale
+    //TODO: radius scale
 
     //x-axis line
     var xAxis = d3.axisBottom(xScale)
@@ -89,19 +97,35 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     });
 
     //render all data points
-    render(dataset, "");
+    render(dataset, "", "");
 
     //yorushika filter
     let yorushikaButton = document.getElementById("yorushika");
     yorushikaButton.addEventListener("click", function () {
-        render(dataset, "Yorushika");
+        render(dataset, "artist", "Yorushika");
     });
 
     //general filter event listener
     let filterButton = document.getElementById("artist-filter-button");
     filterButton.addEventListener("click", function () {
         let artist = document.getElementById("artist-input").value;
-        console.log(artist);
-        render(dataset, artist);
+        render(dataset, "artist", artist);
     });
+
+    //multiple day filter event listener
+    let checkbox = document.getElementsByClassName("checkbox");
+    let checkedDays = [];
+    console.log(checkbox);
+    Array.from(checkbox).forEach(function(cb) {
+        cb.addEventListener('change', function() {
+            if (this.checked) {
+                checkedDays.push(this.value);
+            } else {
+                checkedDays = checkedDays.filter(day => day !== this.value);
+            }
+            console.log(checkedDays);
+            render(dataset, "day", checkedDays);
+        });
+    })
+    
 });

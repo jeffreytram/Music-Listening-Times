@@ -1,0 +1,15 @@
+2.5.20
+- project started
+- formatted data
+- visualize initial graph with d3
+
+2.6.20
+- added artist filter
+- connected to github
+- added day filter selector
+- day filter changed to checkbox
+
+todo
+- improve efficiency
+    - all data points reloading each day filter
+
