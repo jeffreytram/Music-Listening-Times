@@ -1,0 +1,18 @@
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: rgb(30, 30, 30);
+    color: white;
+}
+
+.label {
+    fill: white;
+}
+
+.axis {
+    color: white;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 20px;
+}

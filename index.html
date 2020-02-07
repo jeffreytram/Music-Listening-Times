@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Lastfm Test</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <svg width="600" height="740" style="border: 1px solid #777;">
+    </svg>
+    <br>
+    <button id="yorushika">Yorushika button</button>
+    <br>
+
+    <label for="artist-input">Filter by Artist:</label>
+    <input type="text" name="artist" id="artist-input">
+    <button id="artist-filter-button">Go!</button><br>
+
+    <label for="artist-input">Filter by Day of the Week:</label>
+    <select>
+        <option value="All">All</option>
+        <option value="Monday">Monday</option>
+        <option value="Tuesday">Tuesday</option>
+        <option value="Wednesday">Wednesday</option>
+        <option value="Thursday">Thursday</option>
+        <option value="Friday">Friday</option>
+        <option value="Saturday">Saturday</option>
+        <option value="Sunday">Sunday</option>
+    </select>
+    <button id="filter-button">Go!</button><br>
+
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="main.js" async defer></script>
+</body>
+
+</html>
