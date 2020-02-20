@@ -12,8 +12,10 @@
 2.20.20
 - filters moved to top
 - filter performance improvements
+    - no longer clearing and reloading every single point on filter
+- added basic song display on hover
 
 todo
-- improve efficiency
-    - all data points reloading each day filter
+- padding, height, width variables
+- loading icons
 

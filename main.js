@@ -27,10 +27,17 @@ function render(dataset, filter, category) {
     pointEnter.append('circle')
         .attr('r', 1)
         .style('fill', 'white')
-        .style('opacity', .3);
+        .style('opacity', .3)
+        .on("mouseover", function(d) {	
+            displaySongInfo(d);	
+            });	
 
     //remove filtered out circles
     point.exit().remove();
+}
+function displaySongInfo(song) {
+    let div = document.getElementById("song-info");
+    div.innerHTML = song.Artist + " - " + song.SongTitle + " Date: " + song.ConvertedDateTime;
 }
 
 //default view, no filter
