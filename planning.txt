@@ -11,7 +11,7 @@
 
 2.20.20
 - filters moved to top
-
+- filter performance improvements
 
 todo
 - improve efficiency

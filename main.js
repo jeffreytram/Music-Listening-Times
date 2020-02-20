@@ -4,30 +4,62 @@ function render(dataset, filter, category) {
     }
     if (filter === "day") {
         let newDataset = [];
-        category.forEach(function(day) {
+        category.forEach(function (day) {
             newDataset = newDataset.concat(dataset.filter(d => d.Day === day));
         });
         dataset = newDataset;
     }
 
+    var point = svg.selectAll('.point')
+        .data(dataset, d => d.ConvertedDateTime);
 
-    var svg = d3.select('svg');
-    //clear svg
-    svg.selectAll('*').remove();
+    var pointEnter = point.enter()
+        .append('g')
+        .attr('class', 'point')
+
+    pointEnter.merge(point)
+        .attr('transform', (d, i) => 'translate(' + [xScale(d.Time), yScale(new Date(d.Date))] + ')');
+
+    //radius scale
+    //TODO: radius scale
+
+    //add circle to group
+    pointEnter.append('circle')
+        .attr('r', 1)
+        .style('fill', 'white')
+        .style('opacity', .3);
+
+    //remove filtered out circles
+    point.exit().remove();
+}
+
+//default view, no filter
+d3.csv('lastfm-data-utf.csv').then(dataset => {
+    //convert date string to data object
+    let newDate = new Date();
+    newDate.setHours(0, 0, 0, 0);
+    let newDateMilis = newDate.getTime();
+
+    dataset.forEach(d => {
+        var parts = d.Time.split(/:/);
+        var timePeriodMillis = (parseInt(parts[0], 10) * 60 * 60 * 1000) +
+            (parseInt(parts[1], 10) * 60 * 1000)
+        d.Time = new Date()
+        d.Time.setTime(newDateMilis + timePeriodMillis);
+    });
+
+    svg = d3.select('svg');
 
     //x-axis scale
-    var xScale = d3.scaleTime()
+    xScale = d3.scaleTime()
         .domain(d3.extent(dataset, d => d.Time))
         .nice()
         .range([100, 500]);
 
     //y-axis scale
-    var yScale = d3.scaleTime()
+    yScale = d3.scaleTime()
         .domain([Date.now(), new Date("4/1/2018")])
         .range([60, 660]);
-
-    //radius scale
-    //TODO: radius scale
 
     //x-axis line
     var xAxis = d3.axisBottom(xScale)
@@ -69,32 +101,6 @@ function render(dataset, filter, category) {
         .attr('transform', 'translate(60,40)')
         .text('Jeffrey\'s Music Listening Times (4/2018 - 2/2020)');
 
-    //adding circles to svg
-    svg.selectAll('circle')
-        .data(dataset)
-        .enter()
-        .append('circle')
-        .attr('cx', d => xScale(d.Time))
-        .attr('cy', d => yScale(new Date(d.Date)))
-        .attr('r', 1)
-        .style('fill', 'white')
-        .style('opacity', .3);
-}
-
-//default view, no filter
-d3.csv('lastfm-data-utf.csv').then(dataset => {
-    //convert date string to data object
-    let newDate = new Date();
-    newDate.setHours(0, 0, 0, 0);
-    let newDateMilis = newDate.getTime();
-
-    dataset.forEach(d => {
-        var parts = d.Time.split(/:/);
-        var timePeriodMillis = (parseInt(parts[0], 10) * 60 * 60 * 1000) +
-            (parseInt(parts[1], 10) * 60 * 1000)
-        d.Time = new Date()
-        d.Time.setTime(newDateMilis + timePeriodMillis);
-    });
 
     //render all data points
     render(dataset, "", "");
@@ -116,8 +122,8 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     let checkbox = document.getElementsByClassName("checkbox");
     let checkedDays = [];
     console.log(checkbox);
-    Array.from(checkbox).forEach(function(cb) {
-        cb.addEventListener('change', function() {
+    Array.from(checkbox).forEach(function (cb) {
+        cb.addEventListener('change', function () {
             if (this.checked) {
                 checkedDays.push(this.value);
             } else {
@@ -129,5 +135,5 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     })
 
     //dot hover event listener
-    
+
 });
