@@ -9,6 +9,10 @@
 - added day filter selector
 - day filter changed to checkbox
 
+2.20.20
+- filters moved to top
+
+
 todo
 - improve efficiency
     - all data points reloading each day filter

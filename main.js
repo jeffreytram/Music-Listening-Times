@@ -127,5 +127,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
             render(dataset, "day", checkedDays);
         });
     })
+
+    //dot hover event listener
     
 });
