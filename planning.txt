@@ -20,6 +20,7 @@
 2.21.20
 - song display on hover changed to on click
 - selected song is now highlighted
+- filtered out songs now slightly still visible
 
 todo
 - padding, height, width variables

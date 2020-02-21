@@ -28,3 +28,7 @@
 .art {
     grid-row: 1/4;
 }
+
+.point:hover {
+    cursor: pointer;
+}
