@@ -1,4 +1,24 @@
-function render(dataset, filter, category) {
+function initRender(dataset) {
+    //filtered selection
+    var point = svg.selectAll('.point')
+        .data(dataset);
+
+    var pointEnter = point.enter()
+        .append('g')
+        .attr('class', 'point')
+        .style('opacity', .30)
+        .attr('transform', (d, i) => 'translate(' + [xScale(d.Time), yScale(new Date(d.Date))] + ')');
+
+    //add circle to group
+    pointEnter.append('circle')
+        .attr('r', 1)
+        .style('fill', 'white')
+        .on("click", function (d) {
+            displaySongInfo(d);
+            singleHighlight(d3.select(this));
+        });
+}
+function updateGraph(dataset, filter, category) {
     if (filter === "artist" && category !== "") {
         dataset = dataset.filter(d => d.Artist === category);
     }
@@ -10,32 +30,16 @@ function render(dataset, filter, category) {
         dataset = newDataset;
     }
 
+    //filtered selection
     var point = svg.selectAll('.point')
-        .data(dataset, d => d.ConvertedDateTime);
-
-    var pointEnter = point.enter()
-        .append('g')
-        .attr('class', 'point')
-
-    pointEnter.merge(point)
-        .attr('transform', (d, i) => 'translate(' + [xScale(d.Time), yScale(new Date(d.Date))] + ')');
-
-    //radius scale
-    //TODO: radius scale
-
-    //add circle to group
-    pointEnter.append('circle')
-        .attr('r', 1)
-        .style('fill', 'white')
-        .style('opacity', .3)
-        .on("click", function (d) {
-            displaySongInfo(d);
-            singleHighlight(d3.select(this));
-        });
+        .data(dataset, d => d.ConvertedDateTime)
+        .style('opacity', .30);
 
     //remove filtered out circles
-    point.exit().remove();
+    point.exit()
+        .style('opacity', .05);
 }
+
 function singleHighlight(dot) {
     svg.select('.selected')
         .attr('r', 1)
@@ -52,7 +56,7 @@ function displaySongInfo(song) {
     let divDate = document.getElementsByClassName("date");
 
     let albumArt = "";
-    
+
     let apiAlbum = `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=6bfcf3fcf37f46a75d0297c4e6d09f72&artist=${song.Artist}&album=${song.Album}&format=json`
     fetch(apiAlbum)
         .then(response => {
@@ -140,25 +144,18 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
 
 
     //render all data points
-    render(dataset, "", "");
-
-    //yorushika filter
-    let yorushikaButton = document.getElementById("yorushika");
-    yorushikaButton.addEventListener("click", function () {
-        render(dataset, "artist", "Yorushika");
-    });
+    initRender(dataset);
 
     //general filter event listener
     let filterButton = document.getElementById("artist-filter-button");
     filterButton.addEventListener("click", function () {
         let artist = document.getElementById("artist-input").value;
-        render(dataset, "artist", artist);
+        updateGraph(dataset, "artist", artist);
     });
 
     //multiple day filter event listener
     let checkbox = document.getElementsByClassName("checkbox");
     let checkedDays = [];
-    console.log(checkbox);
     Array.from(checkbox).forEach(function (cb) {
         cb.addEventListener('change', function () {
             if (this.checked) {
@@ -166,11 +163,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
             } else {
                 checkedDays = checkedDays.filter(day => day !== this.value);
             }
-            console.log(checkedDays);
-            render(dataset, "day", checkedDays);
+            updateGraph(dataset, "day", checkedDays);
         });
-    })
-
-    //dot hover event listener
-
+    });
 });
