@@ -28,12 +28,22 @@ function render(dataset, filter, category) {
         .attr('r', 1)
         .style('fill', 'white')
         .style('opacity', .3)
-        .on("mouseover", function (d) {
+        .on("click", function (d) {
             displaySongInfo(d);
+            singleHighlight(d3.select(this));
         });
 
     //remove filtered out circles
     point.exit().remove();
+}
+function singleHighlight(dot) {
+    svg.select('.selected')
+        .attr('r', 1)
+        .style('fill', 'white')
+        .attr('class', 'point');
+    dot.attr('r', 10)
+        .style('fill', 'red')
+        .attr('class', 'point selected');
 }
 function displaySongInfo(song) {
     let divArt = document.getElementsByClassName("art");
