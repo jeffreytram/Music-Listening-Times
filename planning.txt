@@ -17,7 +17,12 @@
 - added album cover image with LastFM API
 - changed api request link http to https
 
+2.21.20
+- song display on hover changed to on click
+- selected song is now highlighted
+
 todo
 - padding, height, width variables
 - loading icons
+- filters highlighting relevant / fading irrelevant points instead of removing
 
