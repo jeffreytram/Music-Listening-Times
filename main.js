@@ -28,16 +28,36 @@ function render(dataset, filter, category) {
         .attr('r', 1)
         .style('fill', 'white')
         .style('opacity', .3)
-        .on("mouseover", function(d) {	
-            displaySongInfo(d);	
-            });	
+        .on("mouseover", function (d) {
+            displaySongInfo(d);
+        });
 
     //remove filtered out circles
     point.exit().remove();
 }
 function displaySongInfo(song) {
-    let div = document.getElementById("song-info");
-    div.innerHTML = song.Artist + " - " + song.SongTitle + " Date: " + song.ConvertedDateTime;
+    let divArt = document.getElementsByClassName("art");
+    let divArtist = document.getElementsByClassName("artist");
+    let divSong = document.getElementsByClassName("song");
+    let divDate = document.getElementsByClassName("date");
+
+    let albumArt = "";
+    
+    let apiAlbum = `http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=6bfcf3fcf37f46a75d0297c4e6d09f72&artist=${song.Artist}&album=${song.Album}&format=json`
+    fetch(apiAlbum)
+        .then(response => {
+            return response.json();
+        })
+        .then(data => {
+            albumArt = data.album.image[2]["#text"];
+            if (albumArt === "") {
+                albumArt = "https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png";
+            }
+            divArt[0].innerHTML = `<img src=${albumArt}>`;
+            divArtist[0].innerHTML = song.Artist;
+            divSong[0].innerHTML = song.SongTitle;
+            divDate[0].innerHTML = song.Day + " " + song.ConvertedDateTime;
+        })
 }
 
 //default view, no filter

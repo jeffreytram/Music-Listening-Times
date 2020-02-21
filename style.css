@@ -16,3 +16,15 @@
     font-weight: bold;
     font-size: 20px;
 }
+
+#song-info-grid {
+    display: grid;
+    grid-template: repeat(3, 60px) / 190px 300px;
+    border: 1px solid rgba(30, 30, 30, .5);
+    border-radius: 15px;
+    min-height: 175px;
+}
+
+.art {
+    grid-row: 1/4;
+}
