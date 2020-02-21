@@ -15,13 +15,16 @@ function initRender(dataset) {
         .style('opacity', .30)
         .on("click", function (d) {
             displaySongInfo(d);
-            singleHighlight(d3.select(this));
             updateGraph(dataset, "song", d.SongTitle);
+            clearHighlight();
+            singleHighlight(d3.select(this));
         });
 }
 function updateGraph(dataset, filter, category) {
     let displaySize = 1;
     let viewOpacity = .30;
+    
+    clearHighlight();
 
     if (filter === "artist" && category !== "") {
         dataset = dataset.filter(d => d.Artist === category);
@@ -56,6 +59,14 @@ function updateGraph(dataset, filter, category) {
 }
 
 function singleHighlight(dot) {
+    dot.transition()
+        .ease(d3.easePoly)
+        .duration(1000)
+        .attr('r', 15)
+        .style('fill', 'red')
+        .attr('class', 'point selected');
+}
+function clearHighlight() {
     svg.select('.selected')
         .transition()
         .ease(d3.easePoly)
@@ -63,12 +74,6 @@ function singleHighlight(dot) {
         .attr('r', 1)
         .style('fill', 'white')
         .attr('class', 'point');
-    dot.transition()
-        .ease(d3.easePoly)
-        .duration(1000)
-        .attr('r', 15)
-        .style('fill', 'red')
-        .attr('class', 'point selected');
 }
 function displaySongInfo(song) {
     let divArt = document.getElementsByClassName("art");
@@ -167,9 +172,16 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     //render all data points
     initRender(dataset);
 
-    //general filter event listener
-    let filterButton = document.getElementById("artist-filter-button");
-    filterButton.addEventListener("click", function () {
+    //song filter
+    let songFilterButton = document.getElementById("song-filter-button");
+    songFilterButton.addEventListener("click", function () {
+        let song = document.getElementById("song-input").value;
+        updateGraph(dataset, "song", song);
+    });
+
+    //artist filter
+    let artistFilterButton = document.getElementById("artist-filter-button");
+    artistFilterButton.addEventListener("click", function () {
         let artist = document.getElementById("artist-input").value;
         updateGraph(dataset, "artist", artist);
     });
