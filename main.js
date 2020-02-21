@@ -43,7 +43,7 @@ function displaySongInfo(song) {
 
     let albumArt = "";
     
-    let apiAlbum = `http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=6bfcf3fcf37f46a75d0297c4e6d09f72&artist=${song.Artist}&album=${song.Album}&format=json`
+    let apiAlbum = `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=6bfcf3fcf37f46a75d0297c4e6d09f72&artist=${song.Artist}&album=${song.Album}&format=json`
     fetch(apiAlbum)
         .then(response => {
             return response.json();
