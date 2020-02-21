@@ -22,12 +22,14 @@
 - selected song is now highlighted
 - filtered out songs now slightly still visible
 - songs with the same title highlighted when selected
+- added song filter input
 
 todo
 - padding, height, width variables
 - loading icons
-- filters highlighting relevant / fading irrelevant points instead of removing
 - multiple filters applied at once
 - no filter day, defaults to view all
 - reset button
+- clicking artist/song/album filters by it
+- filter by album input
 
