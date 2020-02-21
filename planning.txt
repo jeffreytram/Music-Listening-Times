@@ -21,9 +21,13 @@
 - song display on hover changed to on click
 - selected song is now highlighted
 - filtered out songs now slightly still visible
+- songs with the same title highlighted when selected
 
 todo
 - padding, height, width variables
 - loading icons
 - filters highlighting relevant / fading irrelevant points instead of removing
+- multiple filters applied at once
+- no filter day, defaults to view all
+- reset button
 

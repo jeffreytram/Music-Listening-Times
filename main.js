@@ -6,21 +6,31 @@ function initRender(dataset) {
     var pointEnter = point.enter()
         .append('g')
         .attr('class', 'point')
-        .style('opacity', .30)
         .attr('transform', (d, i) => 'translate(' + [xScale(d.Time), yScale(new Date(d.Date))] + ')');
 
     //add circle to group
     pointEnter.append('circle')
         .attr('r', 1)
         .style('fill', 'white')
+        .style('opacity', .30)
         .on("click", function (d) {
             displaySongInfo(d);
             singleHighlight(d3.select(this));
+            updateGraph(dataset, "song", d.SongTitle);
         });
 }
 function updateGraph(dataset, filter, category) {
+    let displaySize = 1;
+    let viewOpacity = .30;
+
     if (filter === "artist" && category !== "") {
         dataset = dataset.filter(d => d.Artist === category);
+        displaySize = 2.5;
+    }
+    if (filter === "song") {
+        dataset = dataset.filter(d => d.SongTitle === category);
+        displaySize = 5;
+        viewOpacity = .50;
     }
     if (filter === "day") {
         let newDataset = [];
@@ -33,19 +43,30 @@ function updateGraph(dataset, filter, category) {
     //filtered selection
     var point = svg.selectAll('.point')
         .data(dataset, d => d.ConvertedDateTime)
-        .style('opacity', .30);
+
+    point.select("circle")
+        .attr('r', displaySize)
+        .style('opacity', viewOpacity);
 
     //remove filtered out circles
     point.exit()
-        .style('opacity', .05);
+        .select("circle")
+            .style('opacity', .07)
+            .attr('r', 1);
 }
 
 function singleHighlight(dot) {
     svg.select('.selected')
+        .transition()
+        .ease(d3.easePoly)
+        .duration(1500)
         .attr('r', 1)
         .style('fill', 'white')
         .attr('class', 'point');
-    dot.attr('r', 10)
+    dot.transition()
+        .ease(d3.easePoly)
+        .duration(1000)
+        .attr('r', 15)
         .style('fill', 'red')
         .attr('class', 'point selected');
 }
