@@ -15,6 +15,7 @@
     - no longer clearing and reloading every single point on filter
 - added basic song display on hover
 - added album cover image with LastFM API
+- changed api request link http to https
 
 todo
 - padding, height, width variables
