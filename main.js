@@ -19,14 +19,17 @@ function initRender(dataset) {
             clearHighlight();
             singleHighlight(d3.select(this));
         });
+
+    //display length of fitlered list
+    document.getElementById("entry-count").innerHTML = dataset.length;
 }
 function updateGraph(dataset, filter, category) {
     let displaySize = 1;
     let viewOpacity = .30;
-    
+
     clearHighlight();
 
-    if (filter === "song") {
+    if (filter === "song" && category !== "") {
         dataset = dataset.filter(d => d.SongTitle === category);
         displaySize = 5;
         viewOpacity = .50;
@@ -35,7 +38,7 @@ function updateGraph(dataset, filter, category) {
         dataset = dataset.filter(d => d.Artist === category);
         displaySize = 2.5;
     }
-    if (filter === "album") {
+    if (filter === "album" && category !== "") {
         dataset = dataset.filter(d => d.Album === category);
         displaySize = 4;
     }
@@ -44,8 +47,13 @@ function updateGraph(dataset, filter, category) {
         category.forEach(function (day) {
             newDataset = newDataset.concat(dataset.filter(d => d.Day === day));
         });
-        dataset = newDataset;
+        //if no days selected, display all
+        if (category.length > 0) {
+            dataset = newDataset;
+        }
     }
+    //display length of fitlered list
+    document.getElementById("entry-count").innerHTML = dataset.length;
 
     //filtered selection
     var point = svg.selectAll('.point')
@@ -58,15 +66,15 @@ function updateGraph(dataset, filter, category) {
     //remove filtered out circles
     point.exit()
         .select("circle")
-            .style('opacity', .07)
-            .attr('r', 1);
+        .style('opacity', .07)
+        .attr('r', 1);
 }
 
 //highlights the given circle element
 function singleHighlight(dot) {
     dot.transition()
         .ease(d3.easePoly)
-        .duration(1000)
+        .duration(2000)
         .attr('r', 15)
         .style('fill', 'red')
         .attr('class', 'point selected');
@@ -75,9 +83,6 @@ function singleHighlight(dot) {
 //removes the highlight of the selected circle
 function clearHighlight() {
     svg.select('.selected')
-        .transition()
-        .ease(d3.easePoly)
-        .duration(1500)
         .attr('r', 1)
         .style('fill', 'white')
         .attr('class', 'point');
@@ -122,7 +127,7 @@ function displaySongInfo(song) {
             divAlbumArt[0].innerHTML = `<img src=${albumArt}>`;
             divArtist[0].innerHTML = song.Artist;
             divSong[0].innerHTML = song.SongTitle;
-            divAlbum[0].innerHTML = data.album.name;
+            divAlbum[0].innerHTML = song.Album;
             divDate[0].innerHTML = song.Day + " " + song.ConvertedDateTime;
         })
 }
