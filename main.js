@@ -26,14 +26,18 @@ function updateGraph(dataset, filter, category) {
     
     clearHighlight();
 
-    if (filter === "artist" && category !== "") {
-        dataset = dataset.filter(d => d.Artist === category);
-        displaySize = 2.5;
-    }
     if (filter === "song") {
         dataset = dataset.filter(d => d.SongTitle === category);
         displaySize = 5;
         viewOpacity = .50;
+    }
+    if (filter === "artist" && category !== "") {
+        dataset = dataset.filter(d => d.Artist === category);
+        displaySize = 2.5;
+    }
+    if (filter === "album") {
+        dataset = dataset.filter(d => d.Album === category);
+        displaySize = 4;
     }
     if (filter === "day") {
         let newDataset = [];
@@ -58,6 +62,7 @@ function updateGraph(dataset, filter, category) {
             .attr('r', 1);
 }
 
+//highlights the given circle element
 function singleHighlight(dot) {
     dot.transition()
         .ease(d3.easePoly)
@@ -66,6 +71,8 @@ function singleHighlight(dot) {
         .style('fill', 'red')
         .attr('class', 'point selected');
 }
+
+//removes the highlight of the selected circle
 function clearHighlight() {
     svg.select('.selected')
         .transition()
@@ -75,10 +82,29 @@ function clearHighlight() {
         .style('fill', 'white')
         .attr('class', 'point');
 }
+
+//creates an event listener filter
+function addFilter(dataset, type, element, sourceValue) {
+    element.addEventListener("click", function () {
+        let filterValue;
+        if (sourceValue === "input") {
+            //filter value is the user input in text field
+            filterValue = document.getElementById(type + "-input").value;
+        } else if (sourceValue === "info") {
+            //filter value is the text displayed in the info
+            filterValue = element.innerHTML;
+            document.getElementById(type + "-input").value = filterValue;
+        }
+        updateGraph(dataset, type, filterValue);
+    });
+}
+
+//display the selected song's info
 function displaySongInfo(song) {
-    let divArt = document.getElementsByClassName("art");
+    let divAlbumArt = document.getElementsByClassName("art");
     let divArtist = document.getElementsByClassName("artist");
     let divSong = document.getElementsByClassName("song");
+    let divAlbum = document.getElementsByClassName("album");
     let divDate = document.getElementsByClassName("date");
 
     let albumArt = "";
@@ -93,9 +119,10 @@ function displaySongInfo(song) {
             if (albumArt === "") {
                 albumArt = "https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png";
             }
-            divArt[0].innerHTML = `<img src=${albumArt}>`;
+            divAlbumArt[0].innerHTML = `<img src=${albumArt}>`;
             divArtist[0].innerHTML = song.Artist;
             divSong[0].innerHTML = song.SongTitle;
+            divAlbum[0].innerHTML = data.album.name;
             divDate[0].innerHTML = song.Day + " " + song.ConvertedDateTime;
         })
 }
@@ -172,18 +199,17 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     //render all data points
     initRender(dataset);
 
-    //song filter
-    let songFilterButton = document.getElementById("song-filter-button");
-    songFilterButton.addEventListener("click", function () {
-        let song = document.getElementById("song-input").value;
-        updateGraph(dataset, "song", song);
+    //song, artist, and album filter
+    let filters = ["song", "artist", "album"];
+    filters.forEach(type => {
+        let clickable = document.getElementById(type + "-filter-button");
+        addFilter(dataset, type, clickable, "input");
     });
 
-    //artist filter
-    let artistFilterButton = document.getElementById("artist-filter-button");
-    artistFilterButton.addEventListener("click", function () {
-        let artist = document.getElementById("artist-input").value;
-        updateGraph(dataset, "artist", artist);
+    let clickableFilters = ["album", "artist", "song"];
+    clickableFilters.forEach(type => {
+        let clickable = document.getElementsByClassName(type);
+        addFilter(dataset, type, clickable[0], "info");
     });
 
     //multiple day filter event listener
