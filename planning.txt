@@ -26,12 +26,16 @@
 - clicking the song info now filters by it
 - added song info labels
 
+2.22.20
+- clickable text underlined
+- no day filter selected defaults to no filter
+- number of entries displayed
+
 todo
 - padding, height, width variables
 - loading icons
 - multiple filters applied at once
-- no filter day, defaults to view all
 - reset button
-- clicking artist/song/album filters by it
-- filter by album input
+- predictive/suggested search
+- display number of filtered
 

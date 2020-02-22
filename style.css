@@ -33,6 +33,6 @@
     cursor: pointer;
 }
 
-.lable {
-    text-align: right;
+.artist, .song, .album {
+    text-decoration: underline;
 }
