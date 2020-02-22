@@ -23,6 +23,8 @@
 - filtered out songs now slightly still visible
 - songs with the same title highlighted when selected
 - added song filter input
+- clicking the song info now filters by it
+- added song info labels
 
 todo
 - padding, height, width variables

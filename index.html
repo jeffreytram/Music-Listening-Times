@@ -19,6 +19,10 @@
     <input type="text" name="artist" id="artist-input">
     <button id="artist-filter-button">Go!</button><br>
 
+    <label for="album-input">Filter by Album:</label>
+    <input type="text" name="album" id="album-input">
+    <button id="album-filter-button">Go!</button><br>
+
     <input class="checkbox" type="checkbox" name="mon" value="Monday">Monday
     <input class="checkbox" type="checkbox" name="tues" value="Tuesday">Tuesday
     <input class="checkbox" type="checkbox" name="wed" value="Wednesday">Wednesday
@@ -29,8 +33,13 @@
     <br>
     <div id="song-info-grid">
         <div class="info art"></div>
+        <div class="label">Artist: </div>
         <div class="info artist"></div>
+        <div class="label">Song: </div>
         <div class="info song"></div>
+        <div class="label">Album: </div>
+        <div class="info album"></div>
+        <div class="label">Date: </div>
         <div class="info date"></div>
     </div>
     <svg width="600" height="740" style="border: 1px solid #777;">
