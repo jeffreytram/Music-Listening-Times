@@ -31,11 +31,21 @@
 - no day filter selected defaults to no filter
 - number of entries displayed
 
+2.26.20
+- switched artist and song filter placement
+
 todo
 - padding, height, width variables
 - loading icons
 - multiple filters applied at once
 - reset button
 - predictive/suggested search
-- display number of filtered
+- filter by year
+    - different time scales: weekly, monthly, yearly
+- displaying active filter
+- display total/top 10 tags
+- display artist tag when filtered by artist
+- display top 10 artist
+    - clicking artist info filters
+
 
