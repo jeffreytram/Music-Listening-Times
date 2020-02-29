@@ -15,6 +15,7 @@ function initRender(dataset) {
         .style('opacity', .30)
         .on("click", function (d) {
             displaySongInfo(d);
+            displayTags(d);
             updateGraph(dataset, "song", d.SongTitle);
             clearHighlight();
             singleHighlight(d3.select(this));
@@ -129,7 +130,30 @@ function displaySongInfo(song) {
             divSong[0].innerHTML = song.SongTitle;
             divAlbum[0].innerHTML = song.Album;
             divDate[0].innerHTML = song.Day + " " + song.ConvertedDateTime;
+        });
+}
+
+function displayTags(song) {
+    let apiArtist = `http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist=${song.Artist}&api_key=${config.API_KEY}&format=json`;
+    fetch(apiArtist) 
+        .then(response => {
+            return response.json();
         })
+        .then(data => {
+            console.log(data);
+            let divTags = document.getElementById("tags");
+
+            let apiTags = data.toptags.tag;
+            let tags = "";
+            let end = (5 > apiTags.length) ? apiTags.length : 5;
+            for (let i = 0; i < end; i++) {
+                tags += apiTags[i].name;
+                if (i != end - 1) {
+                    tags += ", ";
+                }
+            }
+            divTags.innerHTML = tags;
+        });
 }
 
 //default view, no filter
