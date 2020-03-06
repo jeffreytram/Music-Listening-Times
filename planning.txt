@@ -34,6 +34,16 @@
 2.26.20
 - switched artist and song filter placement
 
+2.29.20
+- added artist tags
+
+3.6.20
+- added time range filter
+
+
+
+- filter out points out of domain of chart
+
 todo
 - padding, height, width variables
 - loading icons
@@ -47,5 +57,6 @@ todo
 - display artist tag when filtered by artist
 - display top 10 artist
     - clicking artist info filters
+- loading bar
 
 

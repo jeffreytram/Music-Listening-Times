@@ -1,57 +1,45 @@
-function initRender(dataset) {
-    //filtered selection
-    var point = svg.selectAll('.point')
-        .data(dataset);
+function updateGraph(filter, category) {
 
-    var pointEnter = point.enter()
-        .append('g')
-        .attr('class', 'point')
-        .attr('transform', (d, i) => 'translate(' + [xScale(d.Time), yScale(new Date(d.Date))] + ')');
+    // **** Draw and Update your chart here ****
+    yScale.domain(yState).nice();
 
-    //add circle to group
-    pointEnter.append('circle')
-        .attr('r', 1)
-        .style('fill', 'white')
-        .style('opacity', .30)
-        .on("click", function (d) {
-            displaySongInfo(d);
-            displayTags(d);
-            updateGraph(dataset, "song", d.SongTitle);
-            clearHighlight();
-            singleHighlight(d3.select(this));
-        });
+    yAxisG.transition()
+        .ease(d3.easePoly)
+        .duration(750)
+        .call(d3.axisLeft(yScale));
 
-    //display length of fitlered list
-    document.getElementById("entry-count").innerHTML = dataset.length;
-}
-function updateGraph(dataset, filter, category) {
     let displaySize = 1;
     let viewOpacity = .30;
 
     clearHighlight();
 
     if (filter === "song" && category !== "") {
-        dataset = dataset.filter(d => d.SongTitle === category);
+        dataset = completeDataset.filter(d => d.SongTitle === category);
         displaySize = 5;
         viewOpacity = .50;
     }
     if (filter === "artist" && category !== "") {
-        dataset = dataset.filter(d => d.Artist === category);
+        dataset = completeDataset.filter(d => d.Artist === category);
         displaySize = 2.5;
     }
     if (filter === "album" && category !== "") {
-        dataset = dataset.filter(d => d.Album === category);
+        dataset = completeDataset.filter(d => d.Album === category);
         displaySize = 4;
     }
     if (filter === "day") {
         let newDataset = [];
         category.forEach(function (day) {
-            newDataset = newDataset.concat(dataset.filter(d => d.Day === day));
+            newDataset = newDataset.concat(completeDataset.filter(d => d.Day === day));
         });
         //if no days selected, display all
         if (category.length > 0) {
             dataset = newDataset;
+        } else {
+            dataset = completeDataset;
         }
+    }
+    if (category === "") {
+        dataset = completeDataset;
     }
     //display length of fitlered list
     document.getElementById("entry-count").innerHTML = dataset.length;
@@ -60,15 +48,31 @@ function updateGraph(dataset, filter, category) {
     var point = svg.selectAll('.point')
         .data(dataset, d => d.ConvertedDateTime)
 
-    point.select("circle")
+    var pointEnter = point.enter()
+        .append('g')
+        .attr('class', 'point')
+
+    pointEnter.merge(point)
+        .attr('transform', d => {
+            var tx = xScale(d.Time);
+            var ty = yScale(new Date(d.Date));
+            return 'translate(' + [tx, ty] + ')';
+        });
+
+    //add circle to group
+    pointEnter.append('circle')
         .attr('r', displaySize)
-        .style('opacity', viewOpacity);
+        .style('fill', 'white')
+        .style('opacity', viewOpacity)
+        .on("click", function (d) {
+            displaySongInfo(d);
+            displayTags(d);
+            clearHighlight();
+            singleHighlight(d3.select(this));
+        });
 
     //remove filtered out circles
-    point.exit()
-        .select("circle")
-        .style('opacity', .07)
-        .attr('r', 1);
+    point.exit().remove();
 }
 
 //highlights the given circle element
@@ -90,7 +94,7 @@ function clearHighlight() {
 }
 
 //creates an event listener filter
-function addFilter(dataset, type, element, sourceValue) {
+function addFilter(type, element, sourceValue) {
     element.addEventListener("click", function () {
         let filterValue;
         if (sourceValue === "input") {
@@ -101,7 +105,7 @@ function addFilter(dataset, type, element, sourceValue) {
             filterValue = element.innerHTML;
             document.getElementById(type + "-input").value = filterValue;
         }
-        updateGraph(dataset, type, filterValue);
+        updateGraph(type, filterValue);
     });
 }
 
@@ -134,8 +138,8 @@ function displaySongInfo(song) {
 }
 
 function displayTags(song) {
-    let apiArtist = `http://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist=${song.Artist}&api_key=6bfcf3fcf37f46a75d0297c4e6d09f72&format=json`;
-    fetch(apiArtist) 
+    let apiArtist = `https://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist=${song.Artist}&api_key=6bfcf3fcf37f46a75d0297c4e6d09f72&format=json`;
+    fetch(apiArtist)
         .then(response => {
             return response.json();
         })
@@ -156,12 +160,41 @@ function displayTags(song) {
         });
 }
 
+function changeDateRange(range) {
+    if (range === "weekly") {
+        yState = [new Date("2/1/2020"), new Date("1/25/2020")];
+    } else if (range === "monthly") {
+        yState = [new Date("2/1/2020"), new Date("1/1/2020")];
+    } else if (range === "yearly") {
+        yState = [new Date("2/1/2020"), new Date("2/1/2019")];
+    } else if (range === "all") {
+        yState = [new Date("2/1/2020"), new Date("4/1/2018")];
+    }
+    // Update chart
+    updateGraph("", "");
+}
+
+svg = d3.select('svg');
+
+//append x-axis
+var xAxisG = svg.append('g')
+    .attr('class', 'x axis')
+    .attr('transform', 'translate(0,660)')
+
+//append y-axis
+var yAxisG = svg.append('g')
+    .attr('class', 'y axis')
+    .attr('transform', 'translate(100,0)')
+
 //default view, no filter
-d3.csv('lastfm-data-utf.csv').then(dataset => {
+d3.csv('lastfm-data-utf.csv').then(entireDataset => {
     //convert date string to data object
     let newDate = new Date();
     newDate.setHours(0, 0, 0, 0);
     let newDateMilis = newDate.getTime();
+
+    completeDataset = entireDataset;
+    dataset = entireDataset;
 
     dataset.forEach(d => {
         var parts = d.Time.split(/:/);
@@ -170,8 +203,6 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
         d.Time = new Date()
         d.Time.setTime(newDateMilis + timePeriodMillis);
     });
-
-    svg = d3.select('svg');
 
     //x-axis scale
     xScale = d3.scaleTime()
@@ -190,15 +221,9 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
         .tickFormat(d3.timeFormat('%H:%M'));
 
     //y-axis line
-    var yAxis = d3.axisLeft(yScale)
-        .ticks(d3.timeMonth.every(1))
-        .tickFormat(d3.timeFormat('%b \'%y'));
+    yAxis = d3.axisLeft(yScale)
 
-    //append x-axis
-    svg.append('g')
-        .attr('class', 'x axis')
-        .attr('transform', 'translate(0,660)')
-        .call(xAxis);
+    xAxisG.call(xAxis);
 
     //append x-axis label
     svg.append('text')
@@ -206,11 +231,8 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
         .attr('transform', 'translate(250,720)')
         .text('Time of Day (hrs:mins)');
 
-    //append y-axis
-    svg.append('g')
-        .attr('class', 'y axis')
-        .attr('transform', 'translate(100,0)')
-        .call(yAxis);
+
+    yAxisG.call(yAxis);
 
     //append y-axis label
     svg.append('text')
@@ -225,20 +247,23 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
         .text('Jeffrey\'s Music Listening Times (4/2018 - 2/2020)');
 
 
+    // Create global object called chartScales to keep state
+    yState = [Date.now(), new Date("4/1/2018")];
+
     //render all data points
-    initRender(dataset);
+    updateGraph("", "");
 
     //song, artist, and album filter
     let filters = ["song", "artist", "album"];
     filters.forEach(type => {
         let clickable = document.getElementById(type + "-filter-button");
-        addFilter(dataset, type, clickable, "input");
+        addFilter(type, clickable, "input");
     });
 
     let clickableFilters = ["album", "artist", "song"];
     clickableFilters.forEach(type => {
         let clickable = document.getElementsByClassName(type);
-        addFilter(dataset, type, clickable[0], "info");
+        addFilter(type, clickable[0], "info");
     });
 
     //multiple day filter event listener
@@ -251,7 +276,14 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
             } else {
                 checkedDays = checkedDays.filter(day => day !== this.value);
             }
-            updateGraph(dataset, "day", checkedDays);
+            updateGraph("day", checkedDays);
         });
+    });
+
+    //change date range
+    let selectList = document.getElementById("date-range");
+    selectList.addEventListener("change", function () {
+        let selectedValue = selectList.options[selectList.selectedIndex].value;
+        changeDateRange(selectedValue);
     });
 });
