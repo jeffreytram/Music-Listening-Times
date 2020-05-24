@@ -15,10 +15,10 @@ function filterController(type, value) {
     } else if (type === "day") {
         filterDay(value);
     }
-    updateCirlces(displaySize, viewOpacity);
+    updateCircles(displaySize, viewOpacity);
 }
 function filterSong(song) {
-    dataset = completeDataset.filter(d => d.SongTitle === song);
+    dataset = dataset.filter(d => d.SongTitle === song);
 
 }
 
@@ -43,7 +43,9 @@ function filterDay(days) {
 }
 
 function filterRange(range) {
-    dataset = completeDataset.filter(d => d.Album === category);
+    const upperRange = range[0];
+    const lowerRange = range[1];
+    dataset = completeDataset.filter(d => d.Date >= lowerRange && d.Date <= upperRange);
 }
 
 function resetGraph() {
@@ -65,7 +67,7 @@ function updateCircles(displaySize = 1, viewOpacity = .3) {
     pointEnter.merge(point)
         .attr('transform', d => {
             var tx = xScale(d.Time);
-            var ty = yScale(new Date(d.Date));
+            var ty = yScale(d.Date);
             return 'translate(' + [tx, ty] + ')';
         });
 
@@ -94,7 +96,10 @@ function updateYAxis() {
 }
 
 function changeDateRange(range) {
-    if (range === "2020") {
+    if (range === "All") {
+        yState = [new Date("2/4/2020"), new Date("4/8/2018")];
+    }
+    else if (range === "2020") {
         yState = [new Date("12/31/2020"), new Date("1/1/2020")];
     } else if (range === "2019") {
         yState = [new Date("12/31/2019"), new Date("1/1/2019")];
@@ -103,6 +108,7 @@ function changeDateRange(range) {
     }
     // Update chart
     updateYAxis();
+    filterRange(yState);
     updateCircles();
 }
 
@@ -175,7 +181,6 @@ function displayTags(song) {
             return response.json();
         })
         .then(data => {
-            console.log(data);
             let divTags = document.getElementById("tags");
 
             let apiTags = data.toptags.tag;
@@ -204,7 +209,7 @@ var yAxisG = svg.append('g')
     .attr('transform', 'translate(100,0)')
 
 //default view, no filter
-d3.csv('lastfm-data-utf.csv').then(entireDataset => {
+d3.csv('lastfm-data-utf-testing.csv').then(entireDataset => {
     //convert date string to data object
     let newDate = new Date();
     newDate.setHours(0, 0, 0, 0);
@@ -214,6 +219,8 @@ d3.csv('lastfm-data-utf.csv').then(entireDataset => {
     dataset = entireDataset;
 
     dataset.forEach(d => {
+        d.Date = new Date(d.Date);
+
         var parts = d.Time.split(/:/);
         var timePeriodMillis = (parseInt(parts[0], 10) * 60 * 60 * 1000) +
             (parseInt(parts[1], 10) * 60 * 1000)
@@ -229,7 +236,7 @@ d3.csv('lastfm-data-utf.csv').then(entireDataset => {
 
     //y-axis scale
     yScale = d3.scaleTime()
-        .domain([new Date("12/31/2020"), new Date("1/1/2020")])
+        .domain([new Date("2/4/2020"), new Date("4/8/2018")])
         .range([60, 660]);
 
     //x-axis line
@@ -265,7 +272,7 @@ d3.csv('lastfm-data-utf.csv').then(entireDataset => {
 
 
     // Create global object called chartScales to keep state
-    yState = [new Date("12/31/2020"), new Date("1/1/2020")];
+    yState = [new Date("2/4/2020"), new Date("4/8/2020")];
 
     //render all data points
     updateCircles();
