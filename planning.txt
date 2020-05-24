@@ -40,6 +40,9 @@
 3.6.20
 - added time range filter
 
+5.24.20
+- added year selector
+
 
 
 - filter out points out of domain of chart

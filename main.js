@@ -1,46 +1,56 @@
-function updateGraph(filter, category) {
-
-    // **** Draw and Update your chart here ****
-    yScale.domain(yState).nice();
-
-    yAxisG.transition()
-        .ease(d3.easePoly)
-        .duration(750)
-        .call(d3.axisLeft(yScale));
-
+function filterController(type, value) {
+    clearHighlight()
     let displaySize = 1;
-    let viewOpacity = .30;
-
-    clearHighlight();
-
-    if (filter === "song" && category !== "") {
-        dataset = completeDataset.filter(d => d.SongTitle === category);
+    let viewOpacity = .3;
+    if (type === "song") {
+        filterSong(value);
         displaySize = 5;
         viewOpacity = .50;
-    }
-    if (filter === "artist" && category !== "") {
-        dataset = completeDataset.filter(d => d.Artist === category);
+    } else if (type ==="artist") {
+        filterArtist(value);
         displaySize = 2.5;
+    } else if (type === "album") {
+        filterAlbum(value);
+        displaysize = 4;
+    } else if (type === "day") {
+        filterDay(value);
     }
-    if (filter === "album" && category !== "") {
-        dataset = completeDataset.filter(d => d.Album === category);
-        displaySize = 4;
-    }
-    if (filter === "day") {
-        let newDataset = [];
-        category.forEach(function (day) {
-            newDataset = newDataset.concat(completeDataset.filter(d => d.Day === day));
-        });
-        //if no days selected, display all
-        if (category.length > 0) {
-            dataset = newDataset;
-        } else {
-            dataset = completeDataset;
-        }
-    }
-    if (category === "") {
+    updateCirlces(displaySize, viewOpacity);
+}
+function filterSong(song) {
+    dataset = completeDataset.filter(d => d.SongTitle === song);
+
+}
+
+function filterArtist(artist) {
+    dataset = completeDataset.filter(d => d.Artist === artist);
+}
+function filterAlbum(category) {
+    dataset = completeDataset.filter(d => d.Album === category);
+}
+
+function filterDay(days) {
+    let newDataset = [];
+    days.forEach(function (day) {
+        newDataset = newDataset.concat(completeDataset.filter(d => d.Day === day));
+    });
+    //if no days selected, display all
+    if (days.length > 0) {
+        dataset = newDataset;
+    } else {
         dataset = completeDataset;
     }
+}
+
+function filterRange(range) {
+    dataset = completeDataset.filter(d => d.Album === category);
+}
+
+function resetGraph() {
+    dataset = completeDataset;
+    updateCircles();
+}
+function updateCircles(displaySize = 1, viewOpacity = .3) {
     //display length of fitlered list
     document.getElementById("entry-count").innerHTML = dataset.length;
 
@@ -75,6 +85,27 @@ function updateGraph(filter, category) {
     point.exit().remove();
 }
 
+function updateYAxis() {
+    yScale.domain(yState);
+    yAxisG.transition()
+        .ease(d3.easePoly)
+        .duration(750)
+        .call(d3.axisLeft(yScale));
+}
+
+function changeDateRange(range) {
+    if (range === "2020") {
+        yState = [new Date("12/31/2020"), new Date("1/1/2020")];
+    } else if (range === "2019") {
+        yState = [new Date("12/31/2019"), new Date("1/1/2019")];
+    } else if (range === "2018") {
+        yState = [new Date("12/31/2018"), new Date("1/1/2018")];
+    }
+    // Update chart
+    updateYAxis();
+    updateCircles();
+}
+
 //highlights the given circle element
 function singleHighlight(dot) {
     dot.transition()
@@ -105,7 +136,7 @@ function addFilter(type, element, sourceValue) {
             filterValue = element.innerHTML;
             document.getElementById(type + "-input").value = filterValue;
         }
-        updateGraph(type, filterValue);
+        filterController(type, filterValue);
     });
 }
 
@@ -160,20 +191,6 @@ function displayTags(song) {
         });
 }
 
-function changeDateRange(range) {
-    if (range === "weekly") {
-        yState = [new Date("2/1/2020"), new Date("1/25/2020")];
-    } else if (range === "monthly") {
-        yState = [new Date("2/1/2020"), new Date("1/1/2020")];
-    } else if (range === "yearly") {
-        yState = [new Date("2/1/2020"), new Date("2/1/2019")];
-    } else if (range === "all") {
-        yState = [new Date("2/1/2020"), new Date("4/1/2018")];
-    }
-    // Update chart
-    updateGraph("", "");
-}
-
 svg = d3.select('svg');
 
 //append x-axis
@@ -212,7 +229,7 @@ d3.csv('lastfm-data-utf.csv').then(entireDataset => {
 
     //y-axis scale
     yScale = d3.scaleTime()
-        .domain([Date.now(), new Date("4/1/2018")])
+        .domain([new Date("12/31/2020"), new Date("1/1/2020")])
         .range([60, 660]);
 
     //x-axis line
@@ -248,10 +265,10 @@ d3.csv('lastfm-data-utf.csv').then(entireDataset => {
 
 
     // Create global object called chartScales to keep state
-    yState = [Date.now(), new Date("4/1/2018")];
+    yState = [new Date("12/31/2020"), new Date("1/1/2020")];
 
     //render all data points
-    updateGraph("", "");
+    updateCircles();
 
     //song, artist, and album filter
     let filters = ["song", "artist", "album"];
@@ -276,7 +293,7 @@ d3.csv('lastfm-data-utf.csv').then(entireDataset => {
             } else {
                 checkedDays = checkedDays.filter(day => day !== this.value);
             }
-            updateGraph("day", checkedDays);
+            filterGraph("day", checkedDays);
         });
     });
 
