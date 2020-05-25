@@ -43,6 +43,7 @@
 5.24.20
 - added year selector
 - added range filter
+- changed to monthly
 
 
 - filter out points out of domain of chart

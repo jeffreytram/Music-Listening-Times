@@ -1,32 +1,27 @@
 function filterController(type, value) {
     clearHighlight()
-    let displaySize = 1;
-    let viewOpacity = .3;
     if (type === "song") {
         filterSong(value);
-        displaySize = 5;
-        viewOpacity = .50;
-    } else if (type ==="artist") {
+    } else if (type === "artist") {
         filterArtist(value);
-        displaySize = 2.5;
     } else if (type === "album") {
         filterAlbum(value);
-        displaysize = 4;
     } else if (type === "day") {
         filterDay(value);
     }
-    updateCircles(displaySize, viewOpacity);
+    displayNumEntries();
+    updateCircles(5, .5);
 }
 function filterSong(song) {
-    dataset = dataset.filter(d => d.SongTitle === song);
+    dataset = datasetMonth.filter(d => d.SongTitle === song);
 
 }
 
 function filterArtist(artist) {
-    dataset = completeDataset.filter(d => d.Artist === artist);
+    dataset = datasetMonth.filter(d => d.Artist === artist);
 }
 function filterAlbum(category) {
-    dataset = completeDataset.filter(d => d.Album === category);
+    dataset = datasetMonth.filter(d => d.Album === category);
 }
 
 function filterDay(days) {
@@ -45,17 +40,72 @@ function filterDay(days) {
 function filterRange(range) {
     const upperRange = range[0];
     const lowerRange = range[1];
-    dataset = completeDataset.filter(d => d.Date >= lowerRange && d.Date <= upperRange);
+    dataset = [];
+    for (let i = 0; i < completeDataset.length; i++) {
+        let curr = completeDataset[i];
+        if (curr.Date >= lowerRange && curr.Date <= upperRange) {
+            dataset.push(curr);
+        }
+        if (curr.Date < lowerRange) {
+            break;
+        }
+    }
+    datasetMonth = dataset;
 }
 
 function resetGraph() {
-    dataset = completeDataset;
+    filterRange(yState);
+    displayNumEntries();
     updateCircles();
+    clearHighlight();
 }
-function updateCircles(displaySize = 1, viewOpacity = .3) {
-    //display length of fitlered list
-    document.getElementById("entry-count").innerHTML = dataset.length;
 
+function renderCircles() {
+    //filtered selection
+    var point = svg.selectAll('.point')
+        .data(dataset, d => d.ConvertedDateTime)
+
+    var pointEnter = point.enter()
+        .append('g')
+        .attr('class', 'point')
+
+    pointEnter.merge(point)
+        .attr('transform', d => {
+            var tx = xScale(d.Time);
+            var ty = yScale(d.Date);
+            return 'translate(' + [tx, ty] + ')';
+        });
+
+    //add circle to group
+    pointEnter.append('circle')
+        .attr('r', 3)
+        .style('fill', 'white')
+        .style('opacity', .3)
+        .on("click", function (d) {
+            displaySongInfo(d);
+            displayTags(d);
+            clearHighlight();
+            singleHighlight(d3.select(this));
+        });
+}
+
+function updateCircles(displaySize = 3, viewOpacity = .3) {
+    //filtered selection
+    var point = svg.selectAll('.point')
+        .data(dataset, d => d.ConvertedDateTime)
+
+    point.select("circle")
+        .attr('r', displaySize)
+        .style('opacity', viewOpacity);
+
+    //remove filtered out circles
+    point.exit()
+        .select("circle")
+        .attr('r', 3)
+        .style('opacity', .1);
+}
+
+function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
     //filtered selection
     var point = svg.selectAll('.point')
         .data(dataset, d => d.ConvertedDateTime)
@@ -94,29 +144,32 @@ function updateYAxis() {
         .duration(750)
         .call(d3.axisLeft(yScale));
 }
+function displayNumEntries() {
+    //display length of fitlered list
+    document.getElementById("entry-count").innerHTML = dataset.length;
+}
 
 function changeDateRange(range) {
-    if (range === "All") {
-        yState = [new Date("2/4/2020"), new Date("4/8/2018")];
-    }
-    else if (range === "2020") {
-        yState = [new Date("12/31/2020"), new Date("1/1/2020")];
-    } else if (range === "2019") {
-        yState = [new Date("12/31/2019"), new Date("1/1/2019")];
-    } else if (range === "2018") {
-        yState = [new Date("12/31/2018"), new Date("1/1/2018")];
-    }
+    const date = new Date(range);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    yState = [lastDay, firstDay];
+
     // Update chart
     updateYAxis();
     filterRange(yState);
-    updateCircles();
+    displayNumEntries();
+    updateCirclesRange();
 }
 
 //highlights the given circle element
 function singleHighlight(dot) {
+    filterController('artist', dot._groups[0][0].__data__.Artist);
     dot.transition()
         .ease(d3.easePoly)
-        .duration(2000)
+        .duration(1000)
         .attr('r', 15)
         .style('fill', 'red')
         .attr('class', 'point selected');
@@ -125,7 +178,7 @@ function singleHighlight(dot) {
 //removes the highlight of the selected circle
 function clearHighlight() {
     svg.select('.selected')
-        .attr('r', 1)
+        .attr('r', 3)
         .style('fill', 'white')
         .attr('class', 'point');
 }
@@ -196,12 +249,20 @@ function displayTags(song) {
         });
 }
 
-svg = d3.select('svg');
+const width = 1100;
+const height = 540;
+
+svg = d3.select('#main-graph')
+    .attr('width', width)
+    .attr('height', height)
+    .attr('viewBox', [0, 0, width, height])
+    .attr('preserveAspectRatio', 'xMidYMid meet')
+    .classed('svg-content', true);
 
 //append x-axis
 var xAxisG = svg.append('g')
     .attr('class', 'x axis')
-    .attr('transform', 'translate(0,660)')
+    .attr('transform', 'translate(0,460)')
 
 //append y-axis
 var yAxisG = svg.append('g')
@@ -209,7 +270,7 @@ var yAxisG = svg.append('g')
     .attr('transform', 'translate(100,0)')
 
 //default view, no filter
-d3.csv('lastfm-data-utf-testing.csv').then(entireDataset => {
+d3.csv('lastfm-data-utf.csv').then(entireDataset => {
     //convert date string to data object
     let newDate = new Date();
     newDate.setHours(0, 0, 0, 0);
@@ -217,6 +278,7 @@ d3.csv('lastfm-data-utf-testing.csv').then(entireDataset => {
 
     completeDataset = entireDataset;
     dataset = entireDataset;
+    datesetMonth = [];
 
     dataset.forEach(d => {
         d.Date = new Date(d.Date);
@@ -232,12 +294,12 @@ d3.csv('lastfm-data-utf-testing.csv').then(entireDataset => {
     xScale = d3.scaleTime()
         .domain(d3.extent(dataset, d => d.Time))
         .nice()
-        .range([100, 500]);
+        .range([100, 1000]);
 
     //y-axis scale
     yScale = d3.scaleTime()
-        .domain([new Date("2/4/2020"), new Date("4/8/2018")])
-        .range([60, 660]);
+        .domain([new Date("2/29/2020"), new Date("2/1/2020")])
+        .range([60, 460]);
 
     //x-axis line
     var xAxis = d3.axisBottom(xScale)
@@ -252,7 +314,8 @@ d3.csv('lastfm-data-utf-testing.csv').then(entireDataset => {
     //append x-axis label
     svg.append('text')
         .attr('class', 'x label')
-        .attr('transform', 'translate(250,720)')
+        .attr('text-anchor', 'middle')
+        .attr('transform', 'translate(' + width / 2 + ', ' + (height - 30) + ')')
         .text('Time of Day (hrs:mins)');
 
 
@@ -261,22 +324,26 @@ d3.csv('lastfm-data-utf-testing.csv').then(entireDataset => {
     //append y-axis label
     svg.append('text')
         .attr('class', 'x label')
-        .attr('transform', 'translate(35,400) rotate(-90)')
+        .attr('transform', 'translate(35, ' + height / 2 + ') rotate(-90)')
         .text('Date');
 
     //append title to graph
     svg.append('text')
         .attr('class', 'title label')
-        .attr('transform', 'translate(60,40)')
+        .attr('transform', 'translate(' + width / 2 + ', ' + 40 + ')')
+        .attr('text-anchor', 'middle')
         .text('Jeffrey\'s Music Listening Times (4/2018 - 2/2020)');
 
 
     // Create global object called chartScales to keep state
-    yState = [new Date("2/4/2020"), new Date("4/8/2020")];
+    yState = [new Date("2/29/2020"), new Date("2/1/2020")];
 
+    filterRange(yState);
     //render all data points
-    updateCircles();
+    displayNumEntries();
+    renderCircles();
 
+    datasetMonth = dataset;
     //song, artist, and album filter
     let filters = ["song", "artist", "album"];
     filters.forEach(type => {
@@ -310,4 +377,10 @@ d3.csv('lastfm-data-utf-testing.csv').then(entireDataset => {
         let selectedValue = selectList.options[selectList.selectedIndex].value;
         changeDateRange(selectedValue);
     });
+
+    //reset button
+    let resetButton = document.getElementById("reset");
+    resetButton.addEventListener("click", function () {
+        resetGraph();
+    })
 });
