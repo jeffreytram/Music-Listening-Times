@@ -2,55 +2,50 @@ function filterController(type, value) {
     clearHighlight()
     if (type === "song") {
         filterSong(value);
+        updateCircles(5, .5);
     } else if (type === "artist") {
         filterArtist(value);
+        updateCircles(5, .5);
     } else if (type === "album") {
         filterAlbum(value);
+        updateCircles(5, .5);
     } else if (type === "day") {
         filterDay(value);
+        updateCircles(3, .3);
     }
     displayNumEntries();
-    updateCircles(5, .5);
 }
 function filterSong(song) {
-    dataset = datasetMonth.filter(d => d.SongTitle === song);
+    filteredDatasetMonth = datasetMonth.filter(d => d.SongTitle === song);
 
 }
 
 function filterArtist(artist) {
-    dataset = datasetMonth.filter(d => d.Artist === artist);
+    filteredDatasetMonth = datasetMonth.filter(d => d.Artist === artist);
 }
 function filterAlbum(category) {
-    dataset = datasetMonth.filter(d => d.Album === category);
+    filteredDatasetMonth = datasetMonth.filter(d => d.Album === category);
 }
 
 function filterDay(days) {
     let newDataset = [];
     days.forEach(function (day) {
-        newDataset = newDataset.concat(completeDataset.filter(d => d.Day === day));
+        newDataset = newDataset.concat(datasetMonth.filter(d => d.Day === day));
     });
     //if no days selected, display all
     if (days.length > 0) {
-        dataset = newDataset;
+        filteredDatasetMonth = newDataset;
     } else {
-        dataset = completeDataset;
+        filteredDatasetMonth = datasetMonth;
     }
 }
 
 function filterRange(range) {
     const upperRange = range[0];
     const lowerRange = range[1];
-    dataset = [];
-    for (let i = 0; i < completeDataset.length; i++) {
-        let curr = completeDataset[i];
-        if (curr.Date >= lowerRange && curr.Date <= upperRange) {
-            dataset.push(curr);
-        }
-        if (curr.Date < lowerRange) {
-            break;
-        }
-    }
-    datasetMonth = dataset;
+    let key = (lowerRange.getMonth() + 1) + " " + lowerRange.getFullYear()
+    datasetMonth = buckets[key];
+    filteredDatasetMonth = datasetMonth;
 }
 
 function resetGraph() {
@@ -63,7 +58,7 @@ function resetGraph() {
 function renderCircles() {
     //filtered selection
     var point = svg.selectAll('.point')
-        .data(dataset, d => d.ConvertedDateTime)
+        .data(filteredDatasetMonth, d => d.ConvertedDateTime)
 
     var pointEnter = point.enter()
         .append('g')
@@ -92,7 +87,7 @@ function renderCircles() {
 function updateCircles(displaySize = 3, viewOpacity = .3) {
     //filtered selection
     var point = svg.selectAll('.point')
-        .data(dataset, d => d.ConvertedDateTime)
+        .data(filteredDatasetMonth, d => d.ConvertedDateTime)
 
     point.select("circle")
         .attr('r', displaySize)
@@ -108,7 +103,7 @@ function updateCircles(displaySize = 3, viewOpacity = .3) {
 function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
     //filtered selection
     var point = svg.selectAll('.point')
-        .data(dataset, d => d.ConvertedDateTime)
+        .data(datasetMonth, d => d.ConvertedDateTime)
 
     var pointEnter = point.enter()
         .append('g')
@@ -146,7 +141,7 @@ function updateYAxis() {
 }
 function displayNumEntries() {
     //display length of fitlered list
-    document.getElementById("entry-count").innerHTML = dataset.length;
+    document.getElementById("entry-count").innerHTML = filteredDatasetMonth.length;
 }
 
 function changeDateRange(range) {
@@ -171,6 +166,7 @@ function singleHighlight(dot) {
         .ease(d3.easePoly)
         .duration(1000)
         .attr('r', 15)
+        .style('opacity', .5)
         .style('fill', 'red')
         .attr('class', 'point selected');
 }
@@ -270,18 +266,24 @@ var yAxisG = svg.append('g')
     .attr('transform', 'translate(100,0)')
 
 //default view, no filter
-d3.csv('lastfm-data-utf.csv').then(entireDataset => {
+d3.csv('lastfm-data-utf.csv').then(dataset => {
     //convert date string to data object
     let newDate = new Date();
     newDate.setHours(0, 0, 0, 0);
     let newDateMilis = newDate.getTime();
 
-    completeDataset = entireDataset;
-    dataset = entireDataset;
     datesetMonth = [];
+    filteredDatasetMonth = [];
 
+    buckets = {};
     dataset.forEach(d => {
         d.Date = new Date(d.Date);
+        //add to bucket
+        let key = (d.Date.getMonth() + 1) + " " + d.Date.getFullYear();
+        if (buckets[key] === undefined) {
+            buckets[key] = [];
+        }
+        buckets[key].push(d);
 
         var parts = d.Time.split(/:/);
         var timePeriodMillis = (parseInt(parts[0], 10) * 60 * 60 * 1000) +
@@ -338,12 +340,14 @@ d3.csv('lastfm-data-utf.csv').then(entireDataset => {
     // Create global object called chartScales to keep state
     yState = [new Date("2/29/2020"), new Date("2/1/2020")];
 
+    datasetMonth = buckets["2 2020"];
+    filteredDatasetMonth = datasetMonth;
+
     filterRange(yState);
     //render all data points
     displayNumEntries();
     renderCircles();
 
-    datasetMonth = dataset;
     //song, artist, and album filter
     let filters = ["song", "artist", "album"];
     filters.forEach(type => {
@@ -367,7 +371,7 @@ d3.csv('lastfm-data-utf.csv').then(entireDataset => {
             } else {
                 checkedDays = checkedDays.filter(day => day !== this.value);
             }
-            filterGraph("day", checkedDays);
+            filterController("day", checkedDays);
         });
     });
 

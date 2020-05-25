@@ -45,8 +45,11 @@
 - added range filter
 - changed to monthly
 
+5.25.20
+- split dataset into buckets
+- updated day filter
 
-- filter out points out of domain of chart
+use buckets to store song data by month
 
 todo
 - padding, height, width variables
