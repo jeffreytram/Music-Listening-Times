@@ -17,7 +17,6 @@ function filterController(type, value) {
 }
 function filterSong(song) {
     filteredDatasetMonth = datasetMonth.filter(d => d.SongTitle === song);
-
 }
 
 function filterArtist(artist) {
@@ -49,7 +48,7 @@ function filterRange(range) {
 
 function updateTitle(range) {
     const lowerRange = range[1];
-    let month = lowerRange.toLocaleDateString('default', {month: 'long', year: 'numeric'});
+    let month = lowerRange.toLocaleDateString('default', { month: 'long', year: 'numeric' });
     d3.select('.title')
         .text('Jeffrey\'s music Listening Times - ' + month);
 }
@@ -150,8 +149,7 @@ function displayNumEntries() {
     document.getElementById("entry-count").innerHTML = filteredDatasetMonth.length;
 }
 
-function changeDateRange(range) {
-    const date = new Date(range);
+function changeDateRange(date) {
     const year = date.getFullYear();
     const month = date.getMonth();
     const firstDay = new Date(year, month, 1);
@@ -164,6 +162,46 @@ function changeDateRange(range) {
     displayNumEntries();
     updateCirclesRange();
     updateTitle(yState);
+}
+
+function changeNextMonth() {
+    const currDate = new Date(getSelectedValue());
+    const year = currDate.getFullYear();
+    const month = currDate.getMonth();
+    const nextMonth = new Date(year, month + 1, 1);
+
+    const nextMonthText = nextMonth.toLocaleDateString('default', { month: 'short', year: 'numeric' });
+    if (validMonth(nextMonthText)) {
+        changeDateRange(nextMonth);
+    };
+}
+function changePrevMonth() {
+    const currDate = new Date(getSelectedValue());
+    const year = currDate.getFullYear();
+    const month = currDate.getMonth();
+    const prevMonth = new Date(year, month - 1, 1);
+
+    const prevMonthText = prevMonth.toLocaleDateString('default', {month: 'short', year: 'numeric'});
+    if (validMonth(prevMonthText)) {
+        changeDateRange(prevMonth);
+    }
+}
+
+function validMonth(month) {
+    let selector = document.getElementById('date-range');
+    for (let i = 0; i < selector.options.length; i++) {
+        if (selector.options[i].text === month) {
+            selector.selectedIndex = i;
+            return true;
+        }
+    }
+    return false;
+}
+
+function getSelectedValue() {
+    let selectList = document.getElementById("date-range");
+    let selectedValue = selectList.options[selectList.selectedIndex].value;
+    return selectedValue;
 }
 
 //highlights the given circle element
@@ -386,12 +424,23 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     let selectList = document.getElementById("date-range");
     selectList.addEventListener("change", function () {
         let selectedValue = selectList.options[selectList.selectedIndex].value;
-        changeDateRange(selectedValue);
+        let date = new Date(selectedValue);
+        changeDateRange(date);
     });
 
     //reset button
     let resetButton = document.getElementById("reset");
     resetButton.addEventListener("click", function () {
         resetGraph();
+    });
+
+    //left/right buttons
+    let nextButton = document.getElementById('right');
+    nextButton.addEventListener("click", function () {
+        changeNextMonth();
+    });
+    let prevButton = document.getElementById('left');
+    prevButton.addEventListener("click", function () {
+        changePrevMonth();
     })
 });

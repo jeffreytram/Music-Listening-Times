@@ -51,8 +51,9 @@
 
 5.26.20
 - graph title now updates with selected month
+- added arrows to navigate between months
 
-add arrows to move between months
+loop back on edges
 
 todo
 - padding, height, width variables
