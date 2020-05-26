@@ -41,11 +41,17 @@ function filterDay(days) {
 }
 
 function filterRange(range) {
-    const upperRange = range[0];
     const lowerRange = range[1];
-    let key = (lowerRange.getMonth() + 1) + " " + lowerRange.getFullYear()
+    let key = (lowerRange.getMonth() + 1) + ' ' + lowerRange.getFullYear()
     datasetMonth = buckets[key];
     filteredDatasetMonth = datasetMonth;
+}
+
+function updateTitle(range) {
+    const lowerRange = range[1];
+    let month = lowerRange.toLocaleDateString('default', {month: 'long', year: 'numeric'});
+    d3.select('.title')
+        .text('Jeffrey\'s music Listening Times - ' + month);
 }
 
 function resetGraph() {
@@ -157,6 +163,7 @@ function changeDateRange(range) {
     filterRange(yState);
     displayNumEntries();
     updateCirclesRange();
+    updateTitle(yState);
 }
 
 //highlights the given circle element
@@ -164,7 +171,7 @@ function singleHighlight(dot) {
     filterController('artist', dot._groups[0][0].__data__.Artist);
     dot.transition()
         .ease(d3.easePoly)
-        .duration(1000)
+        .duration(750)
         .attr('r', 15)
         .style('opacity', .5)
         .style('fill', 'red')
@@ -334,7 +341,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
         .attr('class', 'title label')
         .attr('transform', 'translate(' + width / 2 + ', ' + 40 + ')')
         .attr('text-anchor', 'middle')
-        .text('Jeffrey\'s Music Listening Times (4/2018 - 2/2020)');
+        .text('Jeffrey\'s Music Listening Times - February 2020');
 
 
     // Create global object called chartScales to keep state

@@ -49,7 +49,10 @@
 - split dataset into buckets
 - updated day filter
 
-use buckets to store song data by month
+5.26.20
+- graph title now updates with selected month
+
+add arrows to move between months
 
 todo
 - padding, height, width variables
