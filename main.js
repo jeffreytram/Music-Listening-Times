@@ -46,13 +46,6 @@ function filterRange(range) {
     filteredDatasetMonth = datasetMonth;
 }
 
-function updateTitle(range) {
-    const lowerRange = range[1];
-    let month = lowerRange.toLocaleDateString('default', { month: 'long', year: 'numeric' });
-    d3.select('.title')
-        .text('Jeffrey\'s music Listening Times - ' + month);
-}
-
 function resetGraph() {
     filterRange(yState);
     displayNumEntries();
@@ -161,7 +154,6 @@ function changeDateRange(date) {
     filterRange(yState);
     displayNumEntries();
     updateCirclesRange();
-    updateTitle(yState);
 }
 
 function changeNextMonth() {
@@ -346,7 +338,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     //y-axis scale
     yScale = d3.scaleTime()
         .domain([new Date("2/29/2020"), new Date("2/1/2020")])
-        .range([60, 460]);
+        .range([10, 460]);
 
     //x-axis line
     var xAxis = d3.axisBottom(xScale)
@@ -373,14 +365,6 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
         .attr('class', 'x label')
         .attr('transform', 'translate(35, ' + height / 2 + ') rotate(-90)')
         .text('Date');
-
-    //append title to graph
-    svg.append('text')
-        .attr('class', 'title label')
-        .attr('transform', 'translate(' + width / 2 + ', ' + 40 + ')')
-        .attr('text-anchor', 'middle')
-        .text('Jeffrey\'s Music Listening Times - February 2020');
-
 
     // Create global object called chartScales to keep state
     yState = [new Date("2/29/2020"), new Date("2/1/2020")];
