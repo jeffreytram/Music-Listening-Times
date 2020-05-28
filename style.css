@@ -43,6 +43,7 @@ body {
 .checkbox {
     display: inline;
     margin: 8px;
+    white-space: nowrap;
 }
 
 /* Website layout */

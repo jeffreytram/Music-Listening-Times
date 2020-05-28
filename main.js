@@ -391,7 +391,9 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     });
 
     //multiple day filter event listener
-    let checkbox = document.getElementsByClassName("checkbox");
+    let checkbox = document.getElementsByTagName('input');
+    checkbox = Array.from(checkbox).filter(input => input.type === "checkbox");
+    console.log(checkbox);
     let checkedDays = [];
     Array.from(checkbox).forEach(function (cb) {
         cb.addEventListener('change', function () {

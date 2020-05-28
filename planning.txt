@@ -58,6 +58,7 @@
 
 5.28.2020
 - now responsive
+- fixed checkbox bug
 
 TODO:
 loop back on edges
