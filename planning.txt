@@ -60,8 +60,11 @@
 - now responsive
 - fixed checkbox bug
 - updated data
+- added time heatmap
 
 TODO:
+generating one axis view with canvas
+
 loop back on edges
 - circularly doubly linked list
 - show if able to move forward/backwards
@@ -71,6 +74,7 @@ graph to show what time music listened to for the month
     - orig graph without a y-axis
 - distribution
 reset button should reset days filter checks as well
+moving to a different month with filters currently applied
 
 - padding, height, width variables
 - multiple filters applied at once
@@ -84,4 +88,7 @@ Updating data
 -convert the csv to UTF-8 (https://www.highviewapps.com/kb/special-characters-are-not-displaying-properly-when-i-open-my-shopify-csv-export-file-with-excel-or-another-spreadsheet-application-how-can-i-fix-this/)
 -insert data
 -format data
+
+canvas resources
+- https://www.visualcinnamon.com/2015/11/learnings-from-a-d3-js-addict-on-starting-with-canvas.html
 

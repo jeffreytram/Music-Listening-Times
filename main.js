@@ -13,6 +13,7 @@ function filterController(type, value) {
         filterDay(value);
         updateCircles(3, .3);
     }
+    drawCanvasBars();
     displayNumEntries();
 }
 function filterSong(song) {
@@ -50,6 +51,7 @@ function resetGraph() {
     filterRange(yState);
     displayNumEntries();
     updateCircles();
+    drawCanvasBars();
     clearHighlight();
 }
 
@@ -80,6 +82,25 @@ function renderCircles() {
             clearHighlight();
             singleHighlight(d3.select(this));
         });
+}
+
+function drawCanvasBars() {
+    const width = canvas.node().width;
+    const height = canvas.node().height;
+
+    //object with prop and methods used to render graphics in canvas element
+    let context = canvas.node().getContext('2d');
+
+    // clear canvas
+    context.clearRect(0, 0, width, height);
+
+    for (let i = 0; i < filteredDatasetMonth.length; i++) {
+        let d = filteredDatasetMonth[i];
+
+        //draw rect
+        context.fillStyle = 'rgba(225, 225, 225, 0.1)';
+        context.fillRect(xScale(d.Time), 0, 3, height);
+    }
 }
 
 function updateCircles(displaySize = 3, viewOpacity = .3) {
@@ -137,6 +158,7 @@ function updateYAxis() {
         .duration(750)
         .call(d3.axisLeft(yScale));
 }
+
 function displayNumEntries() {
     //display length of fitlered list
     document.getElementById("entry-count").innerHTML = filteredDatasetMonth.length;
@@ -154,6 +176,7 @@ function changeDateRange(date) {
     filterRange(yState);
     displayNumEntries();
     updateCirclesRange();
+    drawCanvasBars();
 }
 
 function changeNextMonth() {
@@ -167,13 +190,14 @@ function changeNextMonth() {
         changeDateRange(nextMonth);
     };
 }
+
 function changePrevMonth() {
     const currDate = new Date(getSelectedValue());
     const year = currDate.getFullYear();
     const month = currDate.getMonth();
     const prevMonth = new Date(year, month - 1, 1);
 
-    const prevMonthText = prevMonth.toLocaleDateString('default', {month: 'short', year: 'numeric'});
+    const prevMonthText = prevMonth.toLocaleDateString('default', { month: 'short', year: 'numeric' });
     if (validMonth(prevMonthText)) {
         changeDateRange(prevMonth);
     }
@@ -377,6 +401,16 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     displayNumEntries();
     renderCircles();
 
+    //creating canvas
+    //DOM element
+    canvas = d3.select('#canvas')
+        .attr('width', width)
+        .attr('height', 45);
+
+    drawCanvasBars();
+
+
+
     //song, artist, and album filter
     let filters = ["song", "artist", "album"];
     filters.forEach(type => {
@@ -393,7 +427,6 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     //multiple day filter event listener
     let checkbox = document.getElementsByTagName('input');
     checkbox = Array.from(checkbox).filter(input => input.type === "checkbox");
-    console.log(checkbox);
     let checkedDays = [];
     Array.from(checkbox).forEach(function (cb) {
         cb.addEventListener('change', function () {
