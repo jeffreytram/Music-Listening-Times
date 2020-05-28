@@ -333,7 +333,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     xScale = d3.scaleTime()
         .domain(d3.extent(dataset, d => d.Time))
         .nice()
-        .range([100, 1000]);
+        .range([100, width - 30]);
 
     //y-axis scale
     yScale = d3.scaleTime()

@@ -46,28 +46,28 @@ body {
 }
 
 /* Website layout */
+
 #content-container {
-    width: 65%;
+    width: 95%;
     margin: auto;
     background-color: rgb(45, 45, 45);
     padding: 25px;
 }
+
 #filters {
     width: 100%;
-    height: 100px;
+    height: 150px;
 }
 
 #song-filters {
-    width: 50%;
-    float: left;
+    width: 100%;
     display: grid;
-    grid-template: repeat(3, 25px) / 130px 180px 60px;
+    grid-template: repeat(3, 25px) / 120px minmax(50px, 180px) minmax(30px, 60px);
     gap: 8px 12px;
 }
 
 #day-filters {
-    width: 50%;
-    float: right;
+    width: 100%;
 }
 
 #song-info {
@@ -77,4 +77,32 @@ body {
 #main {
     margin: auto;
     text-align: center;
+}
+
+#main-graph {
+    width: 100%;
+    height: 100%;
+}
+
+@media (min-width:530px) {
+    #content-container {
+        width: 80%;
+    }
+}
+
+@media (min-width:1000px) {
+    #content-container {
+        width: 65%;
+    }
+    #filters {
+        height: 100px;
+    }
+    #song-filters {
+        width: 50%;
+        float: left;
+    }
+    #day-filters {
+        width: 50%;
+        float: right;
+    }
 }
