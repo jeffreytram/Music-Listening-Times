@@ -23,17 +23,11 @@ body {
 #song-info-grid {
     display: grid;
     grid-template: 20px repeat(3, 50px) / 190px 60px 300px;
-    border: 1px solid rgba(30, 30, 30, .5);
-    border-radius: 15px;
     min-height: 175px;
 }
 
 .art {
     grid-row: 1/5;
-}
-
-.point:hover, .artist:hover, .song:hover, .album:hover {
-    cursor: pointer;
 }
 
 .artist, .song, .album {
@@ -44,6 +38,21 @@ body {
     display: inline;
     margin: 8px;
     white-space: nowrap;
+}
+
+button {
+    border-radius: 5px;
+    border: none;
+}
+
+button:hover {
+    background-color: #158ced;
+    color: white;
+}
+
+.checkbox>input:hover, .checkbox>label:hover, button:hover, 
+select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
+    cursor: pointer;
 }
 
 /* Website layout */
@@ -57,7 +66,7 @@ body {
 
 #filters {
     width: 100%;
-    height: 150px;
+    height: 160px;
 }
 
 #song-filters {

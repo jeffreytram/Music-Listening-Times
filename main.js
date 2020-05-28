@@ -355,22 +355,23 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
 
     //vertical line
     let line = svg.append('path')
-        .style('stroke', '#4682b4')
+        .style('stroke', '#158ced')
         .style('stroke-width', '3px')
         .style('stroke-dasharray', '4');
 
     svg
         .on('mousemove', function() {
             let mouse = d3.mouse(this);
-            line
-                .style('opacity', .4)
-                .attr('d', function() {
+            line.attr('d', function() {
                     //d = 'M100,0 L100,460
                     //move to 100,460 then line to 100,0
                     let d = 'M' + mouse[0] + ',0 ';
                     d += 'L' + mouse[0] + ',460';
                     return d;
                 });
+        })
+        .on('mouseover', function() {
+            line.style('opacity', .4)
         })
         .on('mouseout', function() {
             line.style('opacity', 0);

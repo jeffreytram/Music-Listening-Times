@@ -62,8 +62,11 @@
 - updated data
 - added time heatmap
 - added vertical line hover
+- added hover style and other small changes
 
 TODO:
+improve default view/state
+- 'click a data point to view the song info'
 more details from vertical line
 loop back on edges
 - circularly doubly linked list
