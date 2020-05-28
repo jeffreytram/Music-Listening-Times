@@ -337,7 +337,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
 
     //y-axis scale
     yScale = d3.scaleTime()
-        .domain([new Date("2/29/2020"), new Date("2/1/2020")])
+        .domain([new Date("5/31/2020"), new Date("5/1/2020")])
         .range([10, 460]);
 
     //x-axis line
@@ -367,7 +367,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
         .text('Date');
 
     // Create global object called chartScales to keep state
-    yState = [new Date("2/29/2020"), new Date("2/1/2020")];
+    yState = [new Date("5/31/2020"), new Date("5/1/2020")];
 
     datasetMonth = buckets["2 2020"];
     filteredDatasetMonth = datasetMonth;

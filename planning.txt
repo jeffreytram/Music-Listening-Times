@@ -59,6 +59,7 @@
 5.28.2020
 - now responsive
 - fixed checkbox bug
+- updated data
 
 TODO:
 loop back on edges
@@ -78,4 +79,9 @@ reset button should reset days filter checks as well
 - display top 10 artist
     - clicking artist info filters
 
+Updating data
+-export data using https://benjaminbenben.com/lastfm-to-csv/
+-convert the csv to UTF-8 (https://www.highviewapps.com/kb/special-characters-are-not-displaying-properly-when-i-open-my-shopify-csv-export-file-with-excel-or-another-spreadsheet-application-how-can-i-fix-this/)
+-insert data
+-format data
 
