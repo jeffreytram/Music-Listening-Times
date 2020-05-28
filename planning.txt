@@ -61,10 +61,10 @@
 - fixed checkbox bug
 - updated data
 - added time heatmap
+- added vertical line hover
 
 TODO:
-generating one axis view with canvas
-
+more details from vertical line
 loop back on edges
 - circularly doubly linked list
 - show if able to move forward/backwards
@@ -91,4 +91,4 @@ Updating data
 
 canvas resources
 - https://www.visualcinnamon.com/2015/11/learnings-from-a-d3-js-addict-on-starting-with-canvas.html
-
+- https://www.freecodecamp.org/news/d3-and-canvas-in-3-steps-8505c8b27444/

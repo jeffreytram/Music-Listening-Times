@@ -353,6 +353,29 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
         d.Time.setTime(newDateMilis + timePeriodMillis);
     });
 
+    //vertical line
+    let line = svg.append('path')
+        .style('stroke', '#4682b4')
+        .style('stroke-width', '3px')
+        .style('stroke-dasharray', '4');
+
+    svg
+        .on('mousemove', function() {
+            let mouse = d3.mouse(this);
+            line
+                .style('opacity', .4)
+                .attr('d', function() {
+                    //d = 'M100,0 L100,460
+                    //move to 100,460 then line to 100,0
+                    let d = 'M' + mouse[0] + ',0 ';
+                    d += 'L' + mouse[0] + ',460';
+                    return d;
+                });
+        })
+        .on('mouseout', function() {
+            line.style('opacity', 0);
+        })
+
     //x-axis scale
     xScale = d3.scaleTime()
         .domain(d3.extent(dataset, d => d.Time))
@@ -408,8 +431,6 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
         .attr('height', 45);
 
     drawCanvasBars();
-
-
 
     //song, artist, and album filter
     let filters = ["song", "artist", "album"];
