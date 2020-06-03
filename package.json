@@ -1,0 +1,20 @@
+{
+  "name": "lastfm",
+  "version": "1.0.0",
+  "description": "Visualizing over 2 years of my personal listening habits",
+  "main": "./public/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeffreytram/Music-Listening-Times.git"
+  },
+  "author": "Jeffrey Tram",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeffreytram/Music-Listening-Times/issues"
+  },
+  "homepage": "https://github.com/jeffreytram/Music-Listening-Times#readme",
+  "dependencies": {}
+}

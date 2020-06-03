@@ -79,41 +79,53 @@
         <div id="main">
             <div id="title-bar" style="margin-bottom: 10px;">
                 <button id="left"><</button>
-                <button id="right">></button>
-                <span style="font-size: larger;"><strong>Jeffrey's Music Listening Times - </strong></span>
-                <select id="date-range">
-                    <option value="5/1/2020" selected>May 2020</option>
-                    <option value="4/1/2020">Apr 2020</option>
-                    <option value="3/1/2020">Mar 2020</option>
-                    <option value="2/1/2020">Feb 2020</option>
-                    <option value="1/1/2020">Jan 2020</option>
-                    <option value="12/1/2019">Dec 2019</option>
-                    <option value="11/1/2019">Nov 2019</option>
-                    <option value="10/1/2019">Oct 2019</option>
-                    <option value="9/1/2019">Sep 2019</option>
-                    <option value="8/1/2019">Aug 2019</option>
-                    <option value="7/1/2019">Jul 2019</option>
-                    <option value="6/1/2019">Jun 2019</option>
-                    <option value="5/1/2019">May 2019</option>
-                    <option value="4/1/2019">Apr 2019</option>
-                    <option value="3/1/2019">Mar 2019</option>
-                    <option value="2/1/2019">Feb 2019</option>
-                    <option value="1/1/2019">Jan 2019</option>
-                    <option value="12/1/2018">Dec 2018</option>
-                    <option value="11/1/2018">Nov 2018</option>
-                    <option value="10/1/2018">Oct 2018</option>
-                    <option value="9/1/2018">Sep 2018</option>
-                    <option value="8/1/2018">Aug 2018</option>
-                    <option value="7/1/2018">Jul 2018</option>
-                    <option value="6/1/2018">Jun 2018</option>
-                    <option value="5/1/2018">May 2018</option>
-                    <option value="4/1/2018">Apr 2018</option>
-                </select>
+                        <button id="right">></button>
+                        <span style="font-size: larger;"><strong>Jeffrey's Music Listening Times - </strong></span>
+                        <select id="date-range">
+                            <option value="5/1/2020" selected>May 2020</option>
+                            <option value="4/1/2020">Apr 2020</option>
+                            <option value="3/1/2020">Mar 2020</option>
+                            <option value="2/1/2020">Feb 2020</option>
+                            <option value="1/1/2020">Jan 2020</option>
+                            <option value="12/1/2019">Dec 2019</option>
+                            <option value="11/1/2019">Nov 2019</option>
+                            <option value="10/1/2019">Oct 2019</option>
+                            <option value="9/1/2019">Sep 2019</option>
+                            <option value="8/1/2019">Aug 2019</option>
+                            <option value="7/1/2019">Jul 2019</option>
+                            <option value="6/1/2019">Jun 2019</option>
+                            <option value="5/1/2019">May 2019</option>
+                            <option value="4/1/2019">Apr 2019</option>
+                            <option value="3/1/2019">Mar 2019</option>
+                            <option value="2/1/2019">Feb 2019</option>
+                            <option value="1/1/2019">Jan 2019</option>
+                            <option value="12/1/2018">Dec 2018</option>
+                            <option value="11/1/2018">Nov 2018</option>
+                            <option value="10/1/2018">Oct 2018</option>
+                            <option value="9/1/2018">Sep 2018</option>
+                            <option value="8/1/2018">Aug 2018</option>
+                            <option value="7/1/2018">Jul 2018</option>
+                            <option value="6/1/2018">Jun 2018</option>
+                            <option value="5/1/2018">May 2018</option>
+                            <option value="4/1/2018">Apr 2018</option>
+                        </select>
             </div>
             <canvas id="canvas"></canvas>
             <svg id="main-graph"></svg>
         </div>
     </div>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/7.14.5/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="/__/firebase/7.14.5/firebase-analytics.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+    
+    <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-functions.js"></script>
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="main.js" async defer></script>

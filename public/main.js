@@ -266,44 +266,39 @@ function displaySongInfo(song) {
 
     let albumArt = "";
 
-    let apiAlbum = `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=${config.API_KEY}&artist=${song.Artist}&album=${song.Album}&format=json`
-    fetch(apiAlbum)
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            albumArt = data.album.image[2]["#text"];
-            if (albumArt === "") {
-                albumArt = "https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png";
-            }
-            divAlbumArt[0].innerHTML = `<img src=${albumArt}>`;
-            divArtist[0].innerHTML = song.Artist;
-            divSong[0].innerHTML = song.SongTitle;
-            divAlbum[0].innerHTML = song.Album;
-            divDate[0].innerHTML = song.Day + " " + song.ConvertedDateTime;
-        });
+    divArtist[0].innerHTML = song.Artist;
+    divSong[0].innerHTML = song.SongTitle;
+    divAlbum[0].innerHTML = song.Album;
+    divDate[0].innerHTML = song.Day + " " + song.ConvertedDateTime;
+
+    const getAlbumInfo = firebase.functions().httpsCallable('getAlbumInfo');
+    getAlbumInfo(song).then(result => {
+        albumInfo = JSON.parse(result.data);
+        albumArt = albumInfo.album.image[2]["#text"];
+        if (albumArt === "") {
+            albumArt = 'https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png';
+        }
+        divAlbumArt[0].innerHTML = `<img src=${albumArt}>`;
+    });
 }
 
 function displayTags(song) {
-    let apiArtist = `https://ws.audioscrobbler.com/2.0/?method=artist.gettoptags&artist=${song.Artist}&api_key=${config.API_KEY}&format=json`;
-    fetch(apiArtist)
-        .then(response => {
-            return response.json();
-        })
-        .then(data => {
-            let divTags = document.getElementById("tags");
+    const getArtistTags = firebase.functions().httpsCallable('getArtistTags');
+    getArtistTags(song).then(result => {
+        const tags = JSON.parse(result.data);
 
-            let apiTags = data.toptags.tag;
-            let tags = "";
-            let end = (5 > apiTags.length) ? apiTags.length : 5;
-            for (let i = 0; i < end; i++) {
-                tags += apiTags[i].name;
-                if (i != end - 1) {
-                    tags += ", ";
-                }
+        let divTags = document.getElementById("tags");
+        let apiTags = tags.toptags.tag;
+        let topFiveTags = "";
+        let end = (5 > apiTags.length) ? apiTags.length : 5;
+        for (let i = 0; i < end; i++) {
+            topFiveTags += apiTags[i].name;
+            if (i != end - 1) {
+                topFiveTags += ", ";
             }
-            divTags.innerHTML = tags;
-        });
+        }
+        divTags.innerHTML = topFiveTags;
+    });
 }
 
 const width = 1100;
@@ -411,7 +406,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     //append y-axis label
     svg.append('text')
         .attr('class', 'x label')
-        .attr('transform', 'translate(35, ' + height / 2 + ') rotate(-90)')
+        .attr('transform', 'translate(35, ' + height / 2 + ') rotate(90)')
         .text('Date');
 
     // Create global object called chartScales to keep state

@@ -65,6 +65,9 @@
 - added hover style and other small changes
 
 TODO:
+hosting on firebase
+- https://firebase.google.com/docs/web/setup#config-object
+
 improve default view/state
 - 'click a data point to view the song info'
 more details from vertical line
