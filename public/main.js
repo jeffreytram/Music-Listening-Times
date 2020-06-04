@@ -1,3 +1,9 @@
+const style = getComputedStyle(document.body);
+const red = style.getPropertyValue('--red');
+const green = style.getPropertyValue('--green');
+const blue = style.getPropertyValue('--blue');
+const textColor = style.getPropertyValue('--text-color');
+
 function filterController(type, value) {
     clearHighlight()
     if (type === "song") {
@@ -74,7 +80,7 @@ function renderCircles() {
     //add circle to group
     pointEnter.append('circle')
         .attr('r', 3)
-        .style('fill', 'white')
+        .style('fill', textColor)
         .style('opacity', .3)
         .on("click", function (d) {
             displaySongInfo(d);
@@ -98,7 +104,7 @@ function drawCanvasBars() {
         let d = filteredDatasetMonth[i];
 
         //draw rect
-        context.fillStyle = 'rgba(225, 225, 225, 0.1)';
+        context.fillStyle = `rgba(${red}, ${green}, ${blue}, 0.1)`;
         context.fillRect(xScale(d.Time), 0, 3, height);
     }
 }
@@ -116,7 +122,7 @@ function updateCircles(displaySize = 3, viewOpacity = .3) {
     point.exit()
         .select("circle")
         .attr('r', 3)
-        .style('opacity', .1);
+        .style('opacity', .05);
 }
 
 function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
@@ -138,7 +144,7 @@ function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
     //add circle to group
     pointEnter.append('circle')
         .attr('r', displaySize)
-        .style('fill', 'white')
+        .style('fill', textColor)
         .style('opacity', viewOpacity)
         .on("click", function (d) {
             displaySongInfo(d);
@@ -226,7 +232,7 @@ function singleHighlight(dot) {
     dot.transition()
         .ease(d3.easePoly)
         .duration(750)
-        .attr('r', 15)
+        .attr('r', 10)
         .style('opacity', .5)
         .style('fill', 'red')
         .attr('class', 'point selected');
@@ -236,7 +242,7 @@ function singleHighlight(dot) {
 function clearHighlight() {
     svg.select('.selected')
         .attr('r', 3)
-        .style('fill', 'white')
+        .style('fill', '#303030')
         .attr('class', 'point');
 }
 
@@ -266,10 +272,10 @@ function displaySongInfo(song) {
 
     let albumArt = "";
 
-    divArtist[0].innerHTML = song.Artist;
-    divSong[0].innerHTML = song.SongTitle;
-    divAlbum[0].innerHTML = song.Album;
-    divDate[0].innerHTML = song.Day + " " + song.ConvertedDateTime;
+    divArtist[0].innerText = song.Artist;
+    divSong[0].innerText = song.SongTitle;
+    divAlbum[0].innerText = song.Album;
+    divDate[0].innerText = song.Day + " " + song.ConvertedDateTime;
 
     const getAlbumInfo = firebase.functions().httpsCallable('getAlbumInfo');
     getAlbumInfo(song).then(result => {
@@ -287,22 +293,19 @@ function displayTags(song) {
     getArtistTags(song).then(result => {
         const tags = JSON.parse(result.data);
 
-        let divTags = document.getElementById("tags");
+        let divTags = document.getElementById('tags');
+
         let apiTags = tags.toptags.tag;
-        let topFiveTags = "";
-        let end = (5 > apiTags.length) ? apiTags.length : 5;
-        for (let i = 0; i < end; i++) {
-            topFiveTags += apiTags[i].name;
-            if (i != end - 1) {
-                topFiveTags += ", ";
-            }
-        }
-        divTags.innerHTML = topFiveTags;
+        let topFiveTags = apiTags.slice(0, 5);
+        let results = topFiveTags.map(tag => tag.name);
+
+        divTags.innerText = results.join(', ');
     });
 }
 
 const width = 1100;
 const height = 540;
+const padding = {left: 90, right: 40, top: 40, down: 60};
 
 svg = d3.select('#main-graph')
     .attr('width', width)
@@ -314,12 +317,12 @@ svg = d3.select('#main-graph')
 //append x-axis
 var xAxisG = svg.append('g')
     .attr('class', 'x axis')
-    .attr('transform', 'translate(0,460)')
+    .attr('transform', `translate(0, ${height - padding.down})`)
 
 //append y-axis
 var yAxisG = svg.append('g')
     .attr('class', 'y axis')
-    .attr('transform', 'translate(100,0)')
+    .attr('transform', `translate(${padding.left}, 0)`)
 
 //default view, no filter
 d3.csv('lastfm-data-utf.csv').then(dataset => {
@@ -376,12 +379,12 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     xScale = d3.scaleTime()
         .domain(d3.extent(dataset, d => d.Time))
         .nice()
-        .range([100, width - 30]);
+        .range([padding.left, width - padding.right]);
 
     //y-axis scale
     yScale = d3.scaleTime()
         .domain([new Date("5/31/2020"), new Date("5/1/2020")])
-        .range([10, 460]);
+        .range([padding.top, height - padding.down]);
 
     //x-axis line
     var xAxis = d3.axisBottom(xScale)
@@ -397,7 +400,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     svg.append('text')
         .attr('class', 'x label')
         .attr('text-anchor', 'middle')
-        .attr('transform', 'translate(' + width / 2 + ', ' + (height - 30) + ')')
+        .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${height - padding.down / 4})`)
         .text('Time of Day (hrs:mins)');
 
 
@@ -406,7 +409,8 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     //append y-axis label
     svg.append('text')
         .attr('class', 'x label')
-        .attr('transform', 'translate(35, ' + height / 2 + ') rotate(90)')
+        .attr('text-anchor', 'middle')
+        .attr('transform', `translate(${padding.left / 4}, ${(padding.top + height - padding.down) / 2}) rotate(90)`)
         .text('Date');
 
     // Create global object called chartScales to keep state

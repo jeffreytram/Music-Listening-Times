@@ -1,18 +1,25 @@
+:root {
+    --text-color: #303030;
+    --red: 30;
+    --green: 30;
+    --blue: 30;
+}
+
 * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background-color: rgb(30, 30, 30);
-    color: white;
+    color: var(--text-color);
+    background-color: #EBEBEB;
 }
 
 .label {
-    fill: white;
+    fill: var(--text-color)
 }
 
 .axis {
-    color: white;
+    color: var(--text-color)
 }
 
 .title {
@@ -22,7 +29,7 @@ body {
 
 #song-info-grid {
     display: grid;
-    grid-template: 20px repeat(3, 50px) / 190px 60px 300px;
+    grid-template: 20px 50px 50px 50px / 190px 60px minmax(200px, 1fr);
     min-height: 175px;
 }
 
@@ -42,25 +49,29 @@ body {
 
 button {
     border-radius: 5px;
-    border: none;
+    border: 1px solid #158ced;
 }
 
 button:hover {
     background-color: #158ced;
-    color: white;
+    color: #F5F5F5;
 }
 
-.checkbox>input:hover, .checkbox>label:hover, button:hover, 
-select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
+.checkbox>input:hover, .checkbox>label:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
     cursor: pointer;
 }
 
 /* Website layout */
 
 #content-container {
-    width: 95%;
+    width: 97%;
     margin: auto;
-    background-color: rgb(45, 45, 45);
+    background-color: #F5F5F5;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+}
+
+#side-info {
+    margin: 0;
     padding: 25px;
 }
 
@@ -96,7 +107,7 @@ select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
 
 @media (min-width:530px) {
     #content-container {
-        width: 80%;
+        width: 90%;
     }
 }
 

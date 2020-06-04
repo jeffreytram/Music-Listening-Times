@@ -64,9 +64,10 @@
 - added vertical line hover
 - added hover style and other small changes
 
+6.3.2020
+- css changes and improvements
+
 TODO:
-hosting on firebase
-- https://firebase.google.com/docs/web/setup#config-object
 
 improve default view/state
 - 'click a data point to view the song info'
