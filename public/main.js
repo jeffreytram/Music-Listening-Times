@@ -83,6 +83,7 @@ function renderCircles() {
         .style('fill', textColor)
         .style('opacity', .3)
         .on("click", function (d) {
+            hideInstructions();
             displaySongInfo(d);
             displayTags(d);
             clearHighlight();
@@ -147,6 +148,7 @@ function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
         .style('fill', textColor)
         .style('opacity', viewOpacity)
         .on("click", function (d) {
+            hideInstructions();
             displaySongInfo(d);
             displayTags(d);
             clearHighlight();
@@ -155,6 +157,11 @@ function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
 
     //remove filtered out circles
     point.exit().remove();
+}
+
+function hideInstructions() {
+    const instructions = document.getElementById('temp-instructions');
+    instructions.style.display = 'none';
 }
 
 function updateYAxis() {
@@ -264,24 +271,27 @@ function addFilter(type, element, sourceValue) {
 
 //display the selected song's info
 function displaySongInfo(song) {
-    let imgAlbumArt = document.getElementById("album-art");
-    let divArtist = document.getElementsByClassName("artist");
-    let divSong = document.getElementsByClassName("song");
-    let divAlbum = document.getElementsByClassName("album");
-    let divDate = document.getElementsByClassName("date");
+    const songGrid = document.getElementById('song-info-grid');
+    songGrid.style.display = 'grid';
+
+    let imgAlbumArt = document.getElementById('album-art');
+    let divArtist = document.getElementsByClassName('artist');
+    let divSong = document.getElementsByClassName('song');
+    let divAlbum = document.getElementsByClassName('album');
+    let divDate = document.getElementsByClassName('date');
 
     divArtist[0].innerText = song.Artist;
     divSong[0].innerText = song.SongTitle;
     divAlbum[0].innerText = song.Album;
-    divDate[0].innerText = song.Day + " " + song.ConvertedDateTime;
+    divDate[0].innerText = song.Day + ' ' + song.ConvertedDateTime;
 
-    let albumArt = "";
+    let albumArt = '';
 
     const getAlbumInfo = firebase.functions().httpsCallable('getAlbumInfo');
     getAlbumInfo(song).then(result => {
         albumInfo = JSON.parse(result.data);
-        albumArt = albumInfo.album.image[2]["#text"];
-        if (albumArt === "") {
+        albumArt = albumInfo.album.image[2]['#text'];
+        if (albumArt === '') {
             albumArt = 'https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png';
         }
         imgAlbumArt.src = albumArt;
