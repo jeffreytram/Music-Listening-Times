@@ -11,114 +11,118 @@
 </head>
 
 <body>
-    <div id="content-container">
-        <div id="side-info">
-            <div id="filters">
-                <div id="song-filters">
-                    <label for="artist-input">Filter by artist:</label>
-                    <input type="text" name="artist" id="artist-input">
-                    <button id="artist-filter-button">Go!</button>
+    <div id="test-container">
+        <div id="content-container">
+            <div id="side-info">
+                <div id="filters">
+                    <div id="song-filters">
+                        <label for="artist-input">Filter by artist:</label>
+                        <input type="text" name="artist" id="artist-input">
+                        <button id="artist-filter-button">Go!</button>
 
-                    <label for="song-input">Filter by song:</label>
-                    <input type="text" name="song" id="song-input">
-                    <button id="song-filter-button">Go!</button>
+                        <label for="song-input">Filter by song:</label>
+                        <input type="text" name="song" id="song-input">
+                        <button id="song-filter-button">Go!</button>
 
-                    <label for="album-input">Filter by album:</label>
-                    <input type="text" name="album" id="album-input">
-                    <button id="album-filter-button">Go!</button>
+                        <label for="album-input">Filter by album:</label>
+                        <input type="text" name="album" id="album-input">
+                        <button id="album-filter-button">Go!</button>
+                    </div>
+                    <div id="day-filters">
+                        <label>Filter by day of the week:</label><br>
+                        <div class="checkbox">
+                            <input type="checkbox" name="mon" id="mon" value="Monday">
+                            <label for="mon">Monday</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" name="tues" id="tues" value="Tuesday">
+                            <label for="tues">Tuesday</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" name="wed" id="wed" value="Wednesday">
+                            <label for="wed">Wednesday</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" name="thurs" id="thurs" value="Thursday">
+                            <label for="thurs">Thursday</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" name="fri" id="fri" value="Friday">
+                            <label for="fri">Friday</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" name="sat" id="sat" value="Saturday">
+                            <label for="sat">Saturday</label>
+                        </div>
+                        <div class="checkbox">
+                            <input type="checkbox" name="sun" id="sun" value="Sunday">
+                            <label for="sun">Sunday</label>
+                        </div>
+                    </div>
+                    <button id="reset" style="padding: 3px 20px;">Reset</button>
                 </div>
-                <div id="day-filters">
-                    <label>Filter by day of the week:</label><br>
-                    <div class="checkbox">
-                        <input type="checkbox" name="mon" id="mon" value="Monday">
-                        <label for="mon">Monday</label>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" name="tues" id="tues" value="Tuesday">
-                        <label for="tues">Tuesday</label>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" name="wed" id="wed" value="Wednesday">
-                        <label for="wed">Wednesday</label>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" name="thurs" id="thurs" value="Thursday">
-                        <label for="thurs">Thursday</label>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" name="fri" id="fri" value="Friday">
-                        <label for="fri">Friday</label>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" name="sat" id="sat" value="Saturday">
-                        <label for="sat">Saturday</label>
-                    </div>
-                    <div class="checkbox">
-                        <input type="checkbox" name="sun" id="sun" value="Sunday">
-                        <label for="sun">Sunday</label>
+                
+                <div id="song-info">
+                    <div>Number of entries: <span id="entry-count"></span></div>
+                    <div>Artist Tags: <span id="tags"></span></div>
+                    <!-- <div id="temp-instructions">
+                        <span class="title">Click a dot for more info!</span>
+                    </div> -->
+                    <div id="song-info-grid">
+                        <div class="info art"><img id="album-art"
+                                src="https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png"></div>
+                        <div class="label">Artist: </div>
+                        <div class="info artist"></div>
+                        <div class="label">Song: </div>
+                        <div class="info song"></div>
+                        <div class="label">Album: </div>
+                        <div class="info album"></div>
+                        <div class="label">Date: </div>
+                        <div class="info date"></div>
                     </div>
                 </div>
-
             </div>
-            <button id="reset" style="padding: 3px 20px;">Reset</button>
 
-            <div id="song-info">
-                <div>Number of entries: <span id="entry-count"></span></div>
-                <div>Artist Tags: <span id="tags"></span></div>
-                <div id="song-info-grid">
-                    <div class="info art"><img
-                            src="https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png"></div>
-                    <div class="label">Artist: </div>
-                    <div class="info artist"></div>
-                    <div class="label">Song: </div>
-                    <div class="info song"></div>
-                    <div class="label">Album: </div>
-                    <div class="info album"></div>
-                    <div class="label">Date: </div>
-                    <div class="info date"></div>
+            <div id="main">
+                <div id="title-bar" style="margin-bottom: 10px;">
+                    <button id="left"><</button>
+                    <button id="right">></button>
+                    <span style="font-size: larger;"><strong>Jeffrey's Music Listening Times - </strong></span>
+                    <select id="date-range">
+                        <option value="5/1/2020" selected>May 2020</option>
+                        <option value="4/1/2020">Apr 2020</option>
+                        <option value="3/1/2020">Mar 2020</option>
+                        <option value="2/1/2020">Feb 2020</option>
+                        <option value="1/1/2020">Jan 2020</option>
+                        <option value="12/1/2019">Dec 2019</option>
+                        <option value="11/1/2019">Nov 2019</option>
+                        <option value="10/1/2019">Oct 2019</option>
+                        <option value="9/1/2019">Sep 2019</option>
+                        <option value="8/1/2019">Aug 2019</option>
+                        <option value="7/1/2019">Jul 2019</option>
+                        <option value="6/1/2019">Jun 2019</option>
+                        <option value="5/1/2019">May 2019</option>
+                        <option value="4/1/2019">Apr 2019</option>
+                        <option value="3/1/2019">Mar 2019</option>
+                        <option value="2/1/2019">Feb 2019</option>
+                        <option value="1/1/2019">Jan 2019</option>
+                        <option value="12/1/2018">Dec 2018</option>
+                        <option value="11/1/2018">Nov 2018</option>
+                        <option value="10/1/2018">Oct 2018</option>
+                        <option value="9/1/2018">Sep 2018</option>
+                        <option value="8/1/2018">Aug 2018</option>
+                        <option value="7/1/2018">Jul 2018</option>
+                        <option value="6/1/2018">Jun 2018</option>
+                        <option value="5/1/2018">May 2018</option>
+                        <option value="4/1/2018">Apr 2018</option>
+                    </select>
                 </div>
+                <canvas id="canvas"></canvas>
+                <svg id="main-graph"></svg>
             </div>
-        </div>
-
-
-        <div id="main">
-            <div id="title-bar" style="margin-bottom: 10px;">
-                <button id="left"><</button>
-                <button id="right">></button>
-                <span style="font-size: larger;"><strong>Jeffrey's Music Listening Times - </strong></span>
-                <select id="date-range">
-                    <option value="5/1/2020" selected>May 2020</option>
-                    <option value="4/1/2020">Apr 2020</option>
-                    <option value="3/1/2020">Mar 2020</option>
-                    <option value="2/1/2020">Feb 2020</option>
-                    <option value="1/1/2020">Jan 2020</option>
-                    <option value="12/1/2019">Dec 2019</option>
-                    <option value="11/1/2019">Nov 2019</option>
-                    <option value="10/1/2019">Oct 2019</option>
-                    <option value="9/1/2019">Sep 2019</option>
-                    <option value="8/1/2019">Aug 2019</option>
-                    <option value="7/1/2019">Jul 2019</option>
-                    <option value="6/1/2019">Jun 2019</option>
-                    <option value="5/1/2019">May 2019</option>
-                    <option value="4/1/2019">Apr 2019</option>
-                    <option value="3/1/2019">Mar 2019</option>
-                    <option value="2/1/2019">Feb 2019</option>
-                    <option value="1/1/2019">Jan 2019</option>
-                    <option value="12/1/2018">Dec 2018</option>
-                    <option value="11/1/2018">Nov 2018</option>
-                    <option value="10/1/2018">Oct 2018</option>
-                    <option value="9/1/2018">Sep 2018</option>
-                    <option value="8/1/2018">Aug 2018</option>
-                    <option value="7/1/2018">Jul 2018</option>
-                    <option value="6/1/2018">Jun 2018</option>
-                    <option value="5/1/2018">May 2018</option>
-                    <option value="4/1/2018">Apr 2018</option>
-                </select>
-            </div>
-            <canvas id="canvas"></canvas>
-            <svg id="main-graph"></svg>
         </div>
     </div>
+    
 
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="/__/firebase/7.14.5/firebase-app.js"></script>
@@ -133,7 +137,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-functions.js"></script>
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="main.js" async defer></script>
+    <script src="main.js"></script>
 </body>
 
 </html>

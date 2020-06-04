@@ -5,3 +5,4 @@ node_modules
 .firebaserc
 .firebase
 firebase.json
+firebase-debug.log

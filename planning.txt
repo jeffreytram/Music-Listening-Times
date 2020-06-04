@@ -66,6 +66,8 @@
 
 6.3.2020
 - css changes and improvements
+- added desktop view
+- many other CSS changes and improvements
 
 TODO:
 

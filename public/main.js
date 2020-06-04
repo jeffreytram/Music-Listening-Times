@@ -122,7 +122,7 @@ function updateCircles(displaySize = 3, viewOpacity = .3) {
     point.exit()
         .select("circle")
         .attr('r', 3)
-        .style('opacity', .05);
+        .style('opacity', .07);
 }
 
 function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
@@ -264,18 +264,18 @@ function addFilter(type, element, sourceValue) {
 
 //display the selected song's info
 function displaySongInfo(song) {
-    let divAlbumArt = document.getElementsByClassName("art");
+    let imgAlbumArt = document.getElementById("album-art");
     let divArtist = document.getElementsByClassName("artist");
     let divSong = document.getElementsByClassName("song");
     let divAlbum = document.getElementsByClassName("album");
     let divDate = document.getElementsByClassName("date");
 
-    let albumArt = "";
-
     divArtist[0].innerText = song.Artist;
     divSong[0].innerText = song.SongTitle;
     divAlbum[0].innerText = song.Album;
     divDate[0].innerText = song.Day + " " + song.ConvertedDateTime;
+
+    let albumArt = "";
 
     const getAlbumInfo = firebase.functions().httpsCallable('getAlbumInfo');
     getAlbumInfo(song).then(result => {
@@ -284,7 +284,7 @@ function displaySongInfo(song) {
         if (albumArt === "") {
             albumArt = 'https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png';
         }
-        divAlbumArt[0].innerHTML = `<img src=${albumArt}>`;
+        imgAlbumArt.src = albumArt;
     });
 }
 
@@ -303,9 +303,9 @@ function displayTags(song) {
     });
 }
 
-const width = 1100;
+const width = 950;
 const height = 540;
-const padding = {left: 90, right: 40, top: 40, down: 60};
+const padding = {left: 90, right: 40, top: 10, down: 60};
 
 svg = d3.select('#main-graph')
     .attr('width', width)
@@ -364,7 +364,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
                     //d = 'M100,0 L100,460
                     //move to 100,460 then line to 100,0
                     let d = 'M' + mouse[0] + ',0 ';
-                    d += 'L' + mouse[0] + ',460';
+                    d += 'L' + mouse[0] + `,${height - padding.down}`;
                     return d;
                 });
         })
@@ -410,7 +410,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     svg.append('text')
         .attr('class', 'x label')
         .attr('text-anchor', 'middle')
-        .attr('transform', `translate(${padding.left / 4}, ${(padding.top + height - padding.down) / 2}) rotate(90)`)
+        .attr('transform', `translate(${padding.left / 4}, ${(padding.top + height - padding.down) / 2}) rotate(-90)`)
         .text('Date');
 
     // Create global object called chartScales to keep state
