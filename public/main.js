@@ -378,7 +378,6 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     //x-axis scale
     xScale = d3.scaleTime()
         .domain(d3.extent(dataset, d => d.Time))
-        .nice()
         .range([padding.left, width - padding.right]);
 
     //y-axis scale

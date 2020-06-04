@@ -68,6 +68,7 @@
 - css changes and improvements
 - added desktop view
 - many other CSS changes and improvements
+- day filters now displayed in grid layout
 
 TODO:
 
