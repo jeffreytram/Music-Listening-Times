@@ -419,7 +419,7 @@ function displaySongInfo(song) {
         console.log(color);
         const { value } = color;
         root.style.setProperty('--secondary-color', `rgba(${value[0]},${value[1]},${value[2]},1)`);
-        root.style.setProperty('--light-secondary', `rgba(${value[0]},${value[1]},${value[2]},.5)`);
+        root.style.setProperty('--light-secondary', `rgba(${value[0]},${value[1]},${value[2]},.3)`);
         root.style.setProperty('--very-light-secondary', `rgba(${value[0]},${value[1]},${value[2]},.15)`);
         root.style.setProperty('--secondary-r', `${value[0]}`);
         root.style.setProperty('--secondary-g', `${value[1]}`);

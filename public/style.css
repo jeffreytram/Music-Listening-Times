@@ -31,7 +31,7 @@
 html, body {
   color: var(--text-color);
   background: var(--very-light-secondary);
-  background: linear-gradient(180deg, var(--very-light-secondary) 0%, var(--secondary-color) 100%);
+  background: linear-gradient(170deg, var(--very-light-secondary) 10%, var(--light-secondary) 100%);
   height: 100%;
   margin: 0;
 }
