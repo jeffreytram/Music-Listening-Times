@@ -35,7 +35,7 @@ html, body {
   position: relative;
 }
 
-#title {
+.title {
   font-weight: bold;
   font-size: large;
 }
@@ -47,17 +47,11 @@ html, body {
 
 #song-info-grid {
   display: none;
-  width: 100%;
-  grid-template: repeat(4, minmax(min-content, max-content)) / minmax(90px, 180px) 55px minmax(60px, 1fr);
-  min-height: 175px;
-}
-
-.art {
-  grid-row: 1/5;
+  text-align: center;
 }
 
 #album-art {
-  width: 100%;
+  width: 25%;
 }
 
 #temp-instructions {
@@ -72,6 +66,10 @@ html, body {
 
 .artist, .song, .album {
   text-decoration: underline;
+}
+
+.artist {
+  font-size: large;
 }
 
 .checkbox {
@@ -164,6 +162,9 @@ button:hover {
   #main {
     width: 70%;
     float: left;
+  }
+  #album-art {
+    width: 50%;
   }
   #side-info {
     width: 30%;
