@@ -4,24 +4,13 @@
   --green: 30;
   --blue: 30;
   --gray1: #E6E6E6;
-  --secondary-color: #EBEBEB;
+  --secondary-color: rgba(30, 30, 30, 1);
   --light-secondary: #EBEBEB;
   --very-light-secondary: #EBEBEB;
-  --secondary-r: 235;
-  --secondary-g: 235;
-  --secondary-b: 235;
-  --accessible-color: calc(
-    (
-      (
-        (
-          (var(--secondary-r) * 299) +
-          (var(--secondary-g) * 587) +
-          (var(--secondary-b) * 114)
-        ) / 1000
-      ) - 150
-    ) * -1000
-  );
-
+  --secondary-r: 30;
+  --secondary-g: 30;
+  --secondary-b: 30;
+  --accessible-color: calc( ( ( ( (var(--secondary-r) * 299) + (var(--secondary-g) * 587) + (var(--secondary-b) * 114)) / 1000) - 150) * -1000);
 }
 
 * {
@@ -47,6 +36,7 @@ html, body {
 #date-range {
   padding: 1px 2px;
   border-radius: 10px;
+  border: 1px solid var(--text-color);
 }
 
 #title-bar {
@@ -79,7 +69,7 @@ html, body {
   width: 100%;
   min-height: 175px;
   background-color: var(--gray1);
-  border: 1px solid #158ced;
+  border: 1px solid var(--secondary-color);
 }
 
 .artist, .song, .album {
@@ -90,6 +80,10 @@ html, body {
   font-size: large;
 }
 
+input[type=text] {
+  border: 1px solid var(--text-color);
+}
+
 input[type=checkbox] {
   display: none;
 }
@@ -98,9 +92,9 @@ input[type=checkbox] {
   display: inline-block;
   margin: 2px 0px;
   padding: 2px 10px;
-  background-color: var(--gray1);
   border: 1px solid var(--gray1);
-  border-radius: 10px;
+  background-color: var(--gray1);
+  border-radius: 5px;
   -webkit-transition: background-color .5s ease-out;
   -moz-transition: background-color .5s ease-out;
   -o-transition: background-color .5s ease-out;
@@ -109,23 +103,18 @@ input[type=checkbox] {
 
 :checked+span {
   font-weight: 600;
-  border: 1px solid #303030;
   background-color: var(--secondary-color);
-  color: rgb(
-    var(--accessible-color),
-    var(--accessible-color),
-    var(--accessible-color)
-  );
+  color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
 }
 
 .checkbox:hover {
   font-weight: 600;
-  border: 1px solid #303030;
+  border: 1px solid var(--secondary-color);
 }
 
 button {
+  border: 1px solid var(--text-color);
   border-radius: 5px;
-  border: 1px solid #158ced;
 }
 
 #reset {
@@ -135,8 +124,8 @@ button {
 /* Hover */
 
 button:hover {
-  background-color: #158ced;
-  color: #F5F5F5;
+  background-color: var(--secondary-color);
+  color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
 }
 
 .checkbox:hover, .checkbox>input:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
@@ -149,7 +138,9 @@ button:hover {
   width: 97%;
   margin: auto;
   background-color: #F5F5F5;
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow:  0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+  box-shadow:  0px 0px 20px 0px rgba(0, 0, 0, 0.4);
   padding: 10px;
   box-sizing: border-box;
 }
@@ -195,17 +186,14 @@ button:hover {
 
 .tag {
   display: inline-block;
-  border: 1px solid gray;
+  font-weight: 600;
+  font-size: 14px;
   border-radius: 15px;
   margin: 2px 0px;
   margin-right: 3px;
-  padding: 2px 10px;
+  padding: 4px 10px;
   background-color: var(--secondary-color);
-  color: rgb(
-    var(--accessible-color),
-    var(--accessible-color),
-    var(--accessible-color)
-  );
+  color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
 }
 
 @media (min-width:800px) {

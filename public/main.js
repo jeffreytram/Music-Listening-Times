@@ -418,12 +418,23 @@ function displaySongInfo(song) {
       .then(color => {
         console.log(color);
         const { value } = color;
-        root.style.setProperty('--secondary-color', `rgba(${value[0]},${value[1]},${value[2]},1)`);
-        root.style.setProperty('--light-secondary', `rgba(${value[0]},${value[1]},${value[2]},.3)`);
-        root.style.setProperty('--very-light-secondary', `rgba(${value[0]},${value[1]},${value[2]},.15)`);
-        root.style.setProperty('--secondary-r', `${value[0]}`);
-        root.style.setProperty('--secondary-g', `${value[1]}`);
-        root.style.setProperty('--secondary-b', `${value[2]}`);
+        const r = value[0], g = value[1], b = value[2];
+        const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        if (luma > 225) {
+          root.style.setProperty('--secondary-color', `rgba(30,30,30,1)`);
+          root.style.setProperty('--light-secondary', `rgba(30,30,30,.3)`);
+          root.style.setProperty('--very-light-secondary', `rgba(30,30,30,.15)`);
+          root.style.setProperty('--secondary-r', `30`);
+          root.style.setProperty('--secondary-g', `30`);
+          root.style.setProperty('--secondary-b', `30`);
+        } else {
+          root.style.setProperty('--secondary-color', `rgba(${r},${g},${b},1)`);
+          root.style.setProperty('--light-secondary', `rgba(${r},${g},${b},.3)`);
+          root.style.setProperty('--very-light-secondary', `rgba(${r},${g},${b},.15)`);
+          root.style.setProperty('--secondary-r', `${r}`);
+          root.style.setProperty('--secondary-g', `${g}`);
+          root.style.setProperty('--secondary-b', `${b}`);
+        }
 
       })
   });
@@ -506,7 +517,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
 
   //cursor position vertical line
   let line = svg.append('path')
-    .style('stroke', '#158ced')
+    .style('stroke', 'var(--secondary-color')
     .style('stroke-width', '3px')
     .style('stroke-dasharray', '4');
 
