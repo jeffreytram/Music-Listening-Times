@@ -18,50 +18,50 @@
           <div id="song-filters">
             <label for="artist-input">Filter by artist:</label>
             <input type="text" name="artist" id="artist-input">
-            <button id="artist-filter-button">Go!</button>
+            <button id="artist-filter-button" class="button">Go!</button>
 
             <label for="song-input">Filter by song:</label>
             <input type="text" name="song" id="song-input">
-            <button id="song-filter-button">Go!</button>
+            <button id="song-filter-button" class="button">Go!</button>
 
             <label for="album-input">Filter by album:</label>
             <input type="text" name="album" id="album-input">
-            <button id="album-filter-button">Go!</button>
+            <button id="album-filter-button" class="button">Go!</button>
           </div>
           <div id="day-filters">
             <label>Filter by day of the week:</label><br>
             <div id="day-container">
-                <label for="mon">
-                  <input type="checkbox" name="mon" id="mon" value="Monday">
-                  <span class="checkbox">Mon</span>
-                </label>
-                <label for="tues">
-                  <input type="checkbox" name="tues" id="tues" value="Tuesday">
-                  <span class="checkbox">Tue</span>
-                </label>
-                <label for="wed">
-                  <input type="checkbox" name="wed" id="wed" value="Wednesday">
-                  <span class="checkbox">Wed</span>
-                </label>
-                <label for="thurs">
-                  <input type="checkbox" name="thurs" id="thurs" value="Thursday">
-                  <span class="checkbox">Thu</span>
-                </label>
-                <label for="fri">
-                  <input type="checkbox" name="fri" id="fri" value="Friday">
-                  <span class="checkbox">Fri</span>
-                </label>
-                <label for="sat">
-                  <input type="checkbox" name="sat" id="sat" value="Saturday">
-                  <span class="checkbox">Sat</span>
-                </label>
-                <label for="sun">
-                  <input type="checkbox" name="sun" id="sun" value="Sunday">
-                  <span class="checkbox">Sun</span>
-                </label>
+              <label for="mon">
+                <input type="checkbox" name="mon" id="mon" value="Monday">
+                <span class="checkbox">Mon</span>
+              </label>
+              <label for="tues">
+                <input type="checkbox" name="tues" id="tues" value="Tuesday">
+                <span class="checkbox">Tue</span>
+              </label>
+              <label for="wed">
+                <input type="checkbox" name="wed" id="wed" value="Wednesday">
+                <span class="checkbox">Wed</span>
+              </label>
+              <label for="thurs">
+                <input type="checkbox" name="thurs" id="thurs" value="Thursday">
+                <span class="checkbox">Thu</span>
+              </label>
+              <label for="fri">
+                <input type="checkbox" name="fri" id="fri" value="Friday">
+                <span class="checkbox">Fri</span>
+              </label>
+              <label for="sat">
+                <input type="checkbox" name="sat" id="sat" value="Saturday">
+                <span class="checkbox">Sat</span>
+              </label>
+              <label for="sun">
+                <input type="checkbox" name="sun" id="sun" value="Sunday">
+                <span class="checkbox">Sun</span>
+              </label>
             </div>
           </div>
-          <button id="reset" style="padding: 3px 20px;">Reset</button>
+          <button id="reset" class="button">Reset</button>
         </div>
 
         <div id="song-info">
@@ -88,8 +88,8 @@
             Jeffrey's Music Listening Times &nbsp;
           </span>
           <div id="date-navigation">
-            <button id="left">&lt;</button>
-            <button id="right">&gt;</button>
+            <button id="left" class="arrow"><i class="fas fa-arrow-left fa-lg"></i></button>
+            <button id="right" class="arrow"><i class="fas fa-arrow-right fa-lg"></i></button>
             <select id="date-range">
               <option value="10/1/2020" selected>Oct 2020</option>
               <option value="9/1/2020">Sep 2020</option>
@@ -144,6 +144,7 @@
 
   <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-functions.js"></script>
 
+  <script src="https://use.fontawesome.com/releases/v5.15.1/js/all.js"></script>
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://unpkg.com/fast-average-color/dist/index.min.js"></script>
   <script src="main.js"></script>
