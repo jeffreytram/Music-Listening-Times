@@ -73,17 +73,16 @@
 
 
 TODO:
-
-More documentation
-- update README
-- document code
-
 Fix errors in data
 - TUYU - It's Raining After All has missing date in csv
 
 Improving style
 
 Making updating data easier, less hard coded end dates
+
+jump to next/previous "selected" point
+
+D3-autocomplete
 
 more details from vertical line
 loop back on edges
@@ -115,8 +114,8 @@ Updating data
 
 -update select drop down date range with new months in index.html
 -update y-axis scale in main.js to update default range
--update last date in drawAllDataCircles in main.js
 -update yState with new default range in main.js
+-update initialization of datasetMonth to last month of new data in main.js
 
 
 canvas resources

@@ -4,6 +4,11 @@ const green = style.getPropertyValue('--green');
 const blue = style.getPropertyValue('--blue');
 const textColor = style.getPropertyValue('--text-color');
 
+/**
+ * Handles filter functionality
+ * @param {string} type the type of filter
+ * @param {string} value the value to filter by
+ */
 function filterController(type, value) {
   clearHighlight()
   if (type === "song") {
@@ -22,17 +27,35 @@ function filterController(type, value) {
   drawCanvasBars();
   displayNumEntries();
 }
+
+/**
+ * Filters the current month's data by the given song's name
+ * @param {string} song The song name to filter by
+ */
 function filterSong(song) {
   filteredDatasetMonth = datasetMonth.filter(d => d.SongTitle === song);
 }
 
+/**
+ * Filters the current month's data by the given arist's name
+ * @param {string} artist The artist's name to filter by
+ */
 function filterArtist(artist) {
   filteredDatasetMonth = datasetMonth.filter(d => d.Artist === artist);
 }
-function filterAlbum(category) {
-  filteredDatasetMonth = datasetMonth.filter(d => d.Album === category);
+
+/**
+ * Filters the current month's data by the given album's name
+ * @param {string} category The album's name to filter by
+ */
+function filterAlbum(album) {
+  filteredDatasetMonth = datasetMonth.filter(d => d.Album === album);
 }
 
+/**
+ * Filters the current month's data by the given list of days
+ * @param {array} days The list of days to filter by
+ */
 function filterDay(days) {
   let newDataset = [];
   days.forEach(function (day) {
@@ -46,6 +69,10 @@ function filterDay(days) {
   }
 }
 
+/**
+ * Switches the current month's data to the newly selected month's data
+ * @param {array} range Array containing the upper date range, and lower date range
+ */
 function filterRange(range) {
   const lowerRange = range[1];
   let key = (lowerRange.getMonth() + 1) + ' ' + lowerRange.getFullYear()
@@ -53,8 +80,11 @@ function filterRange(range) {
   filteredDatasetMonth = datasetMonth;
 }
 
+/**
+ * Reset controller.
+ * Clears all filters and selections, and updates the visualizaiton accordingly
+ */
 function resetGraph() {
-  filterRange(yState);
   displayNumEntries();
   updateCircles();
   drawCanvasBars();
@@ -63,6 +93,9 @@ function resetGraph() {
   clearInput();
 }
 
+/**
+ * Resets the checkbox filters (day filters)
+ */
 function clearDayFilters() {
   const input = document.getElementsByTagName('input');
   const checkbox = Array.from(input).filter(input => input.type === "checkbox");
@@ -73,6 +106,9 @@ function clearDayFilters() {
   });
 }
 
+/**
+ * Resets the values in the text inputs
+ */
 function clearInput() {
   const input = document.getElementsByTagName('input');
   const text = Array.from(input).filter(input => input.type === "text");
@@ -81,6 +117,9 @@ function clearInput() {
   });
 }
 
+/**
+ * Initial render of the current month's data
+ */
 function renderCircles() {
   //filtered selection
   var point = svg.selectAll('.point')
@@ -111,47 +150,9 @@ function renderCircles() {
     });
 }
 
-function drawAllDataCircles() {
-
-  const firstDate = new Date('4/1/2018');
-  const lastDate = new Date('11/1/2020');
-  yState = [lastDate, firstDate];
-
-  // Update chart
-  updateYAxis();
-
-  //filterRange(yState);
-  //displayNumEntries();
-
-  //updateCirclesRange();
-  svg.selectAll('.point').remove();
-
-  //drawCanvasBars();
-
-  //const width = canvas.node().width;
-  //const height = canvas.node().height;
-
-  //object with prop and methods used to render graphics in canvas element
-  let context = allDataCanvas.node().getContext('2d');
-
-  // clear canvas
-  // context.clearRect(0, 0, width, height);
-
-  let max = 0;
-  for (let i = 0; i < entireDataset.length; i++) {
-    let d = entireDataset[i];
-
-    if (yScale(d.Date) > max) {
-      max = yScale(d.Date);
-    }
-    //draw rect
-    context.fillStyle = `rgba(${red}, ${green}, ${blue}, 0.15)`;
-    context.beginPath();
-    context.arc(xScale(d.Time), yScale(d.Date), 2, 0, 2 * Math.PI);
-    context.fill();
-  }
-}
-
+/**
+ * Draws the single axis vertical bar visualization
+ */
 function drawCanvasBars() {
   const width = canvas.node().width;
   const height = canvas.node().height;
@@ -171,6 +172,12 @@ function drawCanvasBars() {
   }
 }
 
+/**
+ * Updates the filtered data points accordingly
+ * Points filtered out are more transparent. The other points are more opaque
+ * @param {number} displaySize The radius size to set the filtered data points to
+ * @param {number} viewOpacity The opaciity to set the filtered data points to
+ */
 function updateCircles(displaySize = 3, viewOpacity = .3) {
   //filtered selection
   var point = svg.selectAll('.point')
@@ -187,7 +194,10 @@ function updateCircles(displaySize = 3, viewOpacity = .3) {
     .style('opacity', .07);
 }
 
-function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
+/**
+ * Renders the new month's data
+ */
+function updateCirclesRange() {
   //filtered selection
   var point = svg.selectAll('.point')
     .data(datasetMonth, d => d.ConvertedDateTime)
@@ -220,11 +230,18 @@ function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
   point.exit().remove();
 }
 
+/**
+ * Hides the initial instructions
+ */
 function hideInstructions() {
   const instructions = document.getElementById('temp-instructions');
   instructions.style.display = 'none';
 }
 
+
+/**
+ * Updates the yScale to the current yState
+ */
 function updateYAxis() {
   yScale.domain(yState);
   yAxisG.transition()
@@ -233,11 +250,19 @@ function updateYAxis() {
     .call(d3.axisLeft(yScale));
 }
 
+/**
+ * Displays the length of the current month's data
+ */
 function displayNumEntries() {
   //display length of fitlered list
   document.getElementById("entry-count").innerHTML = filteredDatasetMonth.length;
 }
 
+/**
+ * Handles the changing of months
+ * Updates all the data as needed and resets the filters
+ * @param {Object} date The date to update to
+ */
 function changeDateRange(date) {
   const year = date.getFullYear();
   const month = date.getMonth();
@@ -255,6 +280,9 @@ function changeDateRange(date) {
   clearInput();
 }
 
+/**
+ * Switches from the current month to the next month
+ */
 function changeNextMonth() {
   const currDate = new Date(getSelectedValue());
   const year = currDate.getFullYear();
@@ -267,6 +295,9 @@ function changeNextMonth() {
   };
 }
 
+/**
+ * Switches from the current month to the previous month
+ */
 function changePrevMonth() {
   const currDate = new Date(getSelectedValue());
   const year = currDate.getFullYear();
@@ -279,6 +310,9 @@ function changePrevMonth() {
   }
 }
 
+/**
+ * Checks if the given month/year is in the data
+ */
 function validMonth(month) {
   let selector = document.getElementById('date-range');
   for (let i = 0; i < selector.options.length; i++) {
@@ -290,13 +324,19 @@ function validMonth(month) {
   return false;
 }
 
+/**
+ * Retrieves the value of the option selected from the month dropdown selector
+ */
 function getSelectedValue() {
   let selectList = document.getElementById("date-range");
   let selectedValue = selectList.options[selectList.selectedIndex].value;
   return selectedValue;
 }
 
-//highlights the given circle element
+/**
+ * highlights the given point
+ * @param {Pt} dot The point to highlight
+ */
 function singleHighlight(dot) {
   filterController('artist', dot._groups[0][0].__data__.Artist);
   dot.transition()
@@ -308,7 +348,9 @@ function singleHighlight(dot) {
     .attr('class', 'point selected');
 }
 
-//removes the highlight of the selected circle
+/**
+ * Clears the highlight of the highlighted circle
+ */
 function clearHighlight() {
   svg.select('.selected')
     .attr('r', 3)
@@ -316,7 +358,12 @@ function clearHighlight() {
     .attr('class', 'point');
 }
 
-//creates an event listener filter
+/**
+ * creates an event listener filter
+ * @param {string} type The type of filter
+ * @param {HTML element} element The element too add the event listener to
+ * @param {string} sourceValue Where the value to filter by comes from
+ */
 function addFilter(type, element, sourceValue) {
   element.addEventListener("click", function () {
     let filterValue;
@@ -332,7 +379,10 @@ function addFilter(type, element, sourceValue) {
   });
 }
 
-//display the selected song's info
+/**
+ * Displays the selected song's info
+ * @param {Object} song The song to display the info of
+ */
 function displaySongInfo(song) {
   const songGrid = document.getElementById('song-info-grid');
   songGrid.style.display = 'grid';
@@ -361,6 +411,10 @@ function displaySongInfo(song) {
   });
 }
 
+/**
+ * Gets and displays the tags of the given song's artist
+ * @param {Object} song The song to retrieve the tags for
+ */
 function displayTags(song) {
   const getArtistTags = firebase.functions().httpsCallable('getArtistTags');
   getArtistTags(song).then(result => {
@@ -380,10 +434,12 @@ function displayTags(song) {
   });
 }
 
+//Initialization
 const width = 950;
 const height = 540;
 const padding = { left: 90, right: 40, top: 10, down: 60 };
 
+//Where to add the graph to
 svg = d3.select('#main-graph')
   .attr('width', width)
   .attr('height', height)
@@ -401,7 +457,7 @@ var yAxisG = svg.append('g')
   .attr('class', 'y axis')
   .attr('transform', `translate(${padding.left}, 0)`)
 
-//default view, no filter
+//Initial load of the data. Default view, no filter
 d3.csv('lastfm-data-utf.csv').then(dataset => {
   //convert date string to data object
   let newDate = new Date();
@@ -412,6 +468,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   datesetMonth = [];
   filteredDatasetMonth = [];
 
+  //sorts all the data into buckets by the month and year
   buckets = {};
   dataset.forEach(d => {
     d.Date = new Date(d.Date);
@@ -429,7 +486,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     d.Time.setTime(newDateMilis + timePeriodMillis);
   });
 
-  //vertical line
+  //cursor position vertical line
   let line = svg.append('path')
     .style('stroke', '#158ced')
     .style('stroke-width', '3px')
@@ -490,10 +547,12 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     .attr('transform', `translate(${padding.left / 4}, ${(padding.top + height - padding.down) / 2}) rotate(-90)`)
     .text('Date');
 
-  // Create global object called chartScales to keep state
+  // Initialzation of global object to store state of the y-axis range
   yState = [new Date("10/31/2020"), new Date("10/1/2020")];
 
-  datasetMonth = buckets["2 2020"];
+  // intialization of global object to store the month's data we want to display
+  datasetMonth = buckets["10 2020"];
+  // intialization of global object to store the month's data we want to display
   filteredDatasetMonth = datasetMonth;
 
   filterRange(yState);
