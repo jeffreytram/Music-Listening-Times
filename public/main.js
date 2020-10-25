@@ -647,5 +647,12 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   let prevButton = document.getElementById('left');
   prevButton.addEventListener("click", function () {
     changePrevMonth();
-  })
+  });
+
+  //finished loading
+  const loading = document.getElementById('loading');
+  const content = document.getElementById('content-container');
+
+  loading.style.display = 'none';
+  content.style.display = 'block';
 });
