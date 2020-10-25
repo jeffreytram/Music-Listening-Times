@@ -71,34 +71,41 @@
 - day filters now displayed in grid layout
 - added short instruction
 
-TODO:
 
-improve default view/state
-- 'click a data point to view the song info'
+TODO:
 more details from vertical line
 loop back on edges
 - circularly doubly linked list
 - show if able to move forward/backwards
 
-graph to show what time music listened to for the month
-- heat graph
-    - orig graph without a y-axis
-- distribution
 reset button should reset days filter checks as well
 moving to a different month with filters currently applied
 
-- padding, height, width variables
 - multiple filters applied at once
 - predictive/suggested search
 - display total/top 10 tags
 - display top 10 artist
     - clicking artist info filters
 
+
+Running the application
+- testing locally: firebase serve
+- deploying: firebaes deploy
+
+
 Updating data
 -export data using https://benjaminbenben.com/lastfm-to-csv/
+   -only need to export the new data
 -convert the csv to UTF-8 (https://www.highviewapps.com/kb/special-characters-are-not-displaying-properly-when-i-open-my-shopify-csv-export-file-with-excel-or-another-spreadsheet-application-how-can-i-fix-this/)
--insert data
--format data
+-copy and insert data into the .xlsx
+-apply the formulas to the newly inserted data
+-save a copy as a 'CSV UTF-8' and replace the old csv
+
+-update select drop down date range with new months in index.html
+-update y-axis scale in main.js to update default range
+-update last date in drawAllDataCircles in main.js
+-update yState with new default range in main.js
+
 
 canvas resources
 - https://www.visualcinnamon.com/2015/11/learnings-from-a-d3-js-addict-on-starting-with-canvas.html
