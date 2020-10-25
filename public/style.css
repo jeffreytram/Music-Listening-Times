@@ -1,28 +1,28 @@
 :root {
-    --text-color: #303030;
-    --red: 30;
-    --green: 30;
-    --blue: 30;
-    --gray1: #e6e6e6;
+  --text-color: #303030;
+  --red: 30;
+  --green: 30;
+  --blue: 30;
+  --gray1: #e6e6e6;
 }
 
 * {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 html, body {
-    color: var(--text-color);
-    background-color: #EBEBEB;
-    height: 100%;
-    margin: 0;
+  color: var(--text-color);
+  background-color: #EBEBEB;
+  height: 100%;
+  margin: 0;
 }
 
 .label {
-    fill: var(--text-color)
+  fill: var(--text-color)
 }
 
 .axis {
-    color: var(--text-color)
+  color: var(--text-color)
 }
 
 #date-range {
@@ -41,105 +41,104 @@ html, body {
 }
 
 #day-grid {
-    display: grid;
-    grid-template: repeat(auto-fill, 20px) / repeat(auto-fill, minmax(70px, 1fr));
-    
+  display: grid;
+  grid-template: repeat(auto-fill, 20px) / repeat(auto-fill, minmax(70px, 1fr));
 }
 
 #song-info-grid {
-    display: none;
-    width: 100%;
-    grid-template: repeat(4, minmax(min-content, max-content)) / minmax(90px, 180px) 55px minmax(60px, 1fr);
-    min-height: 175px;
+  display: none;
+  width: 100%;
+  grid-template: repeat(4, minmax(min-content, max-content)) / minmax(90px, 180px) 55px minmax(60px, 1fr);
+  min-height: 175px;
 }
 
 .art {
-    grid-row: 1/5;
+  grid-row: 1/5;
 }
 
 #album-art {
-    width: 100%;
+  width: 100%;
 }
 
 #temp-instructions {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    min-height: 175px;
-    background-color: #EBEBEB;
-    border: 1px solid #158ced
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 175px;
+  background-color: #EBEBEB;
+  border: 1px solid #158ced
 }
 
 .artist, .song, .album {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .checkbox {
-    display: inline;
-    white-space: nowrap;
+  display: inline;
+  white-space: nowrap;
 }
 
 button {
-    border-radius: 5px;
-    border: 1px solid #158ced;
+  border-radius: 5px;
+  border: 1px solid #158ced;
 }
 
 /* Hover */
 
 button:hover {
-    background-color: #158ced;
-    color: #F5F5F5;
+  background-color: #158ced;
+  color: #F5F5F5;
 }
 
 .checkbox>input:hover, .checkbox>label:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 /* Website layout */
 
 #content-container {
-    width: 97%;
-    margin: auto;
-    background-color: #F5F5F5;
-    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
-    padding: 10px;
-    box-sizing: border-box;
+  width: 97%;
+  margin: auto;
+  background-color: #F5F5F5;
+  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+  padding: 10px;
+  box-sizing: border-box;
 }
 
 #filters {
-    width: 100%;
-    height: 100%;
-    margin-bottom: 20px;
+  width: 100%;
+  height: 100%;
+  margin-bottom: 20px;
 }
 
 #song-filters {
-    width: 100%;
-    display: grid;
-    grid-template: repeat(3, 25px) / 120px minmax(50px, 180px) minmax(30px, 60px);
-    gap: 8px 12px;
+  width: 100%;
+  display: grid;
+  grid-template: repeat(3, 25px) / 120px minmax(50px, 180px) minmax(30px, 60px);
+  gap: 8px 12px;
 }
 
 #day-filters {
-    width: 100%;
+  width: 100%;
 }
 
 #song-info {
-    width: 100%;
+  width: 100%;
 }
 
 #main {
-    margin: auto;
-    text-align: center;
+  margin: auto;
+  text-align: center;
 }
 
 #main-graph, #test-canvas {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 #canvas {
-    width: 100%;
+  width: 100%;
 }
 
 #tagList {
@@ -156,24 +155,24 @@ button:hover {
 }
 
 @media (min-width:970px) {
-    #test-container {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-content: center;
-    }
-    #main {
-        width: 70%;
-        float: left;
-    }
-    #side-info {
-        width: 30%;
-        float: right;
-    }
-    #song-filters {
-        width: 100%;
-    }
-    #day-filters {
-        width: 100%;
-    }
+  #test-container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+  }
+  #main {
+    width: 70%;
+    float: left;
+  }
+  #side-info {
+    width: 30%;
+    float: right;
+  }
+  #song-filters {
+    width: 100%;
+  }
+  #day-filters {
+    width: 100%;
+  }
 }

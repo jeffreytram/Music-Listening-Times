@@ -5,537 +5,537 @@ const blue = style.getPropertyValue('--blue');
 const textColor = style.getPropertyValue('--text-color');
 
 function filterController(type, value) {
-    clearHighlight()
-    if (type === "song") {
-        filterSong(value);
-        updateCircles(5, .5);
-    } else if (type === "artist") {
-        filterArtist(value);
-        updateCircles(5, .5);
-    } else if (type === "album") {
-        filterAlbum(value);
-        updateCircles(5, .5);
-    } else if (type === "day") {
-        filterDay(value);
-        updateCircles(3, .3);
-    }
-    drawCanvasBars();
-    displayNumEntries();
+  clearHighlight()
+  if (type === "song") {
+    filterSong(value);
+    updateCircles(5, .5);
+  } else if (type === "artist") {
+    filterArtist(value);
+    updateCircles(5, .5);
+  } else if (type === "album") {
+    filterAlbum(value);
+    updateCircles(5, .5);
+  } else if (type === "day") {
+    filterDay(value);
+    updateCircles(3, .3);
+  }
+  drawCanvasBars();
+  displayNumEntries();
 }
 function filterSong(song) {
-    filteredDatasetMonth = datasetMonth.filter(d => d.SongTitle === song);
+  filteredDatasetMonth = datasetMonth.filter(d => d.SongTitle === song);
 }
 
 function filterArtist(artist) {
-    filteredDatasetMonth = datasetMonth.filter(d => d.Artist === artist);
+  filteredDatasetMonth = datasetMonth.filter(d => d.Artist === artist);
 }
 function filterAlbum(category) {
-    filteredDatasetMonth = datasetMonth.filter(d => d.Album === category);
+  filteredDatasetMonth = datasetMonth.filter(d => d.Album === category);
 }
 
 function filterDay(days) {
-    let newDataset = [];
-    days.forEach(function (day) {
-        newDataset = newDataset.concat(datasetMonth.filter(d => d.Day === day));
-    });
-    //if no days selected, display all
-    if (days.length > 0) {
-        filteredDatasetMonth = newDataset;
-    } else {
-        filteredDatasetMonth = datasetMonth;
-    }
+  let newDataset = [];
+  days.forEach(function (day) {
+    newDataset = newDataset.concat(datasetMonth.filter(d => d.Day === day));
+  });
+  //if no days selected, display all
+  if (days.length > 0) {
+    filteredDatasetMonth = newDataset;
+  } else {
+    filteredDatasetMonth = datasetMonth;
+  }
 }
 
 function filterRange(range) {
-    const lowerRange = range[1];
-    let key = (lowerRange.getMonth() + 1) + ' ' + lowerRange.getFullYear()
-    datasetMonth = buckets[key];
-    filteredDatasetMonth = datasetMonth;
+  const lowerRange = range[1];
+  let key = (lowerRange.getMonth() + 1) + ' ' + lowerRange.getFullYear()
+  datasetMonth = buckets[key];
+  filteredDatasetMonth = datasetMonth;
 }
 
 function resetGraph() {
-    filterRange(yState);
-    displayNumEntries();
-    updateCircles();
-    drawCanvasBars();
-    clearHighlight();
+  filterRange(yState);
+  displayNumEntries();
+  updateCircles();
+  drawCanvasBars();
+  clearHighlight();
 }
 
 function renderCircles() {
-    //filtered selection
-    var point = svg.selectAll('.point')
-        .data(filteredDatasetMonth, d => d.ConvertedDateTime)
+  //filtered selection
+  var point = svg.selectAll('.point')
+    .data(filteredDatasetMonth, d => d.ConvertedDateTime)
 
-    var pointEnter = point.enter()
-        .append('g')
-        .attr('class', 'point')
+  var pointEnter = point.enter()
+    .append('g')
+    .attr('class', 'point')
 
-    pointEnter.merge(point)
-        .attr('transform', d => {
-            var tx = xScale(d.Time);
-            var ty = yScale(d.Date);
-            return 'translate(' + [tx, ty] + ')';
-        });
+  pointEnter.merge(point)
+    .attr('transform', d => {
+      var tx = xScale(d.Time);
+      var ty = yScale(d.Date);
+      return 'translate(' + [tx, ty] + ')';
+    });
 
-    //add circle to group
-    pointEnter.append('circle')
-        .attr('r', 3)
-        .style('fill', textColor)
-        .style('opacity', .3)
-        .on("click", function (d) {
-            hideInstructions();
-            displaySongInfo(d);
-            displayTags(d);
-            clearHighlight();
-            singleHighlight(d3.select(this));
-        });
+  //add circle to group
+  pointEnter.append('circle')
+    .attr('r', 3)
+    .style('fill', textColor)
+    .style('opacity', .3)
+    .on("click", function (d) {
+      hideInstructions();
+      displaySongInfo(d);
+      displayTags(d);
+      clearHighlight();
+      singleHighlight(d3.select(this));
+    });
 }
 
 function drawAllDataCircles() {
 
-    const firstDate = new Date('4/1/2018');
-    const lastDate = new Date('11/1/2020');
-    yState = [lastDate, firstDate];
+  const firstDate = new Date('4/1/2018');
+  const lastDate = new Date('11/1/2020');
+  yState = [lastDate, firstDate];
 
-    // Update chart
-    updateYAxis();
+  // Update chart
+  updateYAxis();
 
-    //filterRange(yState);
-    //displayNumEntries();
+  //filterRange(yState);
+  //displayNumEntries();
 
-    //updateCirclesRange();
-    svg.selectAll('.point').remove();
+  //updateCirclesRange();
+  svg.selectAll('.point').remove();
 
-    //drawCanvasBars();
+  //drawCanvasBars();
 
-    //const width = canvas.node().width;
-    //const height = canvas.node().height;
+  //const width = canvas.node().width;
+  //const height = canvas.node().height;
 
-    //object with prop and methods used to render graphics in canvas element
-    let context = allDataCanvas.node().getContext('2d');
+  //object with prop and methods used to render graphics in canvas element
+  let context = allDataCanvas.node().getContext('2d');
 
-    // clear canvas
-    // context.clearRect(0, 0, width, height);
+  // clear canvas
+  // context.clearRect(0, 0, width, height);
 
-    let max = 0;
-    for (let i = 0; i < entireDataset.length; i++) {
-        let d = entireDataset[i];
+  let max = 0;
+  for (let i = 0; i < entireDataset.length; i++) {
+    let d = entireDataset[i];
 
-        if (yScale(d.Date) > max) {
-            max = yScale(d.Date);
-        }
-        //draw rect
-        context.fillStyle = `rgba(${red}, ${green}, ${blue}, 0.15)`;
-        context.beginPath();
-        context.arc(xScale(d.Time), yScale(d.Date), 2, 0, 2 * Math.PI);
-        context.fill();
+    if (yScale(d.Date) > max) {
+      max = yScale(d.Date);
     }
+    //draw rect
+    context.fillStyle = `rgba(${red}, ${green}, ${blue}, 0.15)`;
+    context.beginPath();
+    context.arc(xScale(d.Time), yScale(d.Date), 2, 0, 2 * Math.PI);
+    context.fill();
+  }
 }
 
 function drawCanvasBars() {
-    const width = canvas.node().width;
-    const height = canvas.node().height;
+  const width = canvas.node().width;
+  const height = canvas.node().height;
 
-    //object with prop and methods used to render graphics in canvas element
-    let context = canvas.node().getContext('2d');
+  //object with prop and methods used to render graphics in canvas element
+  let context = canvas.node().getContext('2d');
 
-    // clear canvas
-    context.clearRect(0, 0, width, height);
+  // clear canvas
+  context.clearRect(0, 0, width, height);
 
-    for (let i = 0; i < filteredDatasetMonth.length; i++) {
-        let d = filteredDatasetMonth[i];
+  for (let i = 0; i < filteredDatasetMonth.length; i++) {
+    let d = filteredDatasetMonth[i];
 
-        //draw rect
-        context.fillStyle = `rgba(${red}, ${green}, ${blue}, 0.1)`;
-        context.fillRect(xScale(d.Time), 0, 3, height);
-    }
+    //draw rect
+    context.fillStyle = `rgba(${red}, ${green}, ${blue}, 0.1)`;
+    context.fillRect(xScale(d.Time), 0, 3, height);
+  }
 }
 
 function updateCircles(displaySize = 3, viewOpacity = .3) {
-    //filtered selection
-    var point = svg.selectAll('.point')
-        .data(filteredDatasetMonth, d => d.ConvertedDateTime)
+  //filtered selection
+  var point = svg.selectAll('.point')
+    .data(filteredDatasetMonth, d => d.ConvertedDateTime)
 
-    point.select("circle")
-        .attr('r', displaySize)
-        .style('opacity', viewOpacity);
+  point.select("circle")
+    .attr('r', displaySize)
+    .style('opacity', viewOpacity);
 
-    //remove filtered out circles
-    point.exit()
-        .select("circle")
-        .attr('r', 3)
-        .style('opacity', .07);
+  //remove filtered out circles
+  point.exit()
+    .select("circle")
+    .attr('r', 3)
+    .style('opacity', .07);
 }
 
 function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
-    //filtered selection
-    var point = svg.selectAll('.point')
-        .data(datasetMonth, d => d.ConvertedDateTime)
+  //filtered selection
+  var point = svg.selectAll('.point')
+    .data(datasetMonth, d => d.ConvertedDateTime)
 
-    var pointEnter = point.enter()
-        .append('g')
-        .attr('class', 'point')
+  var pointEnter = point.enter()
+    .append('g')
+    .attr('class', 'point')
 
-    pointEnter.merge(point)
-        .attr('transform', d => {
-            var tx = xScale(d.Time);
-            var ty = yScale(d.Date);
-            return 'translate(' + [tx, ty] + ')';
-        });
+  pointEnter.merge(point)
+    .attr('transform', d => {
+      var tx = xScale(d.Time);
+      var ty = yScale(d.Date);
+      return 'translate(' + [tx, ty] + ')';
+    });
 
-    //add circle to group
-    pointEnter.append('circle')
-        .attr('r', displaySize)
-        .style('fill', textColor)
-        .style('opacity', viewOpacity)
-        .on("click", function (d) {
-            hideInstructions();
-            displaySongInfo(d);
-            displayTags(d);
-            clearHighlight();
-            singleHighlight(d3.select(this));
-        });
+  //add circle to group
+  pointEnter.append('circle')
+    .attr('r', displaySize)
+    .style('fill', textColor)
+    .style('opacity', viewOpacity)
+    .on("click", function (d) {
+      hideInstructions();
+      displaySongInfo(d);
+      displayTags(d);
+      clearHighlight();
+      singleHighlight(d3.select(this));
+    });
 
-    //remove filtered out circles
-    point.exit().remove();
+  //remove filtered out circles
+  point.exit().remove();
 }
 
 function hideInstructions() {
-    const instructions = document.getElementById('temp-instructions');
-    instructions.style.display = 'none';
+  const instructions = document.getElementById('temp-instructions');
+  instructions.style.display = 'none';
 }
 
 function updateYAxis() {
-    yScale.domain(yState);
-    yAxisG.transition()
-        .ease(d3.easePoly)
-        .duration(750)
-        .call(d3.axisLeft(yScale));
+  yScale.domain(yState);
+  yAxisG.transition()
+    .ease(d3.easePoly)
+    .duration(750)
+    .call(d3.axisLeft(yScale));
 }
 
 function displayNumEntries() {
-    //display length of fitlered list
-    document.getElementById("entry-count").innerHTML = filteredDatasetMonth.length;
+  //display length of fitlered list
+  document.getElementById("entry-count").innerHTML = filteredDatasetMonth.length;
 }
 
 function changeDateRange(date) {
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    yState = [lastDay, firstDay];
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  yState = [lastDay, firstDay];
 
-    // Update chart
-    updateYAxis();
-    filterRange(yState);
-    displayNumEntries();
-    updateCirclesRange();
-    drawCanvasBars();
+  // Update chart
+  updateYAxis();
+  filterRange(yState);
+  displayNumEntries();
+  updateCirclesRange();
+  drawCanvasBars();
 }
 
 function changeNextMonth() {
-    const currDate = new Date(getSelectedValue());
-    const year = currDate.getFullYear();
-    const month = currDate.getMonth();
-    const nextMonth = new Date(year, month + 1, 1);
+  const currDate = new Date(getSelectedValue());
+  const year = currDate.getFullYear();
+  const month = currDate.getMonth();
+  const nextMonth = new Date(year, month + 1, 1);
 
-    const nextMonthText = nextMonth.toLocaleDateString('default', { month: 'short', year: 'numeric' });
-    if (validMonth(nextMonthText)) {
-        changeDateRange(nextMonth);
-    };
+  const nextMonthText = nextMonth.toLocaleDateString('default', { month: 'short', year: 'numeric' });
+  if (validMonth(nextMonthText)) {
+    changeDateRange(nextMonth);
+  };
 }
 
 function changePrevMonth() {
-    const currDate = new Date(getSelectedValue());
-    const year = currDate.getFullYear();
-    const month = currDate.getMonth();
-    const prevMonth = new Date(year, month - 1, 1);
+  const currDate = new Date(getSelectedValue());
+  const year = currDate.getFullYear();
+  const month = currDate.getMonth();
+  const prevMonth = new Date(year, month - 1, 1);
 
-    const prevMonthText = prevMonth.toLocaleDateString('default', { month: 'short', year: 'numeric' });
-    if (validMonth(prevMonthText)) {
-        changeDateRange(prevMonth);
-    }
+  const prevMonthText = prevMonth.toLocaleDateString('default', { month: 'short', year: 'numeric' });
+  if (validMonth(prevMonthText)) {
+    changeDateRange(prevMonth);
+  }
 }
 
 function validMonth(month) {
-    let selector = document.getElementById('date-range');
-    for (let i = 0; i < selector.options.length; i++) {
-        if (selector.options[i].text === month) {
-            selector.selectedIndex = i;
-            return true;
-        }
+  let selector = document.getElementById('date-range');
+  for (let i = 0; i < selector.options.length; i++) {
+    if (selector.options[i].text === month) {
+      selector.selectedIndex = i;
+      return true;
     }
-    return false;
+  }
+  return false;
 }
 
 function getSelectedValue() {
-    let selectList = document.getElementById("date-range");
-    let selectedValue = selectList.options[selectList.selectedIndex].value;
-    return selectedValue;
+  let selectList = document.getElementById("date-range");
+  let selectedValue = selectList.options[selectList.selectedIndex].value;
+  return selectedValue;
 }
 
 //highlights the given circle element
 function singleHighlight(dot) {
-    filterController('artist', dot._groups[0][0].__data__.Artist);
-    dot.transition()
-        .ease(d3.easePoly)
-        .duration(750)
-        .attr('r', 10)
-        .style('opacity', .5)
-        .style('fill', 'red')
-        .attr('class', 'point selected');
+  filterController('artist', dot._groups[0][0].__data__.Artist);
+  dot.transition()
+    .ease(d3.easePoly)
+    .duration(750)
+    .attr('r', 10)
+    .style('opacity', .5)
+    .style('fill', 'red')
+    .attr('class', 'point selected');
 }
 
 //removes the highlight of the selected circle
 function clearHighlight() {
-    svg.select('.selected')
-        .attr('r', 3)
-        .style('fill', '#303030')
-        .attr('class', 'point');
+  svg.select('.selected')
+    .attr('r', 3)
+    .style('fill', '#303030')
+    .attr('class', 'point');
 }
 
 //creates an event listener filter
 function addFilter(type, element, sourceValue) {
-    element.addEventListener("click", function () {
-        let filterValue;
-        if (sourceValue === "input") {
-            //filter value is the user input in text field
-            filterValue = document.getElementById(type + "-input").value;
-        } else if (sourceValue === "info") {
-            //filter value is the text displayed in the info
-            filterValue = element.innerHTML;
-            document.getElementById(type + "-input").value = filterValue;
-        }
-        filterController(type, filterValue);
-    });
+  element.addEventListener("click", function () {
+    let filterValue;
+    if (sourceValue === "input") {
+      //filter value is the user input in text field
+      filterValue = document.getElementById(type + "-input").value;
+    } else if (sourceValue === "info") {
+      //filter value is the text displayed in the info
+      filterValue = element.innerHTML;
+      document.getElementById(type + "-input").value = filterValue;
+    }
+    filterController(type, filterValue);
+  });
 }
 
 //display the selected song's info
 function displaySongInfo(song) {
-    const songGrid = document.getElementById('song-info-grid');
-    songGrid.style.display = 'grid';
+  const songGrid = document.getElementById('song-info-grid');
+  songGrid.style.display = 'grid';
 
-    let imgAlbumArt = document.getElementById('album-art');
-    let divArtist = document.getElementsByClassName('artist');
-    let divSong = document.getElementsByClassName('song');
-    let divAlbum = document.getElementsByClassName('album');
-    let divDate = document.getElementsByClassName('date');
+  let imgAlbumArt = document.getElementById('album-art');
+  let divArtist = document.getElementsByClassName('artist');
+  let divSong = document.getElementsByClassName('song');
+  let divAlbum = document.getElementsByClassName('album');
+  let divDate = document.getElementsByClassName('date');
 
-    divArtist[0].innerText = song.Artist;
-    divSong[0].innerText = song.SongTitle;
-    divAlbum[0].innerText = song.Album;
-    divDate[0].innerText = song.Day + ' ' + song.ConvertedDateTime;
+  divArtist[0].innerText = song.Artist;
+  divSong[0].innerText = song.SongTitle;
+  divAlbum[0].innerText = song.Album;
+  divDate[0].innerText = song.Day + ' ' + song.ConvertedDateTime;
 
-    let albumArt = '';
+  let albumArt = '';
 
-    const getAlbumInfo = firebase.functions().httpsCallable('getAlbumInfo');
-    getAlbumInfo(song).then(result => {
-        albumInfo = JSON.parse(result.data);
-        albumArt = albumInfo.album.image[2]['#text'];
-        if (albumArt === '') {
-            albumArt = 'https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png';
-        }
-        imgAlbumArt.src = albumArt;
-    });
+  const getAlbumInfo = firebase.functions().httpsCallable('getAlbumInfo');
+  getAlbumInfo(song).then(result => {
+    albumInfo = JSON.parse(result.data);
+    albumArt = albumInfo.album.image[2]['#text'];
+    if (albumArt === '') {
+      albumArt = 'https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png';
+    }
+    imgAlbumArt.src = albumArt;
+  });
 }
 
 function displayTags(song) {
-    const getArtistTags = firebase.functions().httpsCallable('getArtistTags');
-    getArtistTags(song).then(result => {
-        const tags = JSON.parse(result.data);
+  const getArtistTags = firebase.functions().httpsCallable('getArtistTags');
+  getArtistTags(song).then(result => {
+    const tags = JSON.parse(result.data);
 
-        let divTags = document.getElementById('tagList');
-        divTags.innerHTML = '';
+    let divTags = document.getElementById('tagList');
+    divTags.innerHTML = '';
 
-        let apiTags = tags.toptags.tag;
-        let topFiveTags = apiTags.slice(0, 5);
-        for (let i = 0; i < topFiveTags.length; i++) {
-          let spanElement = document.createElement('span');
-          spanElement.className = 'tag';
-          spanElement.innerText = topFiveTags[i].name;
-          divTags.appendChild(spanElement);
-        }
-    });
+    let apiTags = tags.toptags.tag;
+    let topFiveTags = apiTags.slice(0, 5);
+    for (let i = 0; i < topFiveTags.length; i++) {
+      let spanElement = document.createElement('span');
+      spanElement.className = 'tag';
+      spanElement.innerText = topFiveTags[i].name;
+      divTags.appendChild(spanElement);
+    }
+  });
 }
 
 const width = 950;
 const height = 540;
-const padding = {left: 90, right: 40, top: 10, down: 60};
+const padding = { left: 90, right: 40, top: 10, down: 60 };
 
 svg = d3.select('#main-graph')
-    .attr('width', width)
-    .attr('height', height)
-    .attr('viewBox', [0, 0, width, height])
-    .attr('preserveAspectRatio', 'xMidYMid meet')
-    .classed('svg-content', true);
+  .attr('width', width)
+  .attr('height', height)
+  .attr('viewBox', [0, 0, width, height])
+  .attr('preserveAspectRatio', 'xMidYMid meet')
+  .classed('svg-content', true);
 
 //append x-axis
 var xAxisG = svg.append('g')
-    .attr('class', 'x axis')
-    .attr('transform', `translate(0, ${height - padding.down})`)
+  .attr('class', 'x axis')
+  .attr('transform', `translate(0, ${height - padding.down})`)
 
 //append y-axis
 var yAxisG = svg.append('g')
-    .attr('class', 'y axis')
-    .attr('transform', `translate(${padding.left}, 0)`)
+  .attr('class', 'y axis')
+  .attr('transform', `translate(${padding.left}, 0)`)
 
 //default view, no filter
 d3.csv('lastfm-data-utf.csv').then(dataset => {
-    //convert date string to data object
-    let newDate = new Date();
-    newDate.setHours(0, 0, 0, 0);
-    let newDateMilis = newDate.getTime();
+  //convert date string to data object
+  let newDate = new Date();
+  newDate.setHours(0, 0, 0, 0);
+  let newDateMilis = newDate.getTime();
 
-    entireDataset = dataset;
-    datesetMonth = [];
-    filteredDatasetMonth = [];
+  entireDataset = dataset;
+  datesetMonth = [];
+  filteredDatasetMonth = [];
 
-    buckets = {};
-    dataset.forEach(d => {
-        d.Date = new Date(d.Date);
-        //add to bucket
-        let key = (d.Date.getMonth() + 1) + " " + d.Date.getFullYear();
-        if (buckets[key] === undefined) {
-            buckets[key] = [];
-        }
-        buckets[key].push(d);
+  buckets = {};
+  dataset.forEach(d => {
+    d.Date = new Date(d.Date);
+    //add to bucket
+    let key = (d.Date.getMonth() + 1) + " " + d.Date.getFullYear();
+    if (buckets[key] === undefined) {
+      buckets[key] = [];
+    }
+    buckets[key].push(d);
 
-        var parts = d.Time.split(/:/);
-        var timePeriodMillis = (parseInt(parts[0], 10) * 60 * 60 * 1000) +
-            (parseInt(parts[1], 10) * 60 * 1000)
-        d.Time = new Date()
-        d.Time.setTime(newDateMilis + timePeriodMillis);
-    });
-    
-    //vertical line
-    let line = svg.append('path')
-        .style('stroke', '#158ced')
-        .style('stroke-width', '3px')
-        .style('stroke-dasharray', '4');
+    var parts = d.Time.split(/:/);
+    var timePeriodMillis = (parseInt(parts[0], 10) * 60 * 60 * 1000) +
+      (parseInt(parts[1], 10) * 60 * 1000)
+    d.Time = new Date()
+    d.Time.setTime(newDateMilis + timePeriodMillis);
+  });
 
-    svg
-        .on('mousemove', function() {
-            let mouse = d3.mouse(this);
-            line.attr('d', function() {
-                    //d = 'M100,0 L100,460
-                    //move to 100,460 then line to 100,0
-                    let d = 'M' + mouse[0] + ',0 ';
-                    d += 'L' + mouse[0] + `,${height - padding.down}`;
-                    return d;
-                });
-        })
-        .on('mouseover', function() {
-            line.style('opacity', .4)
-        })
-        .on('mouseout', function() {
-            line.style('opacity', 0);
-        })
+  //vertical line
+  let line = svg.append('path')
+    .style('stroke', '#158ced')
+    .style('stroke-width', '3px')
+    .style('stroke-dasharray', '4');
 
-    //x-axis scale
-    xScale = d3.scaleTime()
-        .domain(d3.extent(dataset, d => d.Time))
-        .range([padding.left, width - padding.right]);
-
-    //y-axis scale
-    yScale = d3.scaleTime()
-        .domain([new Date("10/31/2020"), new Date("10/1/2020")])
-        .range([padding.top, height - padding.down]);
-
-    //x-axis line
-    var xAxis = d3.axisBottom(xScale)
-        .ticks(d3.timeHour.every(2))
-        .tickFormat(d3.timeFormat('%H:%M'));
-
-    //y-axis line
-    yAxis = d3.axisLeft(yScale)
-
-    xAxisG.call(xAxis);
-
-    //append x-axis label
-    svg.append('text')
-        .attr('class', 'x label')
-        .attr('text-anchor', 'middle')
-        .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${height - padding.down / 4})`)
-        .text('Time of Day (hrs:mins)');
-
-
-    yAxisG.call(yAxis);
-
-    //append y-axis label
-    svg.append('text')
-        .attr('class', 'x label')
-        .attr('text-anchor', 'middle')
-        .attr('transform', `translate(${padding.left / 4}, ${(padding.top + height - padding.down) / 2}) rotate(-90)`)
-        .text('Date');
-
-    // Create global object called chartScales to keep state
-    yState = [new Date("10/31/2020"), new Date("10/1/2020")];
-
-    datasetMonth = buckets["2 2020"];
-    filteredDatasetMonth = datasetMonth;
-
-    filterRange(yState);
-    //render all data points
-    displayNumEntries();
-    renderCircles();
-
-    //creating canvas
-    //DOM element
-    canvas = d3.select('#canvas')
-        .attr('width', width)
-        .attr('height', 45);
-        
-    drawCanvasBars();
-
-    //song, artist, and album filter
-    let filters = ["song", "artist", "album"];
-    filters.forEach(type => {
-        let clickable = document.getElementById(type + "-filter-button");
-        addFilter(type, clickable, "input");
-    });
-
-    let clickableFilters = ["album", "artist", "song"];
-    clickableFilters.forEach(type => {
-        let clickable = document.getElementsByClassName(type);
-        addFilter(type, clickable[0], "info");
-    });
-
-    //multiple day filter event listener
-    let checkbox = document.getElementsByTagName('input');
-    checkbox = Array.from(checkbox).filter(input => input.type === "checkbox");
-    let checkedDays = [];
-    Array.from(checkbox).forEach(function (cb) {
-        cb.addEventListener('change', function () {
-            if (this.checked) {
-                checkedDays.push(this.value);
-            } else {
-                checkedDays = checkedDays.filter(day => day !== this.value);
-            }
-            filterController("day", checkedDays);
-        });
-    });
-
-    //change date range
-    let selectList = document.getElementById("date-range");
-    selectList.addEventListener("change", function () {
-        let selectedValue = selectList.options[selectList.selectedIndex].value;
-        let date = new Date(selectedValue);
-        changeDateRange(date);
-    });
-
-    //reset button
-    let resetButton = document.getElementById("reset");
-    resetButton.addEventListener("click", function () {
-        resetGraph();
-    });
-
-    //left/right buttons
-    let nextButton = document.getElementById('right');
-    nextButton.addEventListener("click", function () {
-        changeNextMonth();
-    });
-    let prevButton = document.getElementById('left');
-    prevButton.addEventListener("click", function () {
-        changePrevMonth();
+  svg
+    .on('mousemove', function () {
+      let mouse = d3.mouse(this);
+      line.attr('d', function () {
+        //d = 'M100,0 L100,460
+        //move to 100,460 then line to 100,0
+        let d = 'M' + mouse[0] + ',0 ';
+        d += 'L' + mouse[0] + `,${height - padding.down}`;
+        return d;
+      });
     })
+    .on('mouseover', function () {
+      line.style('opacity', .4)
+    })
+    .on('mouseout', function () {
+      line.style('opacity', 0);
+    })
+
+  //x-axis scale
+  xScale = d3.scaleTime()
+    .domain(d3.extent(dataset, d => d.Time))
+    .range([padding.left, width - padding.right]);
+
+  //y-axis scale
+  yScale = d3.scaleTime()
+    .domain([new Date("10/31/2020"), new Date("10/1/2020")])
+    .range([padding.top, height - padding.down]);
+
+  //x-axis line
+  var xAxis = d3.axisBottom(xScale)
+    .ticks(d3.timeHour.every(2))
+    .tickFormat(d3.timeFormat('%H:%M'));
+
+  //y-axis line
+  yAxis = d3.axisLeft(yScale)
+
+  xAxisG.call(xAxis);
+
+  //append x-axis label
+  svg.append('text')
+    .attr('class', 'x label')
+    .attr('text-anchor', 'middle')
+    .attr('transform', `translate(${(padding.left + width - padding.right) / 2}, ${height - padding.down / 4})`)
+    .text('Time of Day (hrs:mins)');
+
+
+  yAxisG.call(yAxis);
+
+  //append y-axis label
+  svg.append('text')
+    .attr('class', 'x label')
+    .attr('text-anchor', 'middle')
+    .attr('transform', `translate(${padding.left / 4}, ${(padding.top + height - padding.down) / 2}) rotate(-90)`)
+    .text('Date');
+
+  // Create global object called chartScales to keep state
+  yState = [new Date("10/31/2020"), new Date("10/1/2020")];
+
+  datasetMonth = buckets["2 2020"];
+  filteredDatasetMonth = datasetMonth;
+
+  filterRange(yState);
+  //render all data points
+  displayNumEntries();
+  renderCircles();
+
+  //creating canvas
+  //DOM element
+  canvas = d3.select('#canvas')
+    .attr('width', width)
+    .attr('height', 45);
+
+  drawCanvasBars();
+
+  //song, artist, and album filter
+  let filters = ["song", "artist", "album"];
+  filters.forEach(type => {
+    let clickable = document.getElementById(type + "-filter-button");
+    addFilter(type, clickable, "input");
+  });
+
+  let clickableFilters = ["album", "artist", "song"];
+  clickableFilters.forEach(type => {
+    let clickable = document.getElementsByClassName(type);
+    addFilter(type, clickable[0], "info");
+  });
+
+  //multiple day filter event listener
+  let checkbox = document.getElementsByTagName('input');
+  checkbox = Array.from(checkbox).filter(input => input.type === "checkbox");
+  let checkedDays = [];
+  Array.from(checkbox).forEach(function (cb) {
+    cb.addEventListener('change', function () {
+      if (this.checked) {
+        checkedDays.push(this.value);
+      } else {
+        checkedDays = checkedDays.filter(day => day !== this.value);
+      }
+      filterController("day", checkedDays);
+    });
+  });
+
+  //change date range
+  let selectList = document.getElementById("date-range");
+  selectList.addEventListener("change", function () {
+    let selectedValue = selectList.options[selectList.selectedIndex].value;
+    let date = new Date(selectedValue);
+    changeDateRange(date);
+  });
+
+  //reset button
+  let resetButton = document.getElementById("reset");
+  resetButton.addEventListener("click", function () {
+    resetGraph();
+  });
+
+  //left/right buttons
+  let nextButton = document.getElementById('right');
+  nextButton.addEventListener("click", function () {
+    changeNextMonth();
+  });
+  let prevButton = document.getElementById('left');
+  prevButton.addEventListener("click", function () {
+    changePrevMonth();
+  })
 });
