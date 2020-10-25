@@ -25,9 +25,19 @@ html, body {
     color: var(--text-color)
 }
 
-.title {
-    font-weight: bold;
-    font-size: 20px;
+#date-range {
+  position: absolute;
+  padding: 1px 2px;
+  border-radius: 10px;
+}
+
+#title-bar {
+  position: relative;
+}
+
+#title {
+  font-weight: bold;
+  font-size: large;
 }
 
 #day-grid {
@@ -139,7 +149,8 @@ button:hover {
 .tag {
   display: inline-block;
   border-radius: 15px;
-  margin: 2px 4px;
+  margin: 2px 0px;
+  margin-right: 3px;
   padding: 2px 10px;
   background-color: var(--gray1);
 }
