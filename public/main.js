@@ -344,13 +344,17 @@ function displayTags(song) {
     getArtistTags(song).then(result => {
         const tags = JSON.parse(result.data);
 
-        let divTags = document.getElementById('tags');
+        let divTags = document.getElementById('tagList');
+        divTags.innerHTML = '';
 
         let apiTags = tags.toptags.tag;
         let topFiveTags = apiTags.slice(0, 5);
-        let results = topFiveTags.map(tag => tag.name);
-
-        divTags.innerText = results.join(', ');
+        for (let i = 0; i < topFiveTags.length; i++) {
+          let spanElement = document.createElement('span');
+          spanElement.className = 'tag';
+          spanElement.innerText = topFiveTags[i].name;
+          divTags.appendChild(spanElement);
+        }
     });
 }
 

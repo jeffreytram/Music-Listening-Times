@@ -73,6 +73,18 @@
 
 
 TODO:
+
+More documentation
+- update README
+- document code
+
+Fix errors in data
+- TUYU - It's Raining After All has missing date in csv
+
+Improving style
+
+Making updating data easier, less hard coded end dates
+
 more details from vertical line
 loop back on edges
 - circularly doubly linked list
