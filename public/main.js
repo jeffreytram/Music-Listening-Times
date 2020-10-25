@@ -4,6 +4,9 @@ const green = style.getPropertyValue('--green');
 const blue = style.getPropertyValue('--blue');
 const textColor = style.getPropertyValue('--text-color');
 
+const root = document.documentElement;
+const fac = new FastAverageColor();
+
 /**
  * Handles filter functionality
  * @param {string} type the type of filter
@@ -143,6 +146,7 @@ function renderCircles() {
     .style('opacity', .3)
     .on("click", function (d) {
       hideInstructions();
+      clearDayFilters();
       displaySongInfo(d);
       displayTags(d);
       clearHighlight();
@@ -197,7 +201,7 @@ function updateCircles(displaySize = 3, viewOpacity = .3) {
 /**
  * Renders the new month's data
  */
-function updateCirclesRange() {
+function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
   //filtered selection
   var point = svg.selectAll('.point')
     .data(datasetMonth, d => d.ConvertedDateTime)
@@ -220,6 +224,7 @@ function updateCirclesRange() {
     .style('opacity', viewOpacity)
     .on("click", function (d) {
       hideInstructions();
+      clearDayFilters();
       displaySongInfo(d);
       displayTags(d);
       clearHighlight();
@@ -408,6 +413,19 @@ function displaySongInfo(song) {
       albumArt = 'https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png';
     }
     imgAlbumArt.src = albumArt;
+
+    fac.getColorAsync(albumArt)
+      .then(color => {
+        console.log(color);
+        const { value } = color;
+        root.style.setProperty('--secondary-color', `rgba(${value[0]},${value[1]},${value[2]},1)`);
+        root.style.setProperty('--light-secondary', `rgba(${value[0]},${value[1]},${value[2]},.5)`);
+        root.style.setProperty('--very-light-secondary', `rgba(${value[0]},${value[1]},${value[2]},.15)`);
+        root.style.setProperty('--secondary-r', `${value[0]}`);
+        root.style.setProperty('--secondary-g', `${value[1]}`);
+        root.style.setProperty('--secondary-b', `${value[2]}`);
+
+      })
   });
 }
 
