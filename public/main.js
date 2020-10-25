@@ -91,6 +91,47 @@ function renderCircles() {
         });
 }
 
+function drawAllDataCircles() {
+
+    const firstDate = new Date('4/1/2018');
+    const lastDate = new Date('11/1/2020');
+    yState = [lastDate, firstDate];
+
+    // Update chart
+    updateYAxis();
+
+    //filterRange(yState);
+    //displayNumEntries();
+
+    //updateCirclesRange();
+    svg.selectAll('.point').remove();
+
+    //drawCanvasBars();
+
+    //const width = canvas.node().width;
+    //const height = canvas.node().height;
+
+    //object with prop and methods used to render graphics in canvas element
+    let context = allDataCanvas.node().getContext('2d');
+
+    // clear canvas
+    // context.clearRect(0, 0, width, height);
+
+    let max = 0;
+    for (let i = 0; i < entireDataset.length; i++) {
+        let d = entireDataset[i];
+
+        if (yScale(d.Date) > max) {
+            max = yScale(d.Date);
+        }
+        //draw rect
+        context.fillStyle = `rgba(${red}, ${green}, ${blue}, 0.15)`;
+        context.beginPath();
+        context.arc(xScale(d.Time), yScale(d.Date), 2, 0, 2 * Math.PI);
+        context.fill();
+    }
+}
+
 function drawCanvasBars() {
     const width = canvas.node().width;
     const height = canvas.node().height;
@@ -341,6 +382,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     newDate.setHours(0, 0, 0, 0);
     let newDateMilis = newDate.getTime();
 
+    entireDataset = dataset;
     datesetMonth = [];
     filteredDatasetMonth = [];
 
@@ -360,7 +402,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
         d.Time = new Date()
         d.Time.setTime(newDateMilis + timePeriodMillis);
     });
-
+    
     //vertical line
     let line = svg.append('path')
         .style('stroke', '#158ced')
@@ -392,7 +434,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
 
     //y-axis scale
     yScale = d3.scaleTime()
-        .domain([new Date("5/31/2020"), new Date("5/1/2020")])
+        .domain([new Date("10/31/2020"), new Date("10/1/2020")])
         .range([padding.top, height - padding.down]);
 
     //x-axis line
@@ -423,7 +465,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
         .text('Date');
 
     // Create global object called chartScales to keep state
-    yState = [new Date("5/31/2020"), new Date("5/1/2020")];
+    yState = [new Date("10/31/2020"), new Date("10/1/2020")];
 
     datasetMonth = buckets["2 2020"];
     filteredDatasetMonth = datasetMonth;
@@ -438,7 +480,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     canvas = d3.select('#canvas')
         .attr('width', width)
         .attr('height', 45);
-
+        
     drawCanvasBars();
 
     //song, artist, and album filter
