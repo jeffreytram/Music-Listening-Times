@@ -59,6 +59,24 @@ function resetGraph() {
   updateCircles();
   drawCanvasBars();
   clearHighlight();
+  clearDayFilters();
+  clearInput();
+}
+
+function clearDayFilters() {
+  const input = document.getElementsByTagName('input');
+  const checkbox = Array.from(input).filter(input => input.type === "checkbox");
+  Array.from(checkbox).forEach(function (cb) {
+    cb.checked = false;
+  });
+}
+
+function clearInput() {
+  const input = document.getElementsByTagName('input');
+  const text = Array.from(input).filter(input => input.type === "text");
+  Array.from(text).forEach(function (text) {
+    text.value = "";
+  });
 }
 
 function renderCircles() {
@@ -231,6 +249,8 @@ function changeDateRange(date) {
   displayNumEntries();
   updateCirclesRange();
   drawCanvasBars();
+  clearDayFilters();
+  clearInput();
 }
 
 function changeNextMonth() {
