@@ -3,7 +3,7 @@
   --red: 30;
   --green: 30;
   --blue: 30;
-  --gray1: #e6e6e6;
+  --gray1: #E9E9E9;
 }
 
 * {
@@ -39,9 +39,9 @@ html, body {
   font-size: large;
 }
 
-#day-grid {
-  display: grid;
-  grid-template: repeat(auto-fill, 20px) / repeat(auto-fill, minmax(70px, 1fr));
+#day-container {
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 
 #song-info-grid {
@@ -59,8 +59,8 @@ html, body {
   align-items: center;
   width: 100%;
   min-height: 175px;
-  background-color: #EBEBEB;
-  border: 1px solid #158ced
+  background-color: var(--gray1);
+  border: 1px solid #158ced;
 }
 
 .artist, .song, .album {
@@ -71,14 +71,31 @@ html, body {
   font-size: large;
 }
 
+input[type=checkbox] {
+  display: none;
+}
+
 .checkbox {
-  display: inline;
-  white-space: nowrap;
+  margin-right: 2px;
+  padding: 2px 10px;
+  background-color: var(--gray1);
+  border-radius: 10px;
+  overflow: auto;
+  height: 25px;
+}
+
+:checked + span {
+  background-color: #158ced;
+  color: white;
 }
 
 button {
   border-radius: 5px;
   border: 1px solid #158ced;
+}
+
+#reset {
+  display: inline-block;
 }
 
 /* Hover */
@@ -88,7 +105,7 @@ button:hover {
   color: #F5F5F5;
 }
 
-.checkbox>input:hover, .checkbox>label:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
+.checkbox:hover, .checkbox>input:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
   cursor: pointer;
 }
 
