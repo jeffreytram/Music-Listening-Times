@@ -68,6 +68,8 @@ function clearDayFilters() {
   const checkbox = Array.from(input).filter(input => input.type === "checkbox");
   Array.from(checkbox).forEach(function (cb) {
     cb.checked = false;
+    let change = new Event('change');
+    cb.dispatchEvent(change);
   });
 }
 
