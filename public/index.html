@@ -33,31 +33,31 @@
             <div id="day-grid">
               <div class="checkbox">
                 <input type="checkbox" name="mon" id="mon" value="Monday">
-                <label for="mon">Mon.</label>
+                <label for="mon">Mon</label>
               </div>
               <div class="checkbox">
                 <input type="checkbox" name="tues" id="tues" value="Tuesday">
-                <label for="tues">Tue.</label>
+                <label for="tues">Tue</label>
               </div>
               <div class="checkbox">
                 <input type="checkbox" name="wed" id="wed" value="Wednesday">
-                <label for="wed">Wed.</label>
+                <label for="wed">Wed</label>
               </div>
               <div class="checkbox">
                 <input type="checkbox" name="thurs" id="thurs" value="Thursday">
-                <label for="thurs">Thu.</label>
+                <label for="thurs">Thu</label>
               </div>
               <div class="checkbox">
                 <input type="checkbox" name="fri" id="fri" value="Friday">
-                <label for="fri">Fri.</label>
+                <label for="fri">Fri</label>
               </div>
               <div class="checkbox">
                 <input type="checkbox" name="sat" id="sat" value="Saturday">
-                <label for="sat">Sat.</label>
+                <label for="sat">Sat</label>
               </div>
               <div class="checkbox">
                 <input type="checkbox" name="sun" id="sun" value="Sunday">
-                <label for="sun">Sun.</label>
+                <label for="sun">Sun</label>
               </div>
             </div>
           </div>
@@ -84,44 +84,46 @@
       <div id="main">
         <div id="title-bar" style="margin-bottom: 10px;">
           <div id="entries"><span id="entry-count"></span> entries</div>
-          <button id="left">&lt;</button>
-          <button id="right">&gt;</button>
           <span class="title">
-            Jeffrey's Music Listening Times -
+            Jeffrey's Music Listening Times &nbsp;
           </span>
-          <select id="date-range">
-            <option value="10/1/2020" selected>Oct 2020</option>
-            <option value="9/1/2020">Sep 2020</option>
-            <option value="8/1/2020">Aug 2020</option>
-            <option value="7/1/2020">Jul 2020</option>
-            <option value="6/1/2020">Jun 2020</option>
-            <option value="5/1/2020">May 2020</option>
-            <option value="4/1/2020">Apr 2020</option>
-            <option value="3/1/2020">Mar 2020</option>
-            <option value="2/1/2020">Feb 2020</option>
-            <option value="1/1/2020">Jan 2020</option>
-            <option value="12/1/2019">Dec 2019</option>
-            <option value="11/1/2019">Nov 2019</option>
-            <option value="10/1/2019">Oct 2019</option>
-            <option value="9/1/2019">Sep 2019</option>
-            <option value="8/1/2019">Aug 2019</option>
-            <option value="7/1/2019">Jul 2019</option>
-            <option value="6/1/2019">Jun 2019</option>
-            <option value="5/1/2019">May 2019</option>
-            <option value="4/1/2019">Apr 2019</option>
-            <option value="3/1/2019">Mar 2019</option>
-            <option value="2/1/2019">Feb 2019</option>
-            <option value="1/1/2019">Jan 2019</option>
-            <option value="12/1/2018">Dec 2018</option>
-            <option value="11/1/2018">Nov 2018</option>
-            <option value="10/1/2018">Oct 2018</option>
-            <option value="9/1/2018">Sep 2018</option>
-            <option value="8/1/2018">Aug 2018</option>
-            <option value="7/1/2018">Jul 2018</option>
-            <option value="6/1/2018">Jun 2018</option>
-            <option value="5/1/2018">May 2018</option>
-            <option value="4/1/2018">Apr 2018</option>
-          </select>
+          <div id="date-navigation">
+            <button id="left">&lt;</button>
+            <button id="right">&gt;</button>
+            <select id="date-range">
+              <option value="10/1/2020" selected>Oct 2020</option>
+              <option value="9/1/2020">Sep 2020</option>
+              <option value="8/1/2020">Aug 2020</option>
+              <option value="7/1/2020">Jul 2020</option>
+              <option value="6/1/2020">Jun 2020</option>
+              <option value="5/1/2020">May 2020</option>
+              <option value="4/1/2020">Apr 2020</option>
+              <option value="3/1/2020">Mar 2020</option>
+              <option value="2/1/2020">Feb 2020</option>
+              <option value="1/1/2020">Jan 2020</option>
+              <option value="12/1/2019">Dec 2019</option>
+              <option value="11/1/2019">Nov 2019</option>
+              <option value="10/1/2019">Oct 2019</option>
+              <option value="9/1/2019">Sep 2019</option>
+              <option value="8/1/2019">Aug 2019</option>
+              <option value="7/1/2019">Jul 2019</option>
+              <option value="6/1/2019">Jun 2019</option>
+              <option value="5/1/2019">May 2019</option>
+              <option value="4/1/2019">Apr 2019</option>
+              <option value="3/1/2019">Mar 2019</option>
+              <option value="2/1/2019">Feb 2019</option>
+              <option value="1/1/2019">Jan 2019</option>
+              <option value="12/1/2018">Dec 2018</option>
+              <option value="11/1/2018">Nov 2018</option>
+              <option value="10/1/2018">Oct 2018</option>
+              <option value="9/1/2018">Sep 2018</option>
+              <option value="8/1/2018">Aug 2018</option>
+              <option value="7/1/2018">Jul 2018</option>
+              <option value="6/1/2018">Jun 2018</option>
+              <option value="5/1/2018">May 2018</option>
+              <option value="4/1/2018">Apr 2018</option>
+            </select>
+          </div>
         </div>
         <canvas id="canvas"></canvas>
         <svg id="main-graph"></svg>

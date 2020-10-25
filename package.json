@@ -4,7 +4,9 @@
   "description": "Visualizing over 2 years of my personal listening habits",
   "main": "./public/main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "firebase serve",
+    "deploy": "firebase deploy"
   },
   "repository": {
     "type": "git",

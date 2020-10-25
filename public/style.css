@@ -25,13 +25,7 @@ html, body {
   color: var(--text-color)
 }
 
-#entries {
-  position: absolute;
-  left: 5%;
-}
-
 #date-range {
-  position: absolute;
   padding: 1px 2px;
   border-radius: 10px;
 }
@@ -180,5 +174,14 @@ button:hover {
   }
   #day-filters {
     width: 100%;
+  }
+  #entries {
+    position: absolute;
+    left: 5%;
+  }
+  #date-navigation {
+    display: inline;
+    position: absolute;
+    right: 4%;
   }
 }
