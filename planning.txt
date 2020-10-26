@@ -112,12 +112,6 @@ Updating data
 -apply the formulas to the newly inserted data
 -save a copy as a 'CSV UTF-8' and replace the old csv
 
--update select drop down date range with new months in index.html
--update y-axis scale in main.js to update default range
--update yState with new default range in main.js
--update initialization of datasetMonth to last month of new data in main.js
-
-
 canvas resources
 - https://www.visualcinnamon.com/2015/11/learnings-from-a-d3-js-addict-on-starting-with-canvas.html
 - https://www.freecodecamp.org/news/d3-and-canvas-in-3-steps-8505c8b27444/

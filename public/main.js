@@ -261,16 +261,24 @@ function displayNumEntries() {
 }
 
 /**
- * Handles the changing of months
- * Updates all the data as needed and resets the filters
- * @param {Object} date The date to update to
+ * Sets yState from the first day to the last day of the month for the given date
+ * @param {*} date 
  */
-function changeDateRange(date) {
+function setYState(date) {
   const year = date.getFullYear();
   const month = date.getMonth();
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
   yState = [lastDay, firstDay];
+}
+
+/**
+ * Handles the changing of months
+ * Updates all the data as needed and resets the filters
+ * @param {Object} date The date to update to
+ */
+function changeDateRange(date) {
+  setYState(date);
 
   // Update chart
   updateYAxis();
@@ -495,7 +503,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   let newDateMilis = newDate.getTime();
 
   entireDataset = dataset;
-  datesetMonth = [];
+  datasetMonth = [];
   filteredDatasetMonth = [];
 
   //sorts all the data into buckets by the month and year
@@ -515,6 +523,31 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     d.Time = new Date()
     d.Time.setTime(newDateMilis + timePeriodMillis);
   });
+
+  //initialize date range
+  const latestDate = dataset[0].Date;
+  const earliestDate = dataset[dataset.length - 1].Date;
+  const select = document.getElementById('date-range');
+
+  latestDate.setDate(1);
+  latestDate.setHours(0,0,0,0);
+  earliestDate.setDate(1);
+  earliestDate.setHours(0,0,0,0);
+
+  let currDate = new Date(latestDate);
+
+  while (currDate >= earliestDate) {
+    const formattedDate = `${currDate.toLocaleDateString()}`;
+    const abbrevDate = `${currDate.toDateString().substring(4,7)} ${currDate.getFullYear()}`;
+    const option = new Option(abbrevDate, formattedDate);
+
+    select.appendChild(option);
+
+    currDate.setMonth(currDate.getMonth() - 1);
+  }
+
+  // Initialzation of global object to store state of the y-axis range
+  setYState(latestDate);
 
   //cursor position vertical line
   let line = svg.append('path')
@@ -547,7 +580,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
 
   //y-axis scale
   yScale = d3.scaleTime()
-    .domain([new Date("10/31/2020"), new Date("10/1/2020")])
+    .domain(yState)
     .range([padding.top, height - padding.down]);
 
   //x-axis line
@@ -577,11 +610,8 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     .attr('transform', `translate(${padding.left / 4}, ${(padding.top + height - padding.down) / 2}) rotate(-90)`)
     .text('Date');
 
-  // Initialzation of global object to store state of the y-axis range
-  yState = [new Date("10/31/2020"), new Date("10/1/2020")];
-
   // intialization of global object to store the month's data we want to display
-  datasetMonth = buckets["10 2020"];
+  datasetMonth = buckets[`${latestDate.getMonth() + 1} ${latestDate.getFullYear()}`];
   // intialization of global object to store the month's data we want to display
   filteredDatasetMonth = datasetMonth;
 
