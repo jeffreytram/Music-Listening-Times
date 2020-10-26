@@ -27,6 +27,7 @@ html, body {
 }
 
 /* Loading Screen */
+
 #loading {
   text-align: center;
 }
@@ -36,6 +37,7 @@ html, body {
   width: 80px;
   height: 80px;
 }
+
 .lds-dual-ring:after {
   content: " ";
   display: block;
@@ -47,6 +49,7 @@ html, body {
   border-color: var(--text-color) transparent var(--text-color) transparent;
   animation: lds-dual-ring 1.2s linear infinite;
 }
+
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);
@@ -74,16 +77,12 @@ html, body {
 
 #title-bar {
   position: relative;
+  padding: 2px;
 }
 
 .title {
   font-weight: bold;
   font-size: large;
-}
-
-#day-container {
-  margin-top: 10px;
-  margin-bottom: 15px;
 }
 
 #song-info-grid {
@@ -191,10 +190,10 @@ button:hover {
 
 @keyframes content-fade-in {
   from {
-      opacity: 0;
+    opacity: 0;
   }
   to {
-      opacity: 1;
+    opacity: 1;
   }
 }
 
@@ -204,15 +203,28 @@ button:hover {
   margin-bottom: 20px;
 }
 
-#song-filters {
+#search-filter {
   width: 100%;
-  display: grid;
-  grid-template: repeat(3, 25px) / 120px minmax(50px, 180px) minmax(30px, 60px);
-  gap: 8px 12px;
+  margin-bottom: 25px;
+}
+#filter-select {
+  border-radius: 5px;
+}
+#filter-input {
+  display: inline-block;
+  width: 70%;
+  padding: 2px 8px;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+#submit-button {
+  display: inline-block;
 }
 
 #day-filters {
   width: 100%;
+  margin: 25px 0px;
 }
 
 #song-info {
@@ -266,9 +278,6 @@ button:hover {
   #side-info {
     width: 30%;
     float: right;
-  }
-  #song-filters {
-    width: 100%;
   }
   #day-filters {
     width: 100%;

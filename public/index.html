@@ -19,19 +19,19 @@
     <div id="content-container">
       <div id="side-info">
         <div id="filters">
-          <div id="song-filters">
-            <label for="artist-input">Filter by artist:</label>
-            <input type="text" name="artist" id="artist-input">
-            <button id="artist-filter-button" class="button">Go!</button>
-
-            <label for="song-input">Filter by song:</label>
-            <input type="text" name="song" id="song-input">
-            <button id="song-filter-button" class="button">Go!</button>
-
-            <label for="album-input">Filter by album:</label>
-            <input type="text" name="album" id="album-input">
-            <button id="album-filter-button" class="button">Go!</button>
-          </div>
+          <form id="search-filter">
+            <label for="general-filter">
+              <span style="font-weight: 600;">Search by</span>
+              <select id="filter-select">
+                <option value="artist" selected>Artist</option>
+                <option value="song">Song</option>
+                <option value="album">Album</option>
+              </select>
+            </label>
+            <br/>
+            <input type="text" id="filter-input">
+            <button type="button" id="submit-button" class="button">Go!</button>
+          </form>
           <div id="day-filters">
             <label>Filter by day of the week:</label><br>
             <div id="day-container">

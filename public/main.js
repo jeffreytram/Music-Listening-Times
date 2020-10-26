@@ -113,11 +113,8 @@ function clearDayFilters() {
  * Resets the values in the text inputs
  */
 function clearInput() {
-  const input = document.getElementsByTagName('input');
-  const text = Array.from(input).filter(input => input.type === "text");
-  Array.from(text).forEach(function (text) {
-    text.value = "";
-  });
+  const filterInput = document.getElementById('filter-input');
+  filterInput.value = '';
 }
 
 /**
@@ -372,15 +369,19 @@ function clearHighlight() {
 function addFilter(type, element, sourceValue) {
   element.addEventListener("click", function () {
     let filterValue;
+    const select = document.getElementById('filter-select');
+    const input = document.getElementById('filter-input');
     if (sourceValue === "input") {
       //filter value is the user input in text field
-      filterValue = document.getElementById(type + "-input").value;
+      filterValue = input.value;
+      filterController(select.value, filterValue);
     } else if (sourceValue === "info") {
       //filter value is the text displayed in the info
       filterValue = element.innerHTML;
-      document.getElementById(type + "-input").value = filterValue;
+      select.value = type;
+      input.value = filterValue;
+      filterController(type, filterValue);
     }
-    filterController(type, filterValue);
   });
 }
 
@@ -598,11 +599,8 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   drawCanvasBars();
 
   //song, artist, and album filter
-  let filters = ["song", "artist", "album"];
-  filters.forEach(type => {
-    let clickable = document.getElementById(type + "-filter-button");
-    addFilter(type, clickable, "input");
-  });
+  const submitFilter = document.getElementById('submit-button');
+  addFilter(null, submitFilter, 'input');
 
   let clickableFilters = ["album", "artist", "song"];
   clickableFilters.forEach(type => {
