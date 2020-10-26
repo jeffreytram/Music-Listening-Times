@@ -62,6 +62,8 @@ html, body {
 
 /* Main Content */
 
+/* D3 Style */
+
 .label {
   fill: var(--text-color)
 }
@@ -70,11 +72,7 @@ html, body {
   color: var(--text-color)
 }
 
-#date-range {
-  padding: 2px 2px;
-  border-radius: var(--border-radius);
-  border: 1px solid var(--text-color);
-}
+/* Title bar style */
 
 #title-bar {
   position: relative;
@@ -86,37 +84,45 @@ html, body {
   font-size: large;
 }
 
-#song-info-grid {
-  display: none;
-  text-align: center;
+.arrow {
+  padding: 2px 4px;
+  color: var(--text-color);
+  border: none;
+  border-radius: 15px;
+  background-color: var(--content-bg-color);
 }
 
-#album-art {
-  width: 30%;
-  margin: 5px 0px;
-  border-radius: calc(var(--border-radius) + 5px);
-  -webkit-box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.3);
-  -moz-box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.3);
-  box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.3);
+#date-range {
+  padding: 2px 2px;
+  border-radius: var(--border-radius);
+  border: 1px solid var(--text-color);
 }
 
-#temp-instructions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* Sidebar */
+
+/* Filters */
+
+#filter-select {
+  border: 1px solid var(--text-color);
+  border-radius: var(--border-radius);
+}
+
+#filter-input {
+  display: inline-block;
+  width: 70%;
+  padding: 4px 8px;
+  border-radius: var(--border-radius);
+  margin-top: 5px;
+}
+
+#submit-button {
+  display: inline-block;
+  padding: 4px 15px;
+}
+
+#day-filters {
   width: 100%;
-  min-height: 175px;
-  background-color: var(--gray1);
-  border: 1px solid var(--secondary-color);
-  border-radius: calc(var(--border-radius) + 5px);
-}
-
-.artist, .song, .album {
-  text-decoration: underline;
-}
-
-.artist {
-  font-size: large;
+  margin: 25px 0px;
 }
 
 input[type=text] {
@@ -164,14 +170,6 @@ input[type=checkbox] {
   box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
 }
 
-.arrow {
-  padding: 2px 4px;
-  color: var(--text-color);
-  border: none;
-  border-radius: 15px;
-  background-color: var(--content-bg-color);
-}
-
 #reset {
   display: inline-block;
   padding: 4px 15px;
@@ -187,6 +185,57 @@ button:hover {
 
 .checkbox:hover, .checkbox>input:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
   cursor: pointer;
+}
+
+/* Song info */
+
+#temp-instructions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 175px;
+  background-color: var(--gray1);
+  border: 1px solid var(--secondary-color);
+  border-radius: calc(var(--border-radius) + 5px);
+}
+
+#song-info {
+  display: none;
+  text-align: center;
+}
+
+#album-art {
+  width: 30%;
+  margin: 5px 0px;
+  border-radius: calc(var(--border-radius) + 5px);
+  -webkit-box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.3);
+  -moz-box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.3);
+  box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.3);
+}
+
+.artist, .song, .album {
+  text-decoration: underline;
+}
+
+.artist {
+  font-size: large;
+}
+
+#tagList {
+  margin: 10px 0px;
+}
+
+.tag {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 14px;
+  border-radius: 15px;
+  margin: 2px 0px;
+  margin-right: 3px;
+  padding: 4px 10px;
+  background-color: var(--secondary-color);
+  color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
 }
 
 /* Website layout */
@@ -225,30 +274,7 @@ button:hover {
   margin-bottom: 25px;
 }
 
-#filter-select {
-  border: 1px solid var(--text-color);
-  border-radius: var(--border-radius);
-}
-
-#filter-input {
-  display: inline-block;
-  width: 70%;
-  padding: 4px 8px;
-  border-radius: var(--border-radius);
-  margin-top: 5px;
-}
-
-#submit-button {
-  display: inline-block;
-  padding: 4px 15px;
-}
-
-#day-filters {
-  width: 100%;
-  margin: 25px 0px;
-}
-
-#song-info {
+#song-info-container {
   width: 100%;
 }
 
@@ -264,22 +290,6 @@ button:hover {
 
 #canvas {
   width: 100%;
-}
-
-#tagList {
-  margin: 10px 0px;
-}
-
-.tag {
-  display: inline-block;
-  font-weight: 600;
-  font-size: 14px;
-  border-radius: 15px;
-  margin: 2px 0px;
-  margin-right: 3px;
-  padding: 4px 10px;
-  background-color: var(--secondary-color);
-  color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
 }
 
 @media (min-width:800px) {

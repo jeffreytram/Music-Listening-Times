@@ -390,8 +390,8 @@ function addFilter(type, element, sourceValue) {
  * @param {Object} song The song to display the info of
  */
 function displaySongInfo(song) {
-  const songGrid = document.getElementById('song-info-grid');
-  songGrid.style.display = 'grid';
+  const songInfo = document.getElementById('song-info');
+  songInfo.style.display = 'block';
 
   let imgAlbumArt = document.getElementById('album-art');
   let divArtist = document.getElementsByClassName('artist');
