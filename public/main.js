@@ -753,6 +753,14 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     changeDataList(filterSelect.value);
   });
 
+  //filter-input listener
+  const filterInput = document.getElementById('filter-input');
+  filterInput.addEventListener('keyup', function(event) {
+    if (event.key === 'Enter') {
+      submitFilter.dispatchEvent(new Event('click'));
+    }
+  });
+
   //finished loading
   const loading = document.getElementById('loading');
   const content = document.getElementById('content-container');
