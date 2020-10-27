@@ -33,7 +33,7 @@
               </select>
             </label>
             <br />
-            <input type="text" id="filter-input" placeholder="Search for...">
+            <input type="text" id="filter-input" list="artist-datalist" placeholder="Search for...">
             <button type="button" id="submit-button" class="button">Search</button>
           </form>
           <div id="day-filters">
@@ -107,7 +107,9 @@
       </div>
     </div>
   </div>
-
+  <datalist id="artist-datalist"></datalist>
+  <datalist id="song-datalist"></datalist>
+  <datalist id="album-datalist"></datalist>
 
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="/__/firebase/7.14.5/firebase-app.js"></script>

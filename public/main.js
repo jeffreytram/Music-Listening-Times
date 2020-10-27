@@ -288,6 +288,7 @@ function changeDateRange(date) {
   drawCanvasBars();
   clearDayFilters();
   clearInput();
+  setDataList();
 }
 
 /**
@@ -472,6 +473,72 @@ function displayTags(song) {
   });
 }
 
+/**
+ * Sets the datalists to the current months data
+ */
+function setDataList() {
+  const artistDataList = document.getElementById('artist-datalist');
+  const songDataList = document.getElementById('song-datalist');
+  const albumDataList = document.getElementById('album-datalist');
+
+  artistDataList.innerHTML = '';
+  songDataList.innerHTML = '';
+  albumDataList.innerHTML = '';
+
+  let artistSet = new Set();
+  let songSet = new Set();
+  let albumSet = new Set();
+  datasetMonth.forEach(d => {
+    artistSet.add(d.Artist);
+    songSet.add(d.SongTitle);
+    albumSet.add(d.Album);
+  });
+  const artistList = Array.from(artistSet).sort();
+  const songList = Array.from(songSet).sort();
+  const albumList = Array.from(albumSet).sort();
+
+  const minLength = Math.min(artistList.length, songList.length, albumList.length);
+  for (let i = 0; i < minLength; i++) {
+    const option1 = document.createElement('option');
+    option1.value = artistList[i];
+    artistDataList.appendChild(option1);
+
+    const option2 = document.createElement('option');
+    option2.value = songList[i];
+    songDataList.appendChild(option2);
+
+    const option3 = document.createElement('option');
+    option3.value = albumList[i];
+    albumDataList.appendChild(option3);
+  }
+
+  for (let i = minLength; i < artistList.length; i++) {
+    const option1 = document.createElement('option');
+    option1.value = artistList[i];
+    artistDataList.appendChild(option1);
+  }
+
+  for (let i = minLength; i < songList.length; i++) {
+    const option2 = document.createElement('option');
+    option2.value = songList[i];
+    songDataList.appendChild(option2);
+  }
+  for (let i = minLength; i < albumDataList; i++) {
+    const option3 = document.createElement('option');
+    option3.value = albumList[i];
+    albumDataList.appendChild(option3);
+  }
+}
+
+/**
+ * Switches the current datalist to the new one
+ * @param {string} value The datalist to switch too
+ */
+function changeDataList(value) {
+  const filterInput = document.getElementById('filter-input');
+  filterInput.setAttribute('list', value + '-datalist');
+}
+
 //Initialization
 const width = 950;
 const height = 540;
@@ -508,6 +575,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
 
   //sorts all the data into buckets by the month and year
   buckets = {};
+
   dataset.forEach(d => {
     d.Date = new Date(d.Date);
     //add to bucket
@@ -530,15 +598,15 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   const select = document.getElementById('date-range');
 
   latestDate.setDate(1);
-  latestDate.setHours(0,0,0,0);
+  latestDate.setHours(0, 0, 0, 0);
   earliestDate.setDate(1);
-  earliestDate.setHours(0,0,0,0);
+  earliestDate.setHours(0, 0, 0, 0);
 
   let currDate = new Date(latestDate);
 
   while (currDate >= earliestDate) {
     const formattedDate = `${currDate.toLocaleDateString()}`;
-    const abbrevDate = `${currDate.toDateString().substring(4,7)} ${currDate.getFullYear()}`;
+    const abbrevDate = `${currDate.toDateString().substring(4, 7)} ${currDate.getFullYear()}`;
     const option = new Option(abbrevDate, formattedDate);
 
     select.appendChild(option);
@@ -615,6 +683,8 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   // intialization of global object to store the month's data we want to display
   filteredDatasetMonth = datasetMonth;
 
+  setDataList();
+
   filterRange(yState);
   //render all data points
   displayNumEntries();
@@ -675,6 +745,12 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   let prevButton = document.getElementById('left');
   prevButton.addEventListener("click", function () {
     changePrevMonth();
+  });
+
+  //change datalist
+  const filterSelect = document.getElementById('filter-select');
+  filterSelect.addEventListener('change', function () {
+    changeDataList(filterSelect.value);
   });
 
   //finished loading
