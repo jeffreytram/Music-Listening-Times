@@ -408,7 +408,6 @@ function displaySongInfo(song) {
   divDate[0].innerText = song.Day + ' ' + song.ConvertedDateTime;
 
   let albumArt = '';
-
   const getAlbumInfo = firebase.functions().httpsCallable('getAlbumInfo');
   getAlbumInfo(song).then(result => {
     albumInfo = JSON.parse(result.data);
@@ -418,37 +417,42 @@ function displaySongInfo(song) {
     }
     imgAlbumArt.src = albumArt;
 
-    fac.getColorAsync(albumArt)
-      .then(color => {
-        const { value } = color;
-        const r = value[0], g = value[1], b = value[2];
-        const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-        const bodyClassName = document.getElementById('body').className;
-        if (bodyClassName === 'light-theme' && luma > 225) {
-          body.style.setProperty('--secondary-color', `rgba(30,30,30,1)`);
-          body.style.setProperty('--light-secondary', `rgba(30,30,30,.2)`);
-          body.style.setProperty('--very-light-secondary', `rgba(30,30,30,.1)`);
-          body.style.setProperty('--secondary-r', `30`);
-          body.style.setProperty('--secondary-g', `30`);
-          body.style.setProperty('--secondary-b', `30`);
-        } else if (bodyClassName !== 'light-theme' && luma < 90) {
-          body.style.setProperty('--secondary-color', `rgba(247, 247, 247, 1)`);
-          body.style.setProperty('--light-secondary', `rgba(247, 247, 247, .8);`);
-          body.style.setProperty('--very-light-secondary', `rgba(247, 247, 247, .7);`);
-          body.style.setProperty('--secondary-r', `247`);
-          body.style.setProperty('--secondary-g', `247`);
-          body.style.setProperty('--secondary-b', `247`);
-        } else {
-          body.style.setProperty('--secondary-color', `rgba(${r},${g},${b},1)`);
-          body.style.setProperty('--light-secondary', `rgba(${r},${g},${b},.3)`);
-          body.style.setProperty('--very-light-secondary', `rgba(${r},${g},${b},.15)`);
-          body.style.setProperty('--secondary-r', `${r}`);
-          body.style.setProperty('--secondary-g', `${g}`);
-          body.style.setProperty('--secondary-b', `${b}`);
-        }
+    setContrastingColors(albumArt);
+  })
+}
 
-      })
-  });
+function setContrastingColors(albumArt) {
+  fac.getColorAsync(albumArt)
+    .then(color => {
+      const { value } = color;
+      const r = value[0], g = value[1], b = value[2];
+      const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      const bodyClassName = document.getElementById('body').className;
+      if (bodyClassName === 'light-theme' && luma > 225) {
+        console.log('light theme and art album too light')
+        setBodyStyle(30, 30, 30, [1, .2, .1]);
+      } else if (bodyClassName !== 'light-theme' && luma < 90) {
+        console.log('dark theme and art album too dark')
+        setBodyStyle(247, 247, 247, [1, 8, .7]);
+      } else {
+        console.log('colors ok')
+        setBodyStyle(r, g, b, [1, .3, .15]);
+      }
+    });
+}
+
+function setBodyStyle(r, g, b, alpha) {
+  body.style.setProperty('--secondary-color', `rgba(${r},${g},${b}, ${alpha[0]})`);
+  body.style.setProperty('--light-secondary', `rgba(${r},${g},${b},${alpha[1]})`);
+  body.style.setProperty('--very-light-secondary', `rgba(${r},${g},${b},${alpha[2]})`);
+  body.style.setProperty('--secondary-r', `${r}`);
+  body.style.setProperty('--secondary-g', `${g}`);
+  body.style.setProperty('--secondary-b', `${b}`);
+}
+
+function updateContrastingColors() {
+  let imgAlbumArt = document.getElementById('album-art');
+  setContrastingColors(imgAlbumArt.src);
 }
 
 /**
@@ -766,6 +770,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     style = getComputedStyle(document.body);
     rgb = style.getPropertyValue('--default-rgb');
     drawCanvasBars();
+    updateContrastingColors();
   })
 
   //finished loading
