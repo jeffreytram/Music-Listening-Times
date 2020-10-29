@@ -1,8 +1,8 @@
 const style = getComputedStyle(document.body);
-const red = style.getPropertyValue('--red');
-const green = style.getPropertyValue('--green');
-const blue = style.getPropertyValue('--blue');
-const textColor = style.getPropertyValue('--text-color');
+const red = style.getPropertyValue('--secondary-r');
+const green = style.getPropertyValue('--secondary-g');
+const blue = style.getPropertyValue('--secondary-b');
+const textColor = style.getPropertyValue('--main-text');
 
 const root = document.documentElement;
 const fac = new FastAverageColor();
@@ -168,7 +168,7 @@ function drawCanvasBars() {
     let d = filteredDatasetMonth[i];
 
     //draw rect
-    context.fillStyle = `rgba(${red}, ${green}, ${blue}, 0.1)`;
+    context.fillStyle = `rgba(${red}, ${green}, ${blue}, .1)`;
     context.fillRect(xScale(d.Time), 0, 3, height);
   }
 }
@@ -364,7 +364,7 @@ function singleHighlight(dot) {
 function clearHighlight() {
   svg.select('.selected')
     .attr('r', 3)
-    .style('fill', '#303030')
+    .style('fill', textColor)
     .attr('class', 'point');
 }
 
@@ -748,11 +748,14 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
       submitFilter.dispatchEvent(new Event('click'));
     }
   });
+  debugger;
 
   //finished loading
   const loading = document.getElementById('loading');
   const content = document.getElementById('content-container');
+  const container = document.getElementById('test-container');
 
   loading.style.display = 'none';
   content.style.display = 'block';
+  container.style.display = 'flex';
 });

@@ -1,18 +1,30 @@
 :root {
-  --text-color: #303030;
-  --content-bg-color: #F5F5F5;
-  --red: 30;
-  --green: 30;
-  --blue: 30;
-  --gray1: #E6E6E6;
-  --secondary-color: rgba(30, 30, 30, 1);
+  --main-text: #f7f7f7;
+  --main-bg: #303030;
+  --light: #454545;
+  --secondary-color: #f7f7f7;
+  --light-secondary: #454545;
+  --very-light-secondary: #454545;
+  --secondary-r: 247;
+  --secondary-g: 247;
+  --secondary-b: 247;
+  --accessible-color: calc( ( ( ( (var(--secondary-r) * 299) + (var(--secondary-g) * 587) + (var(--secondary-b) * 114)) / 1000) - 150) * -1000);
+  --shadow: rgba(0, 0, 0, .6);
+  --border-radius: 5px;
+}
+
+body.light-theme {
+  --main-text: #303030;
+  --main-bg: #f8f8f8;
+  --light: #e8e8e8;
+  --secondary-color: #303030;
   --light-secondary: #EBEBEB;
   --very-light-secondary: #EBEBEB;
   --secondary-r: 30;
   --secondary-g: 30;
   --secondary-b: 30;
   --accessible-color: calc( ( ( ( (var(--secondary-r) * 299) + (var(--secondary-g) * 587) + (var(--secondary-b) * 114)) / 1000) - 150) * -1000);
-  --border-radius: 5px
+  --shadow: rgba(50, 50, 50, 0.3);
 }
 
 * {
@@ -20,7 +32,7 @@
 }
 
 html, body {
-  color: var(--text-color);
+  color: var(--main-text);
   background: var(--very-light-secondary);
   background: linear-gradient(170deg, var(--very-light-secondary) 10%, var(--light-secondary) 100%);
   height: 100%;
@@ -30,6 +42,7 @@ html, body {
 /* Loading Screen */
 
 #loading {
+  padding-top: 50px;
   text-align: center;
 }
 
@@ -46,8 +59,8 @@ html, body {
   height: 64px;
   margin: 8px;
   border-radius: 50%;
-  border: 6px solid var(--text-color);
-  border-color: var(--text-color) transparent var(--text-color) transparent;
+  border: 6px solid var(--main-text);
+  border-color: var(--main-text) transparent var(--main-text) transparent;
   animation: lds-dual-ring 1.2s linear infinite;
 }
 
@@ -65,11 +78,11 @@ html, body {
 /* D3 Style */
 
 .label {
-  fill: var(--text-color)
+  fill: var(--main-text)
 }
 
 .axis {
-  color: var(--text-color)
+  color: var(--main-text)
 }
 
 /* Title bar style */
@@ -86,16 +99,19 @@ html, body {
 
 .arrow {
   padding: 2px 4px;
-  color: var(--text-color);
+  color: var(--main-text);
   border: none;
   border-radius: 15px;
-  background-color: var(--content-bg-color);
+  background-color: var(--main-bg);
 }
 
 #date-range {
   padding: 2px 2px;
   border-radius: var(--border-radius);
-  border: 1px solid var(--text-color);
+  border: none;
+  background-color: var(--light);
+  color: - var(--main-text);
+  font-weight: 600;
 }
 
 /* Sidebar */
@@ -103,16 +119,22 @@ html, body {
 /* Filters */
 
 #filter-select {
-  border: 1px solid var(--text-color);
+  border: none;
   border-radius: var(--border-radius);
+  background-color: var(--light);
+  color: var(--main-text);
+  font-weight: 600;
 }
 
 #filter-input {
   display: inline-block;
   width: 70%;
   padding: 4px 8px;
-  border-radius: var(--border-radius);
   margin-top: 5px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--light);
+  color: var(--main-text);
 }
 
 #submit-button {
@@ -126,7 +148,7 @@ html, body {
 }
 
 input[type=text] {
-  border: 1px solid var(--text-color);
+  border: 1px solid var(--main-text);
 }
 
 input[type=checkbox] {
@@ -137,7 +159,7 @@ input[type=checkbox] {
   display: inline-block;
   margin: 2px 0px;
   padding: 2px 10px;
-  background-color: var(--gray1);
+  background-color: var(--light);
   border-radius: var(--border-radius);
   -webkit-transition: background-color .5s ease-out;
   -moz-transition: background-color .5s ease-out;
@@ -159,7 +181,8 @@ input[type=checkbox] {
   font-weight: 600;
   border: none;
   border-radius: var(--border-radius);
-  background-color: var(--gray1);
+  background-color: var(--light);
+  color: var(--main-text);
 }
 
 #reset {
@@ -169,7 +192,7 @@ input[type=checkbox] {
 
 /* Hover */
 
-button:hover {
+.button:hover {
   font-weight: 600;
   background-color: var(--secondary-color);
   color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
@@ -179,10 +202,10 @@ button:hover {
   cursor: pointer;
 }
 
-.tag, .checkbox, .button, #temp-instructions {
-  -webkit-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
-  -moz-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
-  box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
+#date-range, #filter-select, #filter-input, .checkbox, .button, #temp-instructions {
+  -webkit-box-shadow: 1px 1px 3px 0px var(--shadow);
+  -moz-box-shadow: 1px 1px 3px 0px var(--shadow);
+  box-shadow: 1px 1px 3px 0px var(--shadow);
 }
 
 /* Song info */
@@ -193,7 +216,7 @@ button:hover {
   align-items: center;
   width: 100%;
   min-height: 175px;
-  background-color: var(--gray1);
+  background-color: var(--light);
   border-radius: calc(var(--border-radius) + 5px);
 }
 
@@ -206,16 +229,16 @@ button:hover {
   width: 30%;
   margin: 5px 0px;
   border-radius: calc(var(--border-radius) + 5px);
-  -webkit-box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.3);
-  -moz-box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.3);
-  box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.3);
+  -webkit-box-shadow: 7px 7px 7px 0px var(--shadow);
+  -moz-box-shadow: 7px 7px 7px 0px var(--shadow);
+  box-shadow: 7px 7px 7px 0px var(--shadow);
 }
 
 .artist:hover, .song:hover, .album:hover {
   text-decoration: underline;
 }
 
-.artist {
+.artist, .album {
   font-weight: 600;
 }
 
@@ -246,10 +269,10 @@ button:hover {
   display: none;
   width: 97%;
   margin: auto;
-  background-color: var(--content-bg-color);
-  -webkit-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.4);
+  background-color: var(--main-bg);
+  -webkit-box-shadow: 0px 0px 5px 0px var(--shadow);
+  -moz-box-shadow: 0px 0px 5px 0px var(--shadow);
+  box-shadow: 0px 0px 5px 0px var(--shadow);
   padding: 10px;
   box-sizing: border-box;
   border-radius: calc(var(--border-radius) + 5px);
@@ -297,7 +320,7 @@ button:hover {
 @media (min-width:800px) {
   #test-container {
     height: 100%;
-    display: flex;
+    display: none;
     justify-content: center;
     align-content: center;
   }
