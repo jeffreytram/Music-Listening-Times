@@ -287,7 +287,6 @@ function changeDateRange(date) {
   updateCirclesRange();
   drawCanvasBars();
   clearDayFilters();
-  clearInput();
   setDataList();
 }
 
@@ -497,36 +496,25 @@ function setDataList() {
   const songList = Array.from(songSet).sort();
   const albumList = Array.from(albumSet).sort();
 
-  const minLength = Math.min(artistList.length, songList.length, albumList.length);
-  for (let i = 0; i < minLength; i++) {
-    const option1 = document.createElement('option');
-    option1.value = artistList[i];
-    artistDataList.appendChild(option1);
-
-    const option2 = document.createElement('option');
-    option2.value = songList[i];
-    songDataList.appendChild(option2);
-
-    const option3 = document.createElement('option');
-    option3.value = albumList[i];
-    albumDataList.appendChild(option3);
-  }
-
-  for (let i = minLength; i < artistList.length; i++) {
-    const option1 = document.createElement('option');
-    option1.value = artistList[i];
-    artistDataList.appendChild(option1);
-  }
-
-  for (let i = minLength; i < songList.length; i++) {
-    const option2 = document.createElement('option');
-    option2.value = songList[i];
-    songDataList.appendChild(option2);
-  }
-  for (let i = minLength; i < albumDataList; i++) {
-    const option3 = document.createElement('option');
-    option3.value = albumList[i];
-    albumDataList.appendChild(option3);
+  const maxLength = Math.max(artistList.length, songList.length, albumList.length);
+  let i = 0;
+  while (i < maxLength) {
+    if (i < artistList.length) {
+      const option1 = document.createElement('option');
+      option1.value = artistList[i];
+      artistDataList.appendChild(option1);
+    }
+    if (i < songList.length) {
+      const option2 = document.createElement('option');
+      option2.value = songList[i];
+      songDataList.appendChild(option2);
+    }
+    if (i < albumList.length) {
+      const option3 = document.createElement('option');
+      option3.value = albumList[i];
+      albumDataList.appendChild(option3);
+    }
+    i++;
   }
 }
 
@@ -755,7 +743,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
 
   //filter-input listener
   const filterInput = document.getElementById('filter-input');
-  filterInput.addEventListener('keyup', function(event) {
+  filterInput.addEventListener('keyup', function (event) {
     if (event.key === 'Enter') {
       submitFilter.dispatchEvent(new Event('click'));
     }
