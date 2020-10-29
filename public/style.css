@@ -143,9 +143,6 @@ input[type=checkbox] {
   -moz-transition: background-color .5s ease-out;
   -o-transition: background-color .5s ease-out;
   transition: background-color .5s ease-out;
-  -webkit-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
-  -moz-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
-  box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
 }
 
 :checked+span {
@@ -163,9 +160,6 @@ input[type=checkbox] {
   border: none;
   border-radius: var(--border-radius);
   background-color: var(--gray1);
-  -webkit-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
-  -moz-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
-  box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
 }
 
 #reset {
@@ -185,6 +179,12 @@ button:hover {
   cursor: pointer;
 }
 
+.tag, .checkbox, .button, #temp-instructions {
+  -webkit-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
+  -moz-box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
+  box-shadow: 1px 1px 3px 0px rgba(50, 50, 50, 0.3);
+}
+
 /* Song info */
 
 #temp-instructions {
@@ -194,7 +194,6 @@ button:hover {
   width: 100%;
   min-height: 175px;
   background-color: var(--gray1);
-  border: 1px solid var(--secondary-color);
   border-radius: calc(var(--border-radius) + 5px);
 }
 
@@ -212,12 +211,17 @@ button:hover {
   box-shadow: 7px 7px 7px 0px rgba(50, 50, 50, 0.3);
 }
 
-.artist, .song, .album {
+.artist:hover, .song:hover, .album:hover {
   text-decoration: underline;
 }
 
 .artist {
+  font-weight: 600;
+}
+
+.song {
   font-size: large;
+  font-weight: bold;
 }
 
 #tagList {
