@@ -1,10 +1,9 @@
-const style = getComputedStyle(document.body);
-const red = style.getPropertyValue('--secondary-r');
-const green = style.getPropertyValue('--secondary-g');
-const blue = style.getPropertyValue('--secondary-b');
+let style = getComputedStyle(document.body);
+let red = style.getPropertyValue('--secondary-r');
+let green = style.getPropertyValue('--secondary-g');
+let blue = style.getPropertyValue('--secondary-b');
 const textColor = style.getPropertyValue('--main-text');
 
-const body = document.body;
 const fac = new FastAverageColor();
 
 /**
@@ -139,7 +138,6 @@ function renderCircles() {
   //add circle to group
   pointEnter.append('circle')
     .attr('r', 3)
-    .style('fill', textColor)
     .style('opacity', .3)
     .on("click", function (d) {
       hideInstructions();
@@ -431,15 +429,15 @@ function displaySongInfo(song) {
         const bodyClassName = document.getElementById('body').className;
         if (bodyClassName === 'light-theme' && luma > 225) {
           body.style.setProperty('--secondary-color', `rgba(30,30,30,1)`);
-          body.style.setProperty('--light-secondary', `rgba(30,30,30,.15)`);
-          body.style.setProperty('--very-light-secondary', `rgba(30,30,30,.05)`);
+          body.style.setProperty('--light-secondary', `rgba(30,30,30,.2)`);
+          body.style.setProperty('--very-light-secondary', `rgba(30,30,30,.1)`);
           body.style.setProperty('--secondary-r', `30`);
           body.style.setProperty('--secondary-g', `30`);
           body.style.setProperty('--secondary-b', `30`);
         } else if (bodyClassName !== 'light-theme' && luma < 90) {
-          body.style.setProperty('--secondary-color', `#f7f7f7`);
-          body.style.setProperty('--light-secondary', `#454545`);
-          body.style.setProperty('--very-light-secondary', `#454545`);
+          body.style.setProperty('--secondary-color', `rgba(247, 247, 247, 1)`);
+          body.style.setProperty('--light-secondary', `rgba(247, 247, 247, .8);`);
+          body.style.setProperty('--very-light-secondary', `rgba(247, 247, 247, .7);`);
           body.style.setProperty('--secondary-r', `247`);
           body.style.setProperty('--secondary-g', `247`);
           body.style.setProperty('--secondary-b', `247`);
@@ -755,6 +753,25 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
       submitFilter.dispatchEvent(new Event('click'));
     }
   });
+
+  //theme switcher listener
+  const themeSwitcherContainer = document.getElementById('theme-switcher-container');
+  themeSwitcherContainer.addEventListener('click', function () {
+    const themeSwitcher = document.getElementById('theme-switcher');
+    if (themeSwitcher.classList.contains('fa-moon')) {
+      themeSwitcherContainer.innerHTML = '<i id="theme-switcher" class="fas fa-sun fa-lg"></i>';
+      body.className = '';
+    } else {
+      themeSwitcherContainer.innerHTML = '<i id="theme-switcher" class="far fa-moon fa-lg"></i>';
+      body.className = 'light-theme';
+    }
+
+    style = getComputedStyle(document.body);
+    red = style.getPropertyValue('--secondary-r');
+    green = style.getPropertyValue('--secondary-g');
+    blue = style.getPropertyValue('--secondary-b');
+    drawCanvasBars();
+  })
 
   //finished loading
   const loading = document.getElementById('loading');

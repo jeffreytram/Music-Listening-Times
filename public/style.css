@@ -2,9 +2,9 @@ body {
   --main-text: #f7f7f7;
   --main-bg: #303030;
   --light: #454545;
-  --secondary-color: rgba(30, 30, 30, 1);
-  --light-secondary: rgba(30, 30, 30, 1);
-  --very-light-secondary: rgba(30, 30, 30, 1);
+  --secondary-color: rgba(247, 247, 247, 1);
+  --light-secondary: rgba(247, 247, 247, .8);
+  --very-light-secondary: rgba(247, 247, 247, .7);
   --secondary-r: 247;
   --secondary-g: 247;
   --secondary-b: 247;
@@ -17,11 +17,11 @@ body {
 
 body.light-theme {
   --main-text: #303030;
-  --main-bg: #f8f8f8;
+  --main-bg: #f6f6f6;
   --light: #e8e8e8;
   --secondary-color: rgba(30, 30, 30, 1);
-  --light-secondary: rgba(30, 30, 30, 0.15);
-  --very-light-secondary: rgba(30, 30, 30, .05);
+  --light-secondary: rgba(30, 30, 30, 0.2);
+  --very-light-secondary: rgba(30, 30, 30, .1);
   --secondary-r: 30;
   --secondary-g: 30;
   --secondary-b: 30;
@@ -88,6 +88,10 @@ html, body {
   color: var(--main-text)
 }
 
+.point {
+  fill: var(--main-text);
+}
+
 /* Title bar style */
 
 #title-bar {
@@ -118,6 +122,11 @@ html, body {
 }
 
 /* Sidebar */
+
+#theme-switcher-container {
+  position: absolute;
+  right: 5px;
+}
 
 /* Filters */
 
@@ -164,10 +173,6 @@ input[type=checkbox] {
   padding: 2px 10px;
   background-color: var(--light);
   border-radius: var(--border-radius);
-  -webkit-transition: background-color .5s ease-out;
-  -moz-transition: background-color .5s ease-out;
-  -o-transition: background-color .5s ease-out;
-  transition: background-color .5s ease-out;
 }
 
 :checked+span {
@@ -201,7 +206,7 @@ input[type=checkbox] {
   color: rgb( var(--accessible-color), var(--accessible-color), var(--accessible-color));
 }
 
-.checkbox:hover, .checkbox>input:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
+#theme-switcher-container, .checkbox:hover, .checkbox>input:hover, button:hover, select:hover, .point:hover, .artist:hover, .song:hover, .album:hover {
   cursor: pointer;
 }
 
@@ -291,6 +296,13 @@ input[type=checkbox] {
   }
 }
 
+#content-container, .checkbox, body {
+  -webkit-transition: background-color .5s ease-out;
+  -moz-transition: background-color .5s ease-out;
+  -o-transition: background-color .5s ease-out;
+  transition: background-color .5s ease-out;
+}
+
 #filters {
   width: 100%;
   height: 100%;
@@ -314,6 +326,10 @@ input[type=checkbox] {
 #main-graph, #test-canvas {
   width: 100%;
   height: 100%;
+}
+
+#side-info {
+  position: relative;
 }
 
 #canvas {
