@@ -76,8 +76,8 @@ TODO:
 Fix errors in data
 - TUYU - It's Raining After All has missing date in csv
 
-Theme switching not updating tags that are not contrasting
-- same for checkbox, buttons (search, reset)
+album and tag info retrieval sometimes works, sometimes fails
+- see Friday 10/2/2020 13:19 song
 
 Improving style
 

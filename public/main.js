@@ -419,8 +419,17 @@ function displaySongInfo(song) {
 
     setContrastingColors(albumArt);
   })
+    .catch(error => {
+      albumArt = 'https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png';
+      imgAlbumArt.src = albumArt;
+      setContrastingColors(albumArt);
+    });
 }
 
+/**
+ * Sets the style based on the average color of the album art image
+ * @param {string} albumArt The image source link
+ */
 function setContrastingColors(albumArt) {
   fac.getColorAsync(albumArt)
     .then(color => {
@@ -429,18 +438,22 @@ function setContrastingColors(albumArt) {
       const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
       const bodyClassName = document.getElementById('body').className;
       if (bodyClassName === 'light-theme' && luma > 225) {
-        console.log('light theme and art album too light')
         setBodyStyle(30, 30, 30, [1, .2, .1]);
       } else if (bodyClassName !== 'light-theme' && luma < 90) {
-        console.log('dark theme and art album too dark')
         setBodyStyle(247, 247, 247, [1, 8, .7]);
       } else {
-        console.log('colors ok')
         setBodyStyle(r, g, b, [1, .3, .15]);
       }
     });
 }
 
+/**
+ * Sets the body style to the given values
+ * @param {*} r red value 
+ * @param {*} g green value
+ * @param {*} b blue value
+ * @param {*} alpha alpha value
+ */
 function setBodyStyle(r, g, b, alpha) {
   body.style.setProperty('--secondary-color', `rgba(${r},${g},${b}, ${alpha[0]})`);
   body.style.setProperty('--light-secondary', `rgba(${r},${g},${b},${alpha[1]})`);
@@ -450,6 +463,9 @@ function setBodyStyle(r, g, b, alpha) {
   body.style.setProperty('--secondary-b', `${b}`);
 }
 
+/**
+ * Gets the album art and sets the contrasting colors
+ */
 function updateContrastingColors() {
   let imgAlbumArt = document.getElementById('album-art');
   setContrastingColors(imgAlbumArt.src);
