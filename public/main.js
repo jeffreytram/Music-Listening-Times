@@ -4,7 +4,7 @@ const green = style.getPropertyValue('--secondary-g');
 const blue = style.getPropertyValue('--secondary-b');
 const textColor = style.getPropertyValue('--main-text');
 
-const root = document.documentElement;
+const body = document.body;
 const fac = new FastAverageColor();
 
 /**
@@ -425,24 +425,31 @@ function displaySongInfo(song) {
 
     fac.getColorAsync(albumArt)
       .then(color => {
-        console.log(color);
         const { value } = color;
         const r = value[0], g = value[1], b = value[2];
         const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-        if (luma > 225) {
-          root.style.setProperty('--secondary-color', `rgba(30,30,30,1)`);
-          root.style.setProperty('--light-secondary', `rgba(30,30,30,.3)`);
-          root.style.setProperty('--very-light-secondary', `rgba(30,30,30,.15)`);
-          root.style.setProperty('--secondary-r', `30`);
-          root.style.setProperty('--secondary-g', `30`);
-          root.style.setProperty('--secondary-b', `30`);
+        const bodyClassName = document.getElementById('body').className;
+        if (bodyClassName === 'light-theme' && luma > 225) {
+          body.style.setProperty('--secondary-color', `rgba(30,30,30,1)`);
+          body.style.setProperty('--light-secondary', `rgba(30,30,30,.15)`);
+          body.style.setProperty('--very-light-secondary', `rgba(30,30,30,.05)`);
+          body.style.setProperty('--secondary-r', `30`);
+          body.style.setProperty('--secondary-g', `30`);
+          body.style.setProperty('--secondary-b', `30`);
+        } else if (bodyClassName !== 'light-theme' && luma < 90) {
+          body.style.setProperty('--secondary-color', `#f7f7f7`);
+          body.style.setProperty('--light-secondary', `#454545`);
+          body.style.setProperty('--very-light-secondary', `#454545`);
+          body.style.setProperty('--secondary-r', `247`);
+          body.style.setProperty('--secondary-g', `247`);
+          body.style.setProperty('--secondary-b', `247`);
         } else {
-          root.style.setProperty('--secondary-color', `rgba(${r},${g},${b},1)`);
-          root.style.setProperty('--light-secondary', `rgba(${r},${g},${b},.3)`);
-          root.style.setProperty('--very-light-secondary', `rgba(${r},${g},${b},.15)`);
-          root.style.setProperty('--secondary-r', `${r}`);
-          root.style.setProperty('--secondary-g', `${g}`);
-          root.style.setProperty('--secondary-b', `${b}`);
+          body.style.setProperty('--secondary-color', `rgba(${r},${g},${b},1)`);
+          body.style.setProperty('--light-secondary', `rgba(${r},${g},${b},.3)`);
+          body.style.setProperty('--very-light-secondary', `rgba(${r},${g},${b},.15)`);
+          body.style.setProperty('--secondary-r', `${r}`);
+          body.style.setProperty('--secondary-g', `${g}`);
+          body.style.setProperty('--secondary-b', `${b}`);
         }
 
       })
@@ -748,7 +755,6 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
       submitFilter.dispatchEvent(new Event('click'));
     }
   });
-  debugger;
 
   //finished loading
   const loading = document.getElementById('loading');
