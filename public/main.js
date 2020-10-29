@@ -1,7 +1,5 @@
 let style = getComputedStyle(document.body);
-let red = style.getPropertyValue('--secondary-r');
-let green = style.getPropertyValue('--secondary-g');
-let blue = style.getPropertyValue('--secondary-b');
+let rgb = style.getPropertyValue('--default-rgb');
 const textColor = style.getPropertyValue('--main-text');
 
 const fac = new FastAverageColor();
@@ -166,7 +164,7 @@ function drawCanvasBars() {
     let d = filteredDatasetMonth[i];
 
     //draw rect
-    context.fillStyle = `rgba(${red}, ${green}, ${blue}, .1)`;
+    context.fillStyle = `rgba(${rgb}, .1)`;
     context.fillRect(xScale(d.Time), 0, 3, height);
   }
 }
@@ -215,7 +213,6 @@ function updateCirclesRange(displaySize = 3, viewOpacity = .3) {
   //add circle to group
   pointEnter.append('circle')
     .attr('r', displaySize)
-    .style('fill', textColor)
     .style('opacity', viewOpacity)
     .on("click", function (d) {
       hideInstructions();
@@ -352,18 +349,18 @@ function singleHighlight(dot) {
     .duration(750)
     .attr('r', 10)
     .style('opacity', .5)
-    .style('fill', 'red')
-    .attr('class', 'point selected');
+    .attr('class', 'point')
+    .attr('id', 'selected');
 }
 
 /**
  * Clears the highlight of the highlighted circle
  */
 function clearHighlight() {
-  svg.select('.selected')
+  svg.select('#selected')
     .attr('r', 3)
-    .style('fill', textColor)
-    .attr('class', 'point');
+    .attr('class', 'point')
+    .attr('id', '');
 }
 
 /**
@@ -767,9 +764,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     }
 
     style = getComputedStyle(document.body);
-    red = style.getPropertyValue('--secondary-r');
-    green = style.getPropertyValue('--secondary-g');
-    blue = style.getPropertyValue('--secondary-b');
+    rgb = style.getPropertyValue('--default-rgb');
     drawCanvasBars();
   })
 

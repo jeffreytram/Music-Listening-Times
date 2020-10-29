@@ -76,13 +76,13 @@ TODO:
 Fix errors in data
 - TUYU - It's Raining After All has missing date in csv
 
+Theme switching not updating tags that are not contrasting
+
 Improving style
 
 Making updating data easier, less hard coded end dates
 
 jump to next/previous "selected" point
-
-D3-autocomplete
 
 more details from vertical line
 loop back on edges

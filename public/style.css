@@ -5,6 +5,7 @@ body {
   --secondary-color: rgba(247, 247, 247, 1);
   --light-secondary: rgba(247, 247, 247, .8);
   --very-light-secondary: rgba(247, 247, 247, .7);
+  --default-rgb: 247, 247, 247;
   --secondary-r: 247;
   --secondary-g: 247;
   --secondary-b: 247;
@@ -22,6 +23,7 @@ body.light-theme {
   --secondary-color: rgba(30, 30, 30, 1);
   --light-secondary: rgba(30, 30, 30, 0.2);
   --very-light-secondary: rgba(30, 30, 30, .1);
+  --default-rgb: 30, 30, 30;
   --secondary-r: 30;
   --secondary-g: 30;
   --secondary-b: 30;
@@ -90,6 +92,10 @@ html, body {
 
 .point {
   fill: var(--main-text);
+}
+
+#selected {
+  fill: red;
 }
 
 /* Title bar style */
