@@ -102,7 +102,7 @@ moving to a different month with filters currently applied
 
 Running the application
 - testing locally: firebase serve
-- deploying: firebaes deploy
+- deploying: firebase deploy
 
 
 Updating data

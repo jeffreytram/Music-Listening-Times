@@ -1,8 +1,111 @@
+import { updateContrastingColors } from './modules/colors.js';
+import { getNextMonthDate, getPrevMonthDate } from './modules/date.js'
+import { displayTags, displaySongInfo } from './modules/song-info.js';
+
+//Initialization
 let style = getComputedStyle(document.body);
 let rgb = style.getPropertyValue('--default-rgb');
-const textColor = style.getPropertyValue('--main-text');
 
-const fac = new FastAverageColor();
+const width = 950;
+const height = 540;
+const padding = { left: 90, right: 40, top: 10, down: 60 };
+
+//Where to add the graph to
+const svg = d3.select('#main-graph')
+  .attr('width', width)
+  .attr('height', height)
+  .attr('viewBox', [0, 0, width, height])
+  .attr('preserveAspectRatio', 'xMidYMid meet')
+  .classed('svg-content', true);
+
+//creating canvas, DOM element
+const canvas = d3.select('#canvas')
+  .attr('width', width)
+  .attr('height', 45);
+
+let datasetMonth = [];
+let filteredDatasetMonth = [];
+let buckets = {};
+let yState = [];
+let xScale = [];
+let yScale = [];
+
+/**
+ * Sets yState from the first day to the last day of the month for the given date
+ * @param {*} date 
+ */
+function setYState(date) {
+  const year = date.getFullYear();
+  const month = date.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  yState = [lastDay, firstDay];
+}
+
+/**
+ * Switches the current month's data to the newly selected month's data
+ * @param {array} range Array containing the upper date range, and lower date range
+ */
+function filterRange(range) {
+  const lowerRange = range[1];
+  let key = (lowerRange.getMonth() + 1) + ' ' + lowerRange.getFullYear()
+  datasetMonth = buckets[key];
+  filteredDatasetMonth = datasetMonth;
+}
+
+/**
+ * Displays the length of the current month's data
+ */
+function displayNumEntries() {
+  //display length of fitlered list
+  document.getElementById("entry-count").innerHTML = filteredDatasetMonth.length;
+}
+
+/**
+ * Sets the datalists to the current months data
+ */
+function setDataList() {
+  const artistDataList = document.getElementById('artist-datalist');
+  const songDataList = document.getElementById('song-datalist');
+  const albumDataList = document.getElementById('album-datalist');
+
+  artistDataList.innerHTML = '';
+  songDataList.innerHTML = '';
+  albumDataList.innerHTML = '';
+
+  let artistSet = new Set();
+  let songSet = new Set();
+  let albumSet = new Set();
+  datasetMonth.forEach(d => {
+    artistSet.add(d.Artist);
+    songSet.add(d.SongTitle);
+    albumSet.add(d.Album);
+  });
+  const artistList = Array.from(artistSet).sort();
+  const songList = Array.from(songSet).sort();
+  const albumList = Array.from(albumSet).sort();
+
+  const maxLength = Math.max(artistList.length, songList.length, albumList.length);
+  let i = 0;
+  while (i < maxLength) {
+    if (i < artistList.length) {
+      const option1 = document.createElement('option');
+      option1.value = artistList[i];
+      artistDataList.appendChild(option1);
+    }
+    if (i < songList.length) {
+      const option2 = document.createElement('option');
+      option2.value = songList[i];
+      songDataList.appendChild(option2);
+    }
+    if (i < albumList.length) {
+      const option3 = document.createElement('option');
+      option3.value = albumList[i];
+      albumDataList.appendChild(option3);
+    }
+    i++;
+  }
+}
 
 /**
  * Handles filter functionality
@@ -45,14 +148,6 @@ function filterArtist(artist) {
 }
 
 /**
- * Filters the current month's data by the given album's name
- * @param {string} category The album's name to filter by
- */
-function filterAlbum(album) {
-  filteredDatasetMonth = datasetMonth.filter(d => d.Album === album);
-}
-
-/**
  * Filters the current month's data by the given list of days
  * @param {array} days The list of days to filter by
  */
@@ -70,14 +165,11 @@ function filterDay(days) {
 }
 
 /**
- * Switches the current month's data to the newly selected month's data
- * @param {array} range Array containing the upper date range, and lower date range
+ * Filters the current month's data by the given album's name
+ * @param {string} category The album's name to filter by
  */
-function filterRange(range) {
-  const lowerRange = range[1];
-  let key = (lowerRange.getMonth() + 1) + ' ' + lowerRange.getFullYear()
-  datasetMonth = buckets[key];
-  filteredDatasetMonth = datasetMonth;
+function filterAlbum(album) {
+  filteredDatasetMonth = datasetMonth.filter(d => d.Album === album);
 }
 
 /**
@@ -248,26 +340,6 @@ function updateYAxis() {
 }
 
 /**
- * Displays the length of the current month's data
- */
-function displayNumEntries() {
-  //display length of fitlered list
-  document.getElementById("entry-count").innerHTML = filteredDatasetMonth.length;
-}
-
-/**
- * Sets yState from the first day to the last day of the month for the given date
- * @param {*} date 
- */
-function setYState(date) {
-  const year = date.getFullYear();
-  const month = date.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-  yState = [lastDay, firstDay];
-}
-
-/**
  * Handles the changing of months
  * Updates all the data as needed and resets the filters
  * @param {Object} date The date to update to
@@ -283,59 +355,6 @@ function changeDateRange(date) {
   drawCanvasBars();
   clearDayFilters();
   setDataList();
-}
-
-/**
- * Switches from the current month to the next month
- */
-function changeNextMonth() {
-  const currDate = new Date(getSelectedValue());
-  const year = currDate.getFullYear();
-  const month = currDate.getMonth();
-  const nextMonth = new Date(year, month + 1, 1);
-
-  const nextMonthText = nextMonth.toLocaleDateString('default', { month: 'short', year: 'numeric' });
-  if (validMonth(nextMonthText)) {
-    changeDateRange(nextMonth);
-  };
-}
-
-/**
- * Switches from the current month to the previous month
- */
-function changePrevMonth() {
-  const currDate = new Date(getSelectedValue());
-  const year = currDate.getFullYear();
-  const month = currDate.getMonth();
-  const prevMonth = new Date(year, month - 1, 1);
-
-  const prevMonthText = prevMonth.toLocaleDateString('default', { month: 'short', year: 'numeric' });
-  if (validMonth(prevMonthText)) {
-    changeDateRange(prevMonth);
-  }
-}
-
-/**
- * Checks if the given month/year is in the data
- */
-function validMonth(month) {
-  let selector = document.getElementById('date-range');
-  for (let i = 0; i < selector.options.length; i++) {
-    if (selector.options[i].text === month) {
-      selector.selectedIndex = i;
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
- * Retrieves the value of the option selected from the month dropdown selector
- */
-function getSelectedValue() {
-  let selectList = document.getElementById("date-range");
-  let selectedValue = selectList.options[selectList.selectedIndex].value;
-  return selectedValue;
 }
 
 /**
@@ -369,7 +388,7 @@ function clearHighlight() {
  * @param {HTML element} element The element too add the event listener to
  * @param {string} sourceValue Where the value to filter by comes from
  */
-function addFilter(type, element, sourceValue) {
+export function addFilter(type, element, sourceValue) {
   element.addEventListener("click", function () {
     let filterValue;
     const select = document.getElementById('filter-select');
@@ -389,158 +408,6 @@ function addFilter(type, element, sourceValue) {
 }
 
 /**
- * Displays the selected song's info
- * @param {Object} song The song to display the info of
- */
-function displaySongInfo(song) {
-  const songInfo = document.getElementById('song-info');
-  songInfo.style.display = 'block';
-
-  let imgAlbumArt = document.getElementById('album-art');
-  let divArtist = document.getElementsByClassName('artist');
-  let divSong = document.getElementsByClassName('song');
-  let divAlbum = document.getElementsByClassName('album');
-  let divDate = document.getElementsByClassName('date');
-
-  divArtist[0].innerText = song.Artist;
-  divSong[0].innerText = song.SongTitle;
-  divAlbum[0].innerText = song.Album;
-  divDate[0].innerText = song.Day + ' ' + song.ConvertedDateTime;
-
-  let albumArt = '';
-  const getAlbumInfo = firebase.functions().httpsCallable('getAlbumInfo');
-  getAlbumInfo(song).then(result => {
-    albumInfo = JSON.parse(result.data);
-    albumArt = albumInfo.album.image[2]['#text'];
-    if (albumArt === '') {
-      albumArt = 'https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png';
-    }
-    imgAlbumArt.src = albumArt;
-
-    setContrastingColors(albumArt);
-  })
-    .catch(error => {
-      albumArt = 'https://lastfm.freetls.fastly.net/i/u/174s/2a96cbd8b46e442fc41c2b86b821562f.png';
-      imgAlbumArt.src = albumArt;
-      setContrastingColors(albumArt);
-    });
-}
-
-/**
- * Sets the style based on the average color of the album art image
- * @param {string} albumArt The image source link
- */
-function setContrastingColors(albumArt) {
-  fac.getColorAsync(albumArt)
-    .then(color => {
-      const { value } = color;
-      const r = value[0], g = value[1], b = value[2];
-      const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      const bodyClassName = document.getElementById('body').className;
-      if (bodyClassName === 'light-theme' && luma > 225) {
-        setBodyStyle(30, 30, 30, [1, .2, .1]);
-      } else if (bodyClassName !== 'light-theme' && luma < 90) {
-        setBodyStyle(247, 247, 247, [1, 8, .7]);
-      } else {
-        setBodyStyle(r, g, b, [1, .3, .15]);
-      }
-    });
-}
-
-/**
- * Sets the body style to the given values
- * @param {*} r red value 
- * @param {*} g green value
- * @param {*} b blue value
- * @param {*} alpha alpha value
- */
-function setBodyStyle(r, g, b, alpha) {
-  body.style.setProperty('--secondary-color', `rgba(${r},${g},${b}, ${alpha[0]})`);
-  body.style.setProperty('--light-secondary', `rgba(${r},${g},${b},${alpha[1]})`);
-  body.style.setProperty('--very-light-secondary', `rgba(${r},${g},${b},${alpha[2]})`);
-  body.style.setProperty('--secondary-r', `${r}`);
-  body.style.setProperty('--secondary-g', `${g}`);
-  body.style.setProperty('--secondary-b', `${b}`);
-}
-
-/**
- * Gets the album art and sets the contrasting colors
- */
-function updateContrastingColors() {
-  let imgAlbumArt = document.getElementById('album-art');
-  setContrastingColors(imgAlbumArt.src);
-}
-
-/**
- * Gets and displays the tags of the given song's artist
- * @param {Object} song The song to retrieve the tags for
- */
-function displayTags(song) {
-  const getArtistTags = firebase.functions().httpsCallable('getArtistTags');
-  getArtistTags(song).then(result => {
-    const tags = JSON.parse(result.data);
-
-    let divTags = document.getElementById('tagList');
-    divTags.innerHTML = '';
-
-    let apiTags = tags.toptags.tag;
-    let topFiveTags = apiTags.slice(0, 5);
-    for (let i = 0; i < topFiveTags.length; i++) {
-      let spanElement = document.createElement('span');
-      spanElement.className = 'tag';
-      spanElement.innerText = topFiveTags[i].name;
-      divTags.appendChild(spanElement);
-    }
-  });
-}
-
-/**
- * Sets the datalists to the current months data
- */
-function setDataList() {
-  const artistDataList = document.getElementById('artist-datalist');
-  const songDataList = document.getElementById('song-datalist');
-  const albumDataList = document.getElementById('album-datalist');
-
-  artistDataList.innerHTML = '';
-  songDataList.innerHTML = '';
-  albumDataList.innerHTML = '';
-
-  let artistSet = new Set();
-  let songSet = new Set();
-  let albumSet = new Set();
-  datasetMonth.forEach(d => {
-    artistSet.add(d.Artist);
-    songSet.add(d.SongTitle);
-    albumSet.add(d.Album);
-  });
-  const artistList = Array.from(artistSet).sort();
-  const songList = Array.from(songSet).sort();
-  const albumList = Array.from(albumSet).sort();
-
-  const maxLength = Math.max(artistList.length, songList.length, albumList.length);
-  let i = 0;
-  while (i < maxLength) {
-    if (i < artistList.length) {
-      const option1 = document.createElement('option');
-      option1.value = artistList[i];
-      artistDataList.appendChild(option1);
-    }
-    if (i < songList.length) {
-      const option2 = document.createElement('option');
-      option2.value = songList[i];
-      songDataList.appendChild(option2);
-    }
-    if (i < albumList.length) {
-      const option3 = document.createElement('option');
-      option3.value = albumList[i];
-      albumDataList.appendChild(option3);
-    }
-    i++;
-  }
-}
-
-/**
  * Switches the current datalist to the new one
  * @param {string} value The datalist to switch too
  */
@@ -548,19 +415,6 @@ function changeDataList(value) {
   const filterInput = document.getElementById('filter-input');
   filterInput.setAttribute('list', value + '-datalist');
 }
-
-//Initialization
-const width = 950;
-const height = 540;
-const padding = { left: 90, right: 40, top: 10, down: 60 };
-
-//Where to add the graph to
-svg = d3.select('#main-graph')
-  .attr('width', width)
-  .attr('height', height)
-  .attr('viewBox', [0, 0, width, height])
-  .attr('preserveAspectRatio', 'xMidYMid meet')
-  .classed('svg-content', true);
 
 //append x-axis
 var xAxisG = svg.append('g')
@@ -579,13 +433,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   newDate.setHours(0, 0, 0, 0);
   let newDateMilis = newDate.getTime();
 
-  entireDataset = dataset;
-  datasetMonth = [];
-  filteredDatasetMonth = [];
-
   //sorts all the data into buckets by the month and year
-  buckets = {};
-
   dataset.forEach(d => {
     d.Date = new Date(d.Date);
     //add to bucket
@@ -667,7 +515,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
     .tickFormat(d3.timeFormat('%H:%M'));
 
   //y-axis line
-  yAxis = d3.axisLeft(yScale)
+  var yAxis = d3.axisLeft(yScale)
 
   xAxisG.call(xAxis);
 
@@ -694,18 +542,10 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   filteredDatasetMonth = datasetMonth;
 
   setDataList();
-
   filterRange(yState);
-  //render all data points
   displayNumEntries();
+  //render all data points
   renderCircles();
-
-  //creating canvas
-  //DOM element
-  canvas = d3.select('#canvas')
-    .attr('width', width)
-    .attr('height', 45);
-
   drawCanvasBars();
 
   //song, artist, and album filter
@@ -750,11 +590,13 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   //left/right buttons
   let nextButton = document.getElementById('right');
   nextButton.addEventListener("click", function () {
-    changeNextMonth();
+    const nextMonth = getNextMonthDate();
+    if (nextMonth !== -1) changeDateRange(nextMonth);
   });
   let prevButton = document.getElementById('left');
   prevButton.addEventListener("click", function () {
-    changePrevMonth();
+    const prevMonth = getPrevMonthDate();
+    if (prevMonth !== -1) changeDateRange(prevMonth);
   });
 
   //change datalist
