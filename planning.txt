@@ -107,11 +107,14 @@ Running the application
 
 Updating data
 -export data using https://benjaminbenben.com/lastfm-to-csv/
-   -only need to export the new data
+   - only need to export the new data, so can stop early depending on how much data you need to update
 -convert the csv to UTF-8 (https://www.highviewapps.com/kb/special-characters-are-not-displaying-properly-when-i-open-my-shopify-csv-export-file-with-excel-or-another-spreadsheet-application-how-can-i-fix-this/)
--copy and insert data into the .xlsx
+-copy and insert data into the the master .xlsx file (lastfm-data-utf.xlsx)
 -apply the formulas to the newly inserted data
--save a copy as a 'CSV UTF-8' and replace the old csv
+  - paste the formula in the top row
+  - CTRL + SHIFT + DOWN ARROW to select all the blank rows below it
+  - CTRL + D to apply the formula above to all the blank rows below it
+-save a copy as a 'CSV UTF-8' and replace the old csv in the public folder
 
 canvas resources
 - https://www.visualcinnamon.com/2015/11/learnings-from-a-d3-js-addict-on-starting-with-canvas.html
