@@ -403,6 +403,7 @@ export function addFilter(type, element, sourceValue) {
       select.value = type;
       input.value = filterValue;
       filterController(type, filterValue);
+      changeDataList(type);
     }
   });
 }
@@ -602,6 +603,7 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   //change datalist
   const filterSelect = document.getElementById('filter-select');
   filterSelect.addEventListener('change', function () {
+    console.log(`datalist changed to: ${filterSelect.value}`);
     changeDataList(filterSelect.value);
   });
 
