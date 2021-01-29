@@ -620,11 +620,11 @@ d3.csv('lastfm-data-utf.csv').then(dataset => {
   themeSwitcherContainer.addEventListener('click', function () {
     const themeSwitcher = document.getElementById('theme-switcher');
     if (themeSwitcher.classList.contains('fa-moon')) {
-      themeSwitcherContainer.innerHTML = '<i id="theme-switcher" class="fas fa-sun fa-lg"></i>';
-      body.className = '';
+      themeSwitcherContainer.innerHTML = '<i id="theme-switcher" class="far fa-sun fa-lg"></i>';
+      body.className = 'light-theme';
     } else {
       themeSwitcherContainer.innerHTML = '<i id="theme-switcher" class="far fa-moon fa-lg"></i>';
-      body.className = 'light-theme';
+      body.className = '';
     }
 
     style = getComputedStyle(document.body);
